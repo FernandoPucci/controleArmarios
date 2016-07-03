@@ -47,7 +47,6 @@ public class Conexao {
 
             Map<String, String> properties = new HashMap<String, String>();
 
-            //<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
             properties.put(ConstantesDb.JAVAX_DRIVER, ConstantesDb.DRIVER_NAME);
             properties.put(ConstantesDb.JAVAX_URL, ConstantesDb.JDBC + config.getHost() + ":" + config.getServidorPorta() + "/" + config.getBanco() + ConstantesDb.CONVERT_ZERO_TO_NULL_PROPERTY);
             properties.put(ConstantesDb.JAVAX_USER, config.getUsuario());

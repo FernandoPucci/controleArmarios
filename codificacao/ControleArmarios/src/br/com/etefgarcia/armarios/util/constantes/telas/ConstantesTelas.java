@@ -41,5 +41,6 @@ public class ConstantesTelas {
     public static final String BTN_CANCELAR ="cancelar";
     public static final String BTN_SALVAR_CONFIGURACAO ="salvarConfiguracao";
     public static final String BTN_TESTAR_CONFIGURACAO ="testarConfiguracao";
+    public static final String BTN_SAIR ="sair";
 
 }

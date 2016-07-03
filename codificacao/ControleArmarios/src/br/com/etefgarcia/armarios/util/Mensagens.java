@@ -39,6 +39,14 @@ public class Mensagens {
 
         piscaComponente(componente, ConstantesTelas.PISCA_SUCESSO);
 
+        JOptionPane.showMessageDialog(componente, mensagem, ConstantesTelas.TITULO_SUCESSO, JOptionPane.INFORMATION_MESSAGE);
+
+    }
+    
+    public static void mostraMensagemAlerta(JComponent componente, String mensagem) {
+
+        piscaComponente(componente, ConstantesTelas.PISCA_SUCESSO);
+
         JOptionPane.showMessageDialog(componente, mensagem, ConstantesTelas.TITULO_SUCESSO, JOptionPane.WARNING_MESSAGE);
 
     }
@@ -59,6 +67,12 @@ public class Mensagens {
     }
 
     public static void mostraMensagemSucesso( String mensagem) {
+
+        JOptionPane.showMessageDialog(null, mensagem, ConstantesTelas.TITULO_SUCESSO, JOptionPane.INFORMATION_MESSAGE);
+
+    }
+    
+   public static void mostraMensagemAlerta( String mensagem) {
 
         JOptionPane.showMessageDialog(null, mensagem, ConstantesTelas.TITULO_SUCESSO, JOptionPane.WARNING_MESSAGE);
 

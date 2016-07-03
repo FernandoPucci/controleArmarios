@@ -17,6 +17,7 @@
 package br.com.etefgarcia.armarios.main;
 
 import br.com.etefgarcia.armarios.controller.ConfigController;
+import br.com.etefgarcia.armarios.controller.TelaPrincipalController;
 
 import br.com.etefgarcia.armarios.util.Mensagens;
 import br.com.etefgarcia.armarios.view.ConfigInicialView;
@@ -30,31 +31,35 @@ import br.com.etefgarcia.armarios.view.ConfigInicialView;
  *
  */
 public class Principal {
-    
+
     public static void main(String[] args) {
-        
+
         ConfigController configController;
-        
+        TelaPrincipalController telaPrincipalController;
+
         try {
-            
+
             configController = new ConfigController(new ConfigInicialView());
-            
+
             if (configController.getConfig().getIsPrimeiroAcesso()) {
-                
+
                 configController.getThreadShowConfigInicialView().start();
-                
+
             } else {
+
+                telaPrincipalController = new TelaPrincipalController();
                 configController.testarConfiguracaoDbGeral();
-                System.out.println("INICIAR'");
-                
+
+                telaPrincipalController.getThreadShowTelaPrincipalView().start();
+
             }
         } catch (Exception ex) {
-            
+
             Mensagens.mostraMensagemErro(ex.getMessage());
             System.exit(0);
-            
-        } 
-        
+
+        }
+
     }
-    
+
 }
