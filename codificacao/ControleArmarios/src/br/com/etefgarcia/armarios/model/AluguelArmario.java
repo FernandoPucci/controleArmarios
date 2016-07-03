@@ -77,11 +77,11 @@ public class AluguelArmario implements Serializable {
     @JoinColumn(name = ("ID_USUARIO_RESPONSAVEL"))
     private Usuario usuarioResponsavel;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @Column(name = "DATA_ALUGUEL", nullable = true, insertable = false) //configuracoes para permitir insercao de datas null
     private Date dataAluguel;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @Column(name = "DATA_DEVOLUCAO", nullable = true, insertable = false)//configuracoes para permitir insercao de datas null
     private Date dataDevolucao;
 

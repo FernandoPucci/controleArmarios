@@ -59,21 +59,21 @@ public class Tester {
 
             //testarInsercaoMassa();
             //testarAluguel();
-//            List<AluguelArmario> alugueisAbertos = dao.getAllAluguelArmarioEmAberto();
-//        
-//            for (AluguelArmario a : alugueisAbertos) {
-//                System.out.println("****** " + a);
-//
-//            }
+            List<AluguelArmario> alugueisAbertos = dao.getAllAluguelArmarioEmAberto();
+        
+            for (AluguelArmario a : alugueisAbertos) {
+                System.out.println("****** " + a);
+
+            }
 //
 //            testarFecharAluguelByIdArmario();
 //            
-            List<AluguelArmario> alugueisFechados = dao.getAllAluguelArmarioFechadas();
-
-            for (AluguelArmario a : alugueisFechados) {
-                System.out.println("XXXXXX " + a);
-
-            }
+//            List<AluguelArmario> alugueisFechados = dao.getAllAluguelArmarioFechadas();
+//
+//            for (AluguelArmario a : alugueisFechados) {
+//                System.out.println("XXXXXX " + a);
+//
+//            }
 //            
         } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
