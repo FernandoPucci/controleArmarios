@@ -14,23 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.etefgarcia.armarios.util.constantes;
+package br.com.etefgarcia.armarios.dao;
+
+import br.com.etefgarcia.armarios.model.AluguelArmario;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
  * @author fernando-pucci
  */
-public class ConstantesDb {
-    
-    public static String JAVAX_DRIVER = "javax.persistence.jdbc.driver";
-    public static String JAVAX_URL = "javax.persistence.jdbc.url";
-    public static String JAVAX_USER = "javax.persistence.jdbc.user";
-    public static String JAVAX_PASSWORD = "javax.persistence.jdbc.password";
-    
-    public static String DRIVER_NAME = "com.mysql.jdbc.Driver";
-    public static String JDBC = "jdbc:mysql://";
-    public static String CONVERT_ZERO_TO_NULL_PROPERTY = "?zeroDateTimeBehavior=convertToNull";
-    
-    
-    
+public interface AluguelArmarioDAO extends BaseDAO<AluguelArmario, Long> {
+
+    public List<AluguelArmario> getAllAluguelArmarioEmAberto() throws Exception;
+
+    public List<AluguelArmario> getAllAluguelArmarioEmAberto(Date dataInicial, Date DataFinal) throws Exception;
+
+    public List<AluguelArmario> getAllAluguelArmarioFechadas() throws Exception;
+
+    public List<AluguelArmario> getAllAluguelArmarioFechadas(Date dataInicial, Date DataFinal) throws Exception;
+
 }

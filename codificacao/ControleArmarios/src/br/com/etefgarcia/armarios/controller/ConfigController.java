@@ -1,13 +1,23 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2016 fernando-pucci
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package br.com.etefgarcia.armarios.controller;
 
 import br.com.etefgarcia.armarios.dao.TesteDbConfigDAO;
 import br.com.etefgarcia.armarios.dao.impl.TesteDbConfigDAOImpl;
-import br.com.etefgarcia.armarios.exceptions.SistemaException;
 import br.com.etefgarcia.armarios.model.Config;
 import br.com.etefgarcia.armarios.model.TesteDbConfig;
 import br.com.etefgarcia.armarios.util.ConfigUtils;
@@ -16,8 +26,6 @@ import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
 import br.com.etefgarcia.armarios.view.ConfigInicialView;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.AbstractButton;
 
 /**

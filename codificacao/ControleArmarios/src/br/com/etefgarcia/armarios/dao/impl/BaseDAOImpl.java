@@ -7,9 +7,7 @@ package br.com.etefgarcia.armarios.dao.impl;
 
 import br.com.etefgarcia.armarios.dao.BaseDAO;
 import br.com.etefgarcia.armarios.dao.factory.Conexao;
-import br.com.etefgarcia.armarios.exceptions.SistemaException;
 import br.com.etefgarcia.armarios.util.ConfigUtils;
-import br.com.etefgarcia.armarios.util.Mensagens;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
@@ -59,7 +57,14 @@ public abstract class BaseDAOImpl<T, I extends Serializable> implements BaseDAO<
     @Override
     public List<T> getAll(Class<T> classe) throws IOException, ClassNotFoundException, Exception {
 
-        return getEntityManager().createQuery("select o from " + classe.getSimpleName() + " o").getResultList();
+        return getEntityManager().createQuery("select o from " + classe.getSimpleName() + " o ").getResultList();
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<T> getAllAtivos(Class<T> classe) throws IOException, ClassNotFoundException, Exception {
+
+        return getEntityManager().createQuery("select o from " + classe.getSimpleName() + " o WHERE o.flgAtivo = 1").getResultList();
     }
 
     @Override
