@@ -30,6 +30,7 @@ public class ConfigInicialView extends javax.swing.JFrame {
 
     private ConfigController configController;
     private ConfigInicialViewAction configInicialViewAction;
+    private Boolean isAtualizacao = Boolean.FALSE;
 
     /**
      * Creates new form ConfigInicialView
@@ -39,6 +40,22 @@ public class ConfigInicialView extends javax.swing.JFrame {
         initComponents();
         inicializar();
         inicializarDados();
+
+    }
+
+    public ConfigInicialView(Boolean isAtualizacao) throws IOException, ClassNotFoundException {
+        initComponents();
+        this.isAtualizacao = isAtualizacao == null ? Boolean.FALSE : isAtualizacao;
+        atualizaBotoes();
+        inicializar();
+        inicializarDados();
+
+    }
+
+    private void atualizaBotoes() {
+
+        jButtonOK.setName(ConstantesTelas.BTN_SALVAR_ATUALIZAR_CONFIGURACAO);
+        jButtonCancelar.setName(ConstantesTelas.BTN_CANCELAR_ATUALIZAR_CONFIGURACAO);
 
     }
 
@@ -300,7 +317,7 @@ public class ConfigInicialView extends javax.swing.JFrame {
 
     public Config getDadosAtualizar() {
         String senha = "";
-        
+
         for (int i = 0; i < jPasswordFieldSenha.getPassword().length; i++) {
             senha += jPasswordFieldSenha.getPassword()[i];
         }

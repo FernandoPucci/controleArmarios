@@ -46,6 +46,11 @@ public class TelaPrincipalView extends javax.swing.JFrame {
 
     }
 
+    @Override
+    public void dispose() {
+        telaPrincipalController.getThreadConfirmarSaida().start();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -55,21 +60,63 @@ public class TelaPrincipalView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanelPrincipal = new javax.swing.JPanel();
+        jPanelEsquerdo = new javax.swing.JPanel();
+        jPanelBotoes = new javax.swing.JPanel();
         jMenuBar = new javax.swing.JMenuBar();
         jMenu = new javax.swing.JMenu();
+        jMenuItemConfigurarBanco = new javax.swing.JMenuItem();
         jMenuItemSair = new javax.swing.JMenuItem();
+        jMenuAlunos = new javax.swing.JMenu();
+        jMenuItemCadastrarAluno = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(ConstantesTelas.TITULO_JANELA_PRINCIPAL + " " + ConstantesTelas.ETEC);
         setMaximumSize(new java.awt.Dimension(640, 480));
         setMinimumSize(new java.awt.Dimension(640, 480));
         setResizable(false);
 
+        jPanelPrincipal.setLayout(new java.awt.GridBagLayout());
+
+        jPanelEsquerdo.setPreferredSize(new java.awt.Dimension(500, 459));
+
+        javax.swing.GroupLayout jPanelEsquerdoLayout = new javax.swing.GroupLayout(jPanelEsquerdo);
+        jPanelEsquerdo.setLayout(jPanelEsquerdoLayout);
+        jPanelEsquerdoLayout.setHorizontalGroup(
+            jPanelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 500, Short.MAX_VALUE)
+        );
+        jPanelEsquerdoLayout.setVerticalGroup(
+            jPanelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 459, Short.MAX_VALUE)
+        );
+
+        jPanelPrincipal.add(jPanelEsquerdo, new java.awt.GridBagConstraints());
+
+        jPanelBotoes.setMaximumSize(new java.awt.Dimension(100, 459));
+        jPanelBotoes.setMinimumSize(new java.awt.Dimension(100, 459));
+        jPanelBotoes.setName(""); // NOI18N
+        jPanelBotoes.setPreferredSize(new java.awt.Dimension(100, 459));
+        jPanelBotoes.setRequestFocusEnabled(false);
+        jPanelBotoes.setLayout(new java.awt.GridLayout(5, 1));
+        jPanelPrincipal.add(jPanelBotoes, new java.awt.GridBagConstraints());
+
         jMenu.setMnemonic('A');
         jMenu.setText("Ações");
+        jMenu.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jMenu.setName("acoes"); // NOI18N
 
+        jMenuItemConfigurarBanco.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jMenuItemConfigurarBanco.setText("Configurar Banco de Dados");
+        jMenuItemConfigurarBanco.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemConfigurarBancoActionPerformed(evt);
+            }
+        });
+        jMenu.add(jMenuItemConfigurarBanco);
+
         jMenuItemSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemSair.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jMenuItemSair.setText("Sair");
         jMenuItemSair.setName(ConstantesTelas.BTN_SAIR);
         jMenuItemSair.addActionListener(new java.awt.event.ActionListener() {
@@ -81,6 +128,20 @@ public class TelaPrincipalView extends javax.swing.JFrame {
 
         jMenuBar.add(jMenu);
 
+        jMenuAlunos.setText("Alunos");
+        jMenuAlunos.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+
+        jMenuItemCadastrarAluno.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jMenuItemCadastrarAluno.setText("Cadastrar Aluno");
+        jMenuItemCadastrarAluno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCadastrarAlunoActionPerformed(evt);
+            }
+        });
+        jMenuAlunos.add(jMenuItemCadastrarAluno);
+
+        jMenuBar.add(jMenuAlunos);
+
         setJMenuBar(jMenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -88,10 +149,14 @@ public class TelaPrincipalView extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 640, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jPanelPrincipal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 459, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jPanelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         setSize(new java.awt.Dimension(650, 510));
@@ -101,6 +166,16 @@ public class TelaPrincipalView extends javax.swing.JFrame {
     private void jMenuItemSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSairActionPerformed
         telaPrincipalController.getThreadConfirmarSaida().start();
     }//GEN-LAST:event_jMenuItemSairActionPerformed
+
+    private void jMenuItemCadastrarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCadastrarAlunoActionPerformed
+
+        telaPrincipalController.getThreadShowCadastrarAlunoView().start();
+
+    }//GEN-LAST:event_jMenuItemCadastrarAlunoActionPerformed
+
+    private void jMenuItemConfigurarBancoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConfigurarBancoActionPerformed
+        telaPrincipalController.getThreadShowConfigurarBancoView().start();
+    }//GEN-LAST:event_jMenuItemConfigurarBancoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -139,8 +214,14 @@ public class TelaPrincipalView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu;
+    private javax.swing.JMenu jMenuAlunos;
     private javax.swing.JMenuBar jMenuBar;
+    private javax.swing.JMenuItem jMenuItemCadastrarAluno;
+    private javax.swing.JMenuItem jMenuItemConfigurarBanco;
     private javax.swing.JMenuItem jMenuItemSair;
+    private javax.swing.JPanel jPanelBotoes;
+    private javax.swing.JPanel jPanelEsquerdo;
+    private javax.swing.JPanel jPanelPrincipal;
     // End of variables declaration//GEN-END:variables
 
     private void removeListeners() {
@@ -148,6 +229,7 @@ public class TelaPrincipalView extends javax.swing.JFrame {
     }
 
     private void adicionaListeners() {
+
         jMenuItemSair.addMouseListener(telaPrincipalViewAction);
     }
 }

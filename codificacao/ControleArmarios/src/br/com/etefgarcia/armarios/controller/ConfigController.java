@@ -52,6 +52,31 @@ public class ConfigController {
 
     }
 
+    public Thread getThreadShowAtualizaConfigInicialView() {
+
+        return new Thread() {
+
+            public void run() {
+                try {
+
+                    config = ConfigUtils.getConfiguracao();
+                    new ConfigInicialView(Boolean.TRUE).setVisible(true);
+
+                } catch (IOException ex) {
+
+                    Mensagens.mostraMensagemErro("Erro ao inicializar configuração. Arquivo não encontrado;\n\n" + ex.getMessage());
+
+                } catch (ClassNotFoundException ex) {
+
+                    Mensagens.mostraMensagemErro("Erro ao inicializar configuração. Classe não encontrada; \n\n" + ex.getMessage());
+
+                }
+            }
+
+        };
+
+    }
+
     public Thread getThreadShowConfigInicialView() {
 
         return new Thread() {
@@ -84,7 +109,7 @@ public class ConfigController {
         List<TesteDbConfig> listaTeste = dao.getAll(TesteDbConfig.class);
 
         if (listaTeste == null || listaTeste.isEmpty()) {
-            
+
             throw new Exception("Erro ao se conectar com o banco de dados. Impossivel iniciar.");
 
         }
@@ -144,6 +169,29 @@ public class ConfigController {
 
     }
 
+    private Thread getThreadAtualizarConfiguracao() {
+
+        return new Thread() {
+
+            public void run() {
+
+                try {
+                    config = configInicialView.getDadosAtualizar();
+                    ConfigUtils.atualizaArquivoConfiguracao(config);
+                    Mensagens.mostraMensagemSucesso("Configurações atualizadas com sucesso.");
+                    configInicialView.dispose();
+
+                } catch (IOException ex) {
+                    Mensagens.mostraMensagemErro("Erro ao atualizar configuração.\n\n" + ex.getMessage());
+
+                }
+
+            }
+
+        };
+
+    }
+
     private Thread getThreadConfirmarSaida() {
 
         return new Thread() {
@@ -160,6 +208,25 @@ public class ConfigController {
 
                 } catch (IOException ex) {
                     Mensagens.mostraMensagemErro("Erro ao salvar configuração. Arquivo não encontrado;\n\n" + ex.getMessage());
+
+                }
+
+            }
+
+        };
+    }
+
+    private Thread getThreadConfirmarSaidaAtualizacao() {
+
+        return new Thread() {
+
+            public void run() {
+
+                int opt = Mensagens.mostraMensagemPergunta("Tem certeza que deseja Sair e cancelar toda configuração?");
+
+                if (opt == 0) {
+
+                    configInicialView.dispose();
 
                 }
 
@@ -189,6 +256,12 @@ public class ConfigController {
                 break;
             case ConstantesTelas.BTN_TESTAR_CONFIGURACAO:
                 testarConfiguracaoDb();//.start();
+                break;
+            case ConstantesTelas.BTN_SALVAR_ATUALIZAR_CONFIGURACAO:
+                getThreadAtualizarConfiguracao().start();
+                break;
+            case ConstantesTelas.BTN_CANCELAR_ATUALIZAR_CONFIGURACAO:
+                getThreadConfirmarSaidaAtualizacao().start();
                 break;
 
         }

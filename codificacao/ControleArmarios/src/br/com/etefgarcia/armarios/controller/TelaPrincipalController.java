@@ -18,7 +18,12 @@ package br.com.etefgarcia.armarios.controller;
 
 import br.com.etefgarcia.armarios.util.Mensagens;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
+import br.com.etefgarcia.armarios.view.CadastrarAlunoView;
+import br.com.etefgarcia.armarios.view.ConfigInicialView;
 import br.com.etefgarcia.armarios.view.TelaPrincipalView;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractButton;
 
 /**
@@ -26,59 +31,96 @@ import javax.swing.AbstractButton;
  * @author fernando-pucci
  */
 public class TelaPrincipalController {
-
+    
     public Thread getThreadShowTelaPrincipalView() {
-
+        
         return new Thread() {
-
+            
             @Override
             public void run() {
                 new TelaPrincipalView().setVisible(true);
-
+                
             }
-
+            
         };
-
+        
     }
-
+    
     public Thread getThreadConfirmarSaida() {
-
+        
         return new Thread() {
-
+            
             @Override
             public void run() {
-
+                
                 int opt = Mensagens.mostraMensagemPergunta("Tem certeza que deseja Sair do Programa?");
                 if (opt == 0) {
                     System.exit(0);
                 }
             }
-
+            
         };
     }
-
+    
+    public Thread getThreadShowConfigurarBancoView() {
+        
+        return new Thread() {
+            
+            @Override
+            public void run() {
+                try {
+                    ConfigController configController = new ConfigController(new ConfigInicialView());
+                  
+                    configController.getThreadShowAtualizaConfigInicialView().start();
+                                      
+                } catch (IOException ex) {
+                    Logger.getLogger(TelaPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(TelaPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+            
+        };
+    }
+    
+    
+    public Thread getThreadShowCadastrarAlunoView() {
+        
+        return new Thread() {
+            
+            @Override
+            public void run() {
+                
+                new CadastrarAlunoView().setVisible(true);
+                
+            }
+            
+        };
+    }
+    
     //ACOES
     //trata ações dos botoes clicados
     public void acaoClickController(AbstractButton botao) {
-
+        
         if (botao.isEnabled()) {
             acaoController(botao.getName());
         }
     }
-
+    
     private void acaoController(String botao) {
-
+        
         switch (botao) {
-
+            
             case ConstantesTelas.BTN_SAIR:
                 getThreadConfirmarSaida().start();
                 break;
-
+            
         }
 
         //TEST:
         System.out.println(botao);
-
+        
     }
-
+    
 }
