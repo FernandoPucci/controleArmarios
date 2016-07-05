@@ -14,19 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.etefgarcia.armarios.exceptions;
+package br.com.etefgarcia.armarios.util;
 
 /**
  *
  * @author fernando-pucci
  */
-public class SistemaException extends Exception {
+public class ServiceUtils {
 
-    public SistemaException(String message) {
-        super("Erro de Sistema:\n" + message);
+    public static String limpaTelefone(String telefone) {
+
+        String telefoneSaida = "";
+
+        if (telefone == null) {
+
+            return telefoneSaida;
+        }
+
+        for (int i = 0; i < telefone.length(); i++) {
+            if (Character.isDigit(telefone.charAt(i))) {
+                telefoneSaida += telefone.charAt(i);
+            }
+
+        }
+
+        return telefoneSaida;
+
     }
 
-    public SistemaException(Class clazz, String message) {
-        super(clazz.getSimpleName() + "\n\n" + "Erro de Sistema:\n" + message);
-    }
 }

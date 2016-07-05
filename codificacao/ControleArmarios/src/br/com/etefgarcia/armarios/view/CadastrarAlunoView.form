@@ -211,7 +211,7 @@
                 <Property name="text" type="java.lang.String" value="E-Mail:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextEmail">
+            <Component class="javax.swing.JTextField" name="jTextFieldEmail">
               <Properties>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[250, 28]"/>
@@ -224,8 +224,8 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextEmailActionPerformed"/>
-                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jTextEmailFocusLost"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextFieldEmailActionPerformed"/>
+                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jTextFieldEmailFocusLost"/>
               </Events>
             </Component>
             <Component class="javax.swing.JCheckBox" name="jCheckBoxFlgAtivo">

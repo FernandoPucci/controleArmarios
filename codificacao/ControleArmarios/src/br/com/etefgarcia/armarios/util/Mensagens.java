@@ -45,9 +45,9 @@ public class Mensagens {
     
     public static void mostraMensagemAlerta(JComponent componente, String mensagem) {
 
-        piscaComponente(componente, ConstantesTelas.PISCA_SUCESSO);
+        piscaComponente(componente, ConstantesTelas.PISCA_INFO);
 
-        JOptionPane.showMessageDialog(componente, mensagem, ConstantesTelas.TITULO_SUCESSO, JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(componente, mensagem, ConstantesTelas.TITULO_ALERTA, JOptionPane.WARNING_MESSAGE);
 
     }
 
@@ -74,7 +74,7 @@ public class Mensagens {
     
    public static void mostraMensagemAlerta( String mensagem) {
 
-        JOptionPane.showMessageDialog(null, mensagem, ConstantesTelas.TITULO_SUCESSO, JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(null, mensagem, ConstantesTelas.TITULO_ALERTA, JOptionPane.WARNING_MESSAGE);
 
     }
 

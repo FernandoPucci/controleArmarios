@@ -47,6 +47,10 @@ public class TelaUtils {
             return false;
         }
 
+        if (telefone.trim().length() < 8 || telefone.trim().length() > 11) {
+            return false;
+        }
+
         for (int i = 0; i < telefone.length(); i++) {
             if (!Character.isDigit(telefone.charAt(i))
                     && (telefone.charAt(i) != '(')

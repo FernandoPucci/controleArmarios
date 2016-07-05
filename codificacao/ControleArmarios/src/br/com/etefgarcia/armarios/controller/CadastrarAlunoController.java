@@ -16,6 +16,10 @@
  */
 package br.com.etefgarcia.armarios.controller;
 
+import br.com.etefgarcia.armarios.exceptions.NegocioException;
+import br.com.etefgarcia.armarios.exceptions.SistemaException;
+import br.com.etefgarcia.armarios.model.Aluno;
+import br.com.etefgarcia.armarios.service.AlunoService;
 import br.com.etefgarcia.armarios.util.Mensagens;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
 import br.com.etefgarcia.armarios.view.CadastrarAlunoView;
@@ -51,6 +55,34 @@ public class CadastrarAlunoController {
         };
     }
 
+    public Thread getThreadCadastrarAluno() {
+
+        return new Thread() {
+
+            @Override
+            public void run() {
+                try {
+
+                    Aluno a = cadastrarAlunoView.getAluno();
+
+                    AlunoService.cadastrarAluno(a.getNome(), a.getSexo() + "", a.getTelefone(), a.getEmail());
+
+                    Mensagens.mostraMensagemSucesso(cadastrarAlunoView.getPainel(), "Aluno Cadastrado com sucesso.");
+
+                    cadastrarAlunoView.limparCampos();
+
+                } catch (NegocioException | SistemaException ex) {
+
+                    Mensagens.mostraMensagemErro(cadastrarAlunoView.getPainel(), ex.getMessage());
+
+                }
+
+            }
+
+        };
+
+    }
+
     //ACOES
     //trata ações dos botoes clicados
     public void acaoClickController(AbstractButton botao) {
@@ -68,6 +100,10 @@ public class CadastrarAlunoController {
                 getThreadConfirmarCancelar().start();
                 break;
 
+            case ConstantesTelas.BTN_SALVAR:
+                getThreadCadastrarAluno().start();
+                break;
+                
             case ConstantesTelas.BTN_LIMPAR:
                 cadastrarAlunoView.limparCampos();
                 break;

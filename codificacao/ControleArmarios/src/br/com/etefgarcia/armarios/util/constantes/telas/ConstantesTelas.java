@@ -26,6 +26,8 @@ public class ConstantesTelas {
     public static final int PISCA_ERRO = 2;
     public static final int PISCA_INFO = 3;
 
+    public static final String ERR_TOKEN_LISTA = "\n- ";
+    
     //Janelas
     public static final String TITULO_JANELA_PRINCIPAL = ".:: CONTROLE DE ARMARIOS";
     public static final String SUBTITULO_JANELA_CONFIG = "Configuração Inicial";
@@ -35,6 +37,7 @@ public class ConstantesTelas {
     public static final String TITULO_ERRO = ".:: ERRO";
     public static final String TITULO_SUCESSO = ".:: SUCESSO";
     public static final String TITULO_PERGUNTA = ".::QUESTAO";
+    public static final String TITULO_ALERTA = ".:: ATENÇAO";
 
     public static final String TITULO_CADASTRAR_ALUNO = "Cadastrar Aluno";
 

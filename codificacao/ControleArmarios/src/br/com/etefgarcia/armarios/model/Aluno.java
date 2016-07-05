@@ -94,7 +94,7 @@ public class Aluno implements Serializable {
     }
 
     public void setSexo(String sexo) {
-        this.sexo = sexo.equals("Masculino") ? 'M' : 'F';
+        this.sexo = sexo.equals("Masculino") ? 'M' : sexo.equals("Feminino") ? 'F' : sexo.equals("M") ? 'M' :  '?';
     }
 
     public void setSexo(Character sexo) {
