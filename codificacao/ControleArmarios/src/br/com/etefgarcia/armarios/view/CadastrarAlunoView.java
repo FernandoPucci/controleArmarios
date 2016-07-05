@@ -19,7 +19,11 @@ package br.com.etefgarcia.armarios.view;
 import br.com.etefgarcia.armarios.action.CadastrarAlunoViewAction;
 import br.com.etefgarcia.armarios.controller.CadastrarAlunoController;
 import br.com.etefgarcia.armarios.model.Aluno;
+import br.com.etefgarcia.armarios.util.Mensagens;
+import br.com.etefgarcia.armarios.util.TelaRenderUtil;
+import br.com.etefgarcia.armarios.util.TelaUtils;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -30,27 +34,55 @@ public class CadastrarAlunoView extends javax.swing.JFrame {
 
     private CadastrarAlunoController cadastrarAlunoController;
     private CadastrarAlunoViewAction cadastrarAlunoViewAction;
+    private Boolean isAtualizar = Boolean.FALSE;
 
-    /**
-     * Creates new form CadastrarAlunoView
-     */
-    public CadastrarAlunoView() {
+    private final Runnable threadChecaCampoNome = new Runnable() {
+
+        @Override
+        public void run() {
+            validaCampoNome();
+        }
+    };
+
+    //nao utilizado
+//    private final Runnable threadFormataTelefone = new Runnable() {
+//
+//        @Override
+//        public void run() {
+//            formatarCampoTelefone();
+//        }
+//    };
+    public CadastrarAlunoView(Boolean isAtualizar) {
         initComponents();
+
+        this.isAtualizar = isAtualizar == null ? Boolean.FALSE : isAtualizar;
+
         inicializar();
-        configurarBotoes();
+        configurarBotoes(false);
         configurarCampos();
+        configurarItens();
+
+        jTableTabela.setVisible(false);
 
     }
 
-    public CadastrarAlunoView(Aluno aluno) {
+    public CadastrarAlunoView(Aluno aluno, Boolean isAtualizar) {
 
         initComponents();
 
-        this.aluno = new Aluno();
+        this.aluno = aluno;
 
         inicializar();
-        configurarBotoes();
+        configurarBotoes(aluno != null);
         configurarCampos();
+        configurarItens();
+
+        jTableTabela.setVisible(false);
+
+        if (aluno != null) {
+            vincularAluno();
+        }
+
     }
 
     private void inicializar() {
@@ -73,16 +105,38 @@ public class CadastrarAlunoView extends javax.swing.JFrame {
 
     }
 
-    private void configurarCampos() {
-        jTextFieldIdAluno.setEnabled(false);
-        jTextFieldIdAluno.setEditable(false);
+    private void configurarItens() {
+
+        TelaRenderUtil.habilitarCampos(jTableTabela, false);
+
     }
 
-    private void configurarBotoes() {
+    private void configurarCampos() {
 
-        jButtonBuscar.setEnabled(false);
-        jButtonSalvar.setEnabled(false);
-        jButtonLimpar.setEnabled(false);
+        jTextFieldIdAluno.setEnabled(false);
+        jTextFieldIdAluno.setEditable(false);
+
+        if (!isAtualizar) {
+
+            jCheckBoxFlgAtivo.setSelected(true);
+            TelaRenderUtil.habilitarCampos(jCheckBoxFlgAtivo, false);
+
+        } else {
+
+            jCheckBoxFlgAtivo.setSelected(this.aluno.getFlgAtivo());
+            TelaRenderUtil.habilitarCampos(jCheckBoxFlgAtivo, true);
+
+        }
+
+        preencherComboSexo();
+
+    }
+
+    private void configurarBotoes(boolean habilitar) {
+
+        TelaRenderUtil.habilitarBotao(jButtonBuscar, habilitar);
+        TelaRenderUtil.habilitarBotao(jButtonSalvar, habilitar);
+        TelaRenderUtil.habilitarBotao(jButtonLimpar, habilitar);
 
     }
 
@@ -102,6 +156,16 @@ public class CadastrarAlunoView extends javax.swing.JFrame {
         jTextFieldIdAluno = new javax.swing.JTextField();
         jLabelNome = new javax.swing.JLabel();
         jTextFieldNome = new javax.swing.JTextField();
+        jLabelSexo = new javax.swing.JLabel();
+        jComboBoxSexo = new javax.swing.JComboBox();
+        jLabelTelefone = new javax.swing.JLabel();
+        jTextFieldTelefone = new javax.swing.JTextField();
+        jLabelEmail = new javax.swing.JLabel();
+        jTextEmail = new javax.swing.JTextField();
+        jCheckBoxFlgAtivo = new javax.swing.JCheckBox();
+        jSeparator1 = new javax.swing.JSeparator();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableTabela = new javax.swing.JTable();
         jPanelBotoes = new javax.swing.JPanel();
         jButtonBuscar = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(30, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(30, 32767));
@@ -111,7 +175,6 @@ public class CadastrarAlunoView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(ConstantesTelas.TITULO_JANELA_PRINCIPAL + " - " + ConstantesTelas.TITULO_CADASTRAR_ALUNO);
-        setMaximumSize(new java.awt.Dimension(640, 480));
         setMinimumSize(new java.awt.Dimension(640, 480));
         setResizable(false);
 
@@ -132,6 +195,9 @@ jLabelIdAluno.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
 jLabelIdAluno.setText("Cód.:");
 jPanelEsquerdo.add(jLabelIdAluno);
 
+jTextFieldIdAluno.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+jTextFieldIdAluno.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+jTextFieldIdAluno.setDisabledTextColor(new java.awt.Color(210, 20, 8));
 jTextFieldIdAluno.setPreferredSize(new java.awt.Dimension(90, 28));
 jPanelEsquerdo.add(jTextFieldIdAluno);
 
@@ -142,38 +208,149 @@ jPanelEsquerdo.add(jLabelNome);
 jTextFieldNome.setMaximumSize(new java.awt.Dimension(286, 28));
 jTextFieldNome.setMinimumSize(new java.awt.Dimension(286, 28));
 jTextFieldNome.setPreferredSize(new java.awt.Dimension(286, 28));
-jPanelEsquerdo.add(jTextFieldNome);
-
-jPanelFundo.add(jPanelEsquerdo);
-
-jPanelBotoes.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-jPanelBotoes.setMaximumSize(new java.awt.Dimension(120, 459));
-jPanelBotoes.setMinimumSize(new java.awt.Dimension(120, 459));
-jPanelBotoes.setName(""); // NOI18N
-jPanelBotoes.setPreferredSize(new java.awt.Dimension(120, 459));
-jPanelBotoes.setRequestFocusEnabled(false);
-jPanelBotoes.setLayout(new java.awt.GridLayout(5, 1));
-
-jButtonBuscar.setBackground(new java.awt.Color(242, 241, 240));
-jButtonBuscar.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-jButtonBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ico/search3.png"))); // NOI18N
-jButtonBuscar.setToolTipText("TESTE SOENTE");
-jPanelBotoes.add(jButtonBuscar);
-jPanelBotoes.add(filler1);
-
-jButtonSalvar.setBackground(new java.awt.Color(242, 241, 240));
-jButtonSalvar.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-jButtonSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ico/Save3.png"))); // NOI18N
-jButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
-    public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jButtonSalvarActionPerformed(evt);
+jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
+    public void focusLost(java.awt.event.FocusEvent evt) {
+        jTextFieldNomeFocusLost(evt);
     }
+    });
+    jTextFieldNome.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            jTextFieldNomeKeyTyped(evt);
+        }
+    });
+    jPanelEsquerdo.add(jTextFieldNome);
+
+    jLabelSexo.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+    jLabelSexo.setText("Sexo:");
+    jPanelEsquerdo.add(jLabelSexo);
+
+    jComboBoxSexo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Selecione..." }));
+    jComboBoxSexo.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jComboBoxSexoActionPerformed(evt);
+        }
+    });
+    jPanelEsquerdo.add(jComboBoxSexo);
+
+    jLabelTelefone.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+    jLabelTelefone.setText("Telefone:");
+    jLabelTelefone.setMaximumSize(new java.awt.Dimension(80, 17));
+    jLabelTelefone.setMinimumSize(new java.awt.Dimension(80, 17));
+    jLabelTelefone.setPreferredSize(new java.awt.Dimension(80, 17));
+    jLabelTelefone.setRequestFocusEnabled(false);
+    jPanelEsquerdo.add(jLabelTelefone);
+
+    jTextFieldTelefone.setMaximumSize(new java.awt.Dimension(220, 28));
+    jTextFieldTelefone.setMinimumSize(new java.awt.Dimension(220, 28));
+    jTextFieldTelefone.setName(""); // NOI18N
+    jTextFieldTelefone.setPreferredSize(new java.awt.Dimension(220, 28));
+    jTextFieldTelefone.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent evt) {
+            jTextFieldTelefoneFocusLost(evt);
+        }
+    });
+    jPanelEsquerdo.add(jTextFieldTelefone);
+
+    jLabelEmail.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+    jLabelEmail.setText("E-Mail:");
+    jPanelEsquerdo.add(jLabelEmail);
+
+    jTextEmail.setMaximumSize(new java.awt.Dimension(250, 28));
+    jTextEmail.setMinimumSize(new java.awt.Dimension(250, 28));
+    jTextEmail.setPreferredSize(new java.awt.Dimension(250, 28));
+    jTextEmail.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jTextEmailActionPerformed(evt);
+        }
+    });
+    jTextEmail.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent evt) {
+            jTextEmailFocusLost(evt);
+        }
+    });
+    jPanelEsquerdo.add(jTextEmail);
+
+    jCheckBoxFlgAtivo.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+    jCheckBoxFlgAtivo.setText("Ativo ?");
+    jCheckBoxFlgAtivo.setMargin(new java.awt.Insets(0, 50, 0, 0));
+    jCheckBoxFlgAtivo.setMaximumSize(new java.awt.Dimension(169, 24));
+    jCheckBoxFlgAtivo.setMinimumSize(new java.awt.Dimension(169, 24));
+    jCheckBoxFlgAtivo.setPreferredSize(new java.awt.Dimension(169, 24));
+    jCheckBoxFlgAtivo.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jCheckBoxFlgAtivoActionPerformed(evt);
+        }
+    });
+    jPanelEsquerdo.add(jCheckBoxFlgAtivo);
+
+    jSeparator1.setMaximumSize(new java.awt.Dimension(450, 15));
+    jSeparator1.setMinimumSize(new java.awt.Dimension(450, 15));
+    jSeparator1.setName(""); // NOI18N
+    jSeparator1.setPreferredSize(new java.awt.Dimension(450, 5));
+    jSeparator1.setRequestFocusEnabled(false);
+    jPanelEsquerdo.add(jSeparator1);
+
+    jScrollPane1.setMaximumSize(new java.awt.Dimension(452, 300));
+    jScrollPane1.setMinimumSize(new java.awt.Dimension(452, 300));
+    jScrollPane1.setPreferredSize(new java.awt.Dimension(452, 300));
+    jScrollPane1.setRequestFocusEnabled(false);
+
+    jTableTabela.setModel(new javax.swing.table.DefaultTableModel(
+        new Object [][] {
+            {null}
+        },
+        new String [] {
+            "Título 1"
+        }
+    ) {
+        boolean[] canEdit = new boolean [] {
+            false
+        };
+
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return canEdit [columnIndex];
+        }
+    });
+    jTableTabela.setMaximumSize(new java.awt.Dimension(400, 200));
+    jTableTabela.setMinimumSize(new java.awt.Dimension(400, 200));
+    jTableTabela.setName(ConstantesTelas.ITM_TABELA);
+    jTableTabela.setPreferredSize(new java.awt.Dimension(400, 200));
+    jTableTabela.setSelectionBackground(java.awt.SystemColor.activeCaption);
+    jScrollPane1.setViewportView(jTableTabela);
+
+    jPanelEsquerdo.add(jScrollPane1);
+
+    jPanelFundo.add(jPanelEsquerdo);
+
+    jPanelBotoes.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+    jPanelBotoes.setMaximumSize(new java.awt.Dimension(120, 459));
+    jPanelBotoes.setMinimumSize(new java.awt.Dimension(120, 459));
+    jPanelBotoes.setName(""); // NOI18N
+    jPanelBotoes.setPreferredSize(new java.awt.Dimension(120, 459));
+    jPanelBotoes.setRequestFocusEnabled(false);
+    jPanelBotoes.setLayout(new java.awt.GridLayout(5, 1));
+
+    jButtonBuscar.setBackground(new java.awt.Color(242, 241, 240));
+    jButtonBuscar.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+    jButtonBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ico/search3.png"))); // NOI18N
+    jButtonBuscar.setToolTipText("TESTE SOENTE");
+    jPanelBotoes.add(jButtonBuscar);
+    jPanelBotoes.add(filler1);
+
+    jButtonSalvar.setBackground(new java.awt.Color(242, 241, 240));
+    jButtonSalvar.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+    jButtonSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ico/Save3.png"))); // NOI18N
+    jButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jButtonSalvarActionPerformed(evt);
+        }
     });
     jPanelBotoes.add(jButtonSalvar);
 
     jButtonLimpar.setBackground(new java.awt.Color(242, 241, 240));
     jButtonLimpar.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
     jButtonLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ico/limpar3.png"))); // NOI18N
+    jButtonLimpar.setName(ConstantesTelas.BTN_LIMPAR);
     jButtonLimpar.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             jButtonLimparActionPerformed(evt);
@@ -223,6 +400,64 @@ jButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonSalvarActionPerformed
 
+    private void jTextFieldNomeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldNomeKeyTyped
+
+        SwingUtilities.invokeLater(threadChecaCampoNome);
+    }//GEN-LAST:event_jTextFieldNomeKeyTyped
+
+    private void jComboBoxSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxSexoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxSexoActionPerformed
+
+    private void jTextEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextEmailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextEmailActionPerformed
+
+    private void jCheckBoxFlgAtivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxFlgAtivoActionPerformed
+
+        if (!jCheckBoxFlgAtivo.isSelected()) {
+
+            int opt = Mensagens.mostraMensagemPergunta("Se você desativar um aluno, ele deixará de figurar nas pesquisas de Ativos. \n Tem certeza?");
+            System.out.println(opt);
+            if (0 == opt) {
+                jCheckBoxFlgAtivo.setSelected(false);
+            } else {
+                jCheckBoxFlgAtivo.setSelected(true);
+            };
+        }
+
+    }//GEN-LAST:event_jCheckBoxFlgAtivoActionPerformed
+
+    private void jTextEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextEmailFocusLost
+
+        if (!jTextEmail.getText().isEmpty() && !TelaUtils.validaEmail(jTextEmail.getText())) {
+
+            Mensagens.mostraMensagemErro("Digite um e-mail válido.");
+            jTextEmail.setText("");
+            jTextEmail.requestFocus();
+
+        };
+
+    }//GEN-LAST:event_jTextEmailFocusLost
+
+    private void jTextFieldNomeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldNomeFocusLost
+
+        if (!jTextFieldNome.getText().trim().isEmpty()) {
+            configurarBotoes(true);
+        }
+    }//GEN-LAST:event_jTextFieldNomeFocusLost
+
+    private void jTextFieldTelefoneFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldTelefoneFocusLost
+
+        if (!jTextFieldTelefone.getText().trim().isEmpty() && !TelaUtils.validaTelefone(jTextFieldTelefone.getText())) {
+
+            Mensagens.mostraMensagemErro("Digite um telefone válido.");
+            jTextFieldTelefone.setText("");
+            jTextFieldTelefone.requestFocus();
+
+        }
+    }//GEN-LAST:event_jTextFieldTelefoneFocusLost
+
     /**
      * @param args the command line arguments
      */
@@ -265,13 +500,23 @@ jButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonLimpar;
     private javax.swing.JButton jButtonSalvar;
+    private javax.swing.JCheckBox jCheckBoxFlgAtivo;
+    private javax.swing.JComboBox jComboBoxSexo;
+    private javax.swing.JLabel jLabelEmail;
     private javax.swing.JLabel jLabelIdAluno;
     private javax.swing.JLabel jLabelNome;
+    private javax.swing.JLabel jLabelSexo;
+    private javax.swing.JLabel jLabelTelefone;
     private javax.swing.JPanel jPanelBotoes;
     private javax.swing.JPanel jPanelEsquerdo;
     private javax.swing.JPanel jPanelFundo;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTable jTableTabela;
+    private javax.swing.JTextField jTextEmail;
     private javax.swing.JTextField jTextFieldIdAluno;
     private javax.swing.JTextField jTextFieldNome;
+    private javax.swing.JTextField jTextFieldTelefone;
     // End of variables declaration//GEN-END:variables
 
     private void removeListeners() {
@@ -290,4 +535,75 @@ jButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
         jButtonSalvar.addMouseListener(cadastrarAlunoViewAction);
 
     }
+
+    private void formatarCampoTelefone() {
+        String telefone = jTextFieldTelefone.getText();
+
+        if (telefone.substring(telefone.indexOf("-"), telefone.length()).trim().length() == 4) {
+
+            String telefoneSaida = "";
+
+            for (int i = 0; i < telefone.length(); i++) {
+                if (telefone.charAt(i) == ')') {
+                    telefoneSaida += ") ";
+
+                } else {
+                    telefoneSaida += telefone.charAt(i);
+                }
+
+            }
+
+            jTextFieldTelefone.setText(telefoneSaida);
+
+        }
+    }
+
+    private void validaCampoNome() {
+
+        if (jTextFieldNome.getText().length() > 0) {
+
+            TelaRenderUtil.habilitarBotao(jButtonBuscar, true);
+
+        } else {
+
+            TelaRenderUtil.habilitarBotao(jButtonBuscar, false);
+
+        }
+
+    }
+
+    private void preencherComboSexo() {
+
+        jComboBoxSexo.addItem("Masculino");
+        jComboBoxSexo.addItem("Feminino");
+
+    }
+
+    public void limparCampos() {
+
+        jTextEmail.setText("");
+        jTextFieldNome.setText("");
+        jTextFieldIdAluno.setText("");
+
+        jTextFieldTelefone.setText("");
+
+        jComboBoxSexo.setSelectedIndex(0);
+
+        configurarBotoes(false);
+    }
+
+    private void vincularAluno() {
+
+        jTextFieldIdAluno.setText(aluno.getIdAluno() + "");
+        jTextFieldNome.setText(aluno.getNome());
+        jTextEmail.setText(aluno.getEmail());
+
+        jTextFieldTelefone.setText(aluno.getTelefone());
+
+        jCheckBoxFlgAtivo.setSelected(aluno.getFlgAtivo());
+
+        jComboBoxSexo.setSelectedIndex(aluno.getSexo() == 'M' ? 1 : 2);
+
+    }
+
 }

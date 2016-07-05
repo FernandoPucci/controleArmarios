@@ -92,7 +92,7 @@ public class TelaPrincipalController {
             @Override
             public void run() {
                 
-                new CadastrarAlunoView().setVisible(true);
+                new CadastrarAlunoView(false).setVisible(true);
                 
             }
             

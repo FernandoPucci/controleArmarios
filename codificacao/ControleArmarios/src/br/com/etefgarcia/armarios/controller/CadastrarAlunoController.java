@@ -68,6 +68,10 @@ public class CadastrarAlunoController {
                 getThreadConfirmarCancelar().start();
                 break;
 
+            case ConstantesTelas.BTN_LIMPAR:
+                cadastrarAlunoView.limparCampos();
+                break;
+
         }
 
         //TEST:

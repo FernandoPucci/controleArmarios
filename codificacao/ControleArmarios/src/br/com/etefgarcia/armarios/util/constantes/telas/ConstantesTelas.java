@@ -35,27 +35,29 @@ public class ConstantesTelas {
     public static final String TITULO_ERRO = ".:: ERRO";
     public static final String TITULO_SUCESSO = ".:: SUCESSO";
     public static final String TITULO_PERGUNTA = ".::QUESTAO";
-    
-    public static final String TITULO_CADASTRAR_ALUNO = "Cadastrar Aluno";
-    
-    
-    //Botoes
-    public static final String BTN_CANCELAR ="cancelar";
-    public static final String BTN_SALVAR ="salvar";
-    public static final String BTN_BUSCAR ="bucar";
-    public static final String BTN_LIMPAR ="bucar";
-    public static final String BTN_SALVAR_CONFIGURACAO ="salvarConfiguracao";
-    public static final String BTN_TESTAR_CONFIGURACAO ="testarConfiguracao";
-    
-    public static final String BTN_SALVAR_ATUALIZAR_CONFIGURACAO ="atualizarConfiguracao";
-    public static final String BTN_CANCELAR_ATUALIZAR_CONFIGURACAO ="cancelarAtualizarConfiguracao";
-    
-    public static final String BTN_SAIR ="sair";
 
-    //Tooltips
-    public static final String TT_BTN_CANCELAR ="Cancelar Operação";
-    public static final String TT_BTN_SALVAR ="Gravar";
-    public static final String TT_BTN_BUSCAR ="Pesquisar...";
-    public static final String TT_BTN_LIMPAR ="Limpar Campos";
+    public static final String TITULO_CADASTRAR_ALUNO = "Cadastrar Aluno";
+
+    //Botoes
+    public static final String BTN_CANCELAR = "cancelar";
+    public static final String BTN_SALVAR = "salvar";
+    public static final String BTN_BUSCAR = "buscar";
+    public static final String BTN_LIMPAR = "limpar";
+    public static final String BTN_SALVAR_CONFIGURACAO = "salvarConfiguracao";
+    public static final String BTN_TESTAR_CONFIGURACAO = "testarConfiguracao";
+
+    public static final String BTN_SALVAR_ATUALIZAR_CONFIGURACAO = "atualizarConfiguracao";
+    public static final String BTN_CANCELAR_ATUALIZAR_CONFIGURACAO = "cancelarAtualizarConfiguracao";
+
+    public static final String BTN_SAIR = "sair";
+
+    //Itens
+    public static final String ITM_TABELA = "tabelaSelecionar";
     
+    //Tooltips
+    public static final String TT_BTN_CANCELAR = "Cancelar Operação";
+    public static final String TT_BTN_SALVAR = "Gravar";
+    public static final String TT_BTN_BUSCAR = "Pesquisar...";
+    public static final String TT_BTN_LIMPAR = "Limpar Campos";
+
 }

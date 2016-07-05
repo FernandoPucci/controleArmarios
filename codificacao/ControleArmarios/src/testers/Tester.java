@@ -31,6 +31,8 @@ import br.com.etefgarcia.armarios.model.Config;
 import br.com.etefgarcia.armarios.model.TipoUsuario;
 import br.com.etefgarcia.armarios.model.Usuario;
 import br.com.etefgarcia.armarios.util.ConfigUtils;
+import br.com.etefgarcia.armarios.view.CadastrarAluguelArmarioView;
+import br.com.etefgarcia.armarios.view.CadastrarAlunoView;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -55,16 +57,17 @@ public class Tester {
 
             System.out.println(c);
 
-            inicializar();
+           // inicializar();
 
             //testarInsercaoMassa();
             //testarAluguel();
-            List<AluguelArmario> alugueisAbertos = dao.getAllAluguelArmarioEmAberto();
-        
-            for (AluguelArmario a : alugueisAbertos) {
-                System.out.println("****** " + a);
-
-            }
+            
+//            List<AluguelArmario> alugueisAbertos = dao.getAllAluguelArmarioEmAberto();
+//        
+//            for (AluguelArmario a : alugueisAbertos) {
+//                System.out.println("****** " + a);
+//
+//            }
 //
 //            testarFecharAluguelByIdArmario();
 //            
@@ -80,8 +83,18 @@ public class Tester {
         } catch (Exception ex) {
             Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            System.exit(0);
+          //  System.exit(0);
         }
+        
+        Aluno a = new Aluno();
+        a.setIdAluno(39L);
+        a.setNome("FERNANDO PUCCI");
+        a.setFlgAtivo(Boolean.TRUE);
+        a.setSexo('M');
+        a.setTelefone("19981271009");
+        a.setEmail("fernando@teste.com");
+        CadastrarAlunoView c = new CadastrarAlunoView(a, true);
+        c.setVisible(true);
 
     }
 
@@ -124,6 +137,7 @@ public class Tester {
         Armario armarioAluguel = daoArmario.getAllAtivos(Armario.class).get(0);
         Usuario usuarioAluguel = daoUsuario.getAllAtivos(Usuario.class).get(0);
 
+        
         AluguelArmario aluguel = new AluguelArmario(null, armarioAluguel, alunoAluguel, usuarioAluguel, new Date(), null, Boolean.FALSE);
         dao.save(aluguel);
     }
