@@ -121,8 +121,8 @@ public class Mensagens {
                 }
             }
         } else {
-            for (int i = 100; i < 200; i++) {
-                componente.setBackground(new Color(i, i, 255));
+for (int i = 100; i < 200; i++) {
+                componente.setBackground(new Color(i, i, blue));
                 componente.repaint();
                 try {
                     Thread.sleep(2L);

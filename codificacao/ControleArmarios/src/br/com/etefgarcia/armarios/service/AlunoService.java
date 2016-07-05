@@ -24,6 +24,7 @@ import br.com.etefgarcia.armarios.model.Aluno;
 import br.com.etefgarcia.armarios.util.ServiceUtils;
 import br.com.etefgarcia.armarios.util.TelaUtils;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
+import java.util.List;
 
 /**
  *
@@ -33,7 +34,7 @@ public class AlunoService {
 
     private static AlunoDAO dao = null;
 
-    public static void cadastrarAluno(String nome, String sexo, String telefone, String email) throws NegocioException, SistemaException {
+    public static void cadastrarAlunoService(String nome, String sexo, String telefone, String email) throws NegocioException, SistemaException {
 
         int err = 0;
         StringBuilder sb = new StringBuilder();
@@ -53,7 +54,7 @@ public class AlunoService {
             sb.append(ConstantesTelas.ERR_TOKEN_LISTA + "O aluno deve possuir um contato. E-mail ou telefone");
             err++;
         }
-        
+
         if (!email.trim().isEmpty() && !TelaUtils.validaEmail(email)) {
             sb.append(ConstantesTelas.ERR_TOKEN_LISTA + "Entre com email valido.");
             err++;
@@ -78,7 +79,7 @@ public class AlunoService {
         a.setEmail(email);
 
         try {
-            
+
             dao = new AlunoDAOImpl();
 
             dao.save(a);
@@ -88,6 +89,25 @@ public class AlunoService {
             throw new SistemaException(AlunoService.class, ex.getMessage());
 
         }
+    }
+
+    public static List<Aluno> consultarAlunosService(boolean buscarAtivos) throws SistemaException {
+
+        List<Aluno> listaAlunos = null;
+
+        try {
+
+            dao = new AlunoDAOImpl();
+
+            listaAlunos = buscarAtivos ? dao.getAllAtivos(Aluno.class) : dao.getAll(Aluno.class);
+
+        } catch (Exception ex) {
+
+            throw new SistemaException(AlunoService.class, ex.getMessage());
+
+        }
+
+        return listaAlunos;
     }
 
 }

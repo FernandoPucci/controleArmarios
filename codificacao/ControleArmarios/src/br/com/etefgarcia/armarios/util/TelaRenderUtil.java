@@ -22,13 +22,12 @@ package br.com.etefgarcia.armarios.util;
  */
 public class TelaRenderUtil {
 
-    
     public static void habilitarBotao(javax.swing.JButton botao, boolean habilitar) {
 
         botao.setEnabled(habilitar);
 
     }
-    
+
     public static void habilitarCampos(Object obj, boolean habilitar) {
 
         if (obj instanceof javax.swing.JFormattedTextField) {
@@ -56,13 +55,26 @@ public class TelaRenderUtil {
             obj2.setEnabled(habilitar);
 
         } else if (obj instanceof javax.swing.JTable) {
-            
+
             javax.swing.JTable obj2 = (javax.swing.JTable) obj;
 
             obj2.setEnabled(habilitar);
+            obj2.setVisible(habilitar);
+
+        } else if (obj instanceof javax.swing.JScrollPane) {
+
+            javax.swing.JScrollPane obj2 = (javax.swing.JScrollPane) obj;
+
+            obj2.setEnabled(habilitar);
+            obj2.setVisible(habilitar);
+        } else if (obj instanceof javax.swing.JPanel) {
+
+            javax.swing.JPanel obj2 = (javax.swing.JPanel) obj;
+
+            obj2.setEnabled(habilitar);
+            obj2.setVisible(habilitar);
 
         }
     }
-
 
 }

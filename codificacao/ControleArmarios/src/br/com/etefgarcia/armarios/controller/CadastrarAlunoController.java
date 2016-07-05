@@ -23,6 +23,7 @@ import br.com.etefgarcia.armarios.service.AlunoService;
 import br.com.etefgarcia.armarios.util.Mensagens;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
 import br.com.etefgarcia.armarios.view.CadastrarAlunoView;
+import java.util.List;
 import javax.swing.AbstractButton;
 
 /**
@@ -55,6 +56,38 @@ public class CadastrarAlunoController {
         };
     }
 
+    public Thread getThreadConsultarAluno() {
+
+        return new Thread() {
+
+            @Override
+            public void run() {
+
+                Boolean ativos = cadastrarAlunoView.getFiltroAtivo();
+
+                try {
+
+                    List<Aluno> listaAlunos = AlunoService.consultarAlunosService(ativos);
+
+                    if (listaAlunos == null || listaAlunos.isEmpty()) {
+                        Mensagens.mostraMensagemAlerta(cadastrarAlunoView.getPainel(), "Não há resultados para esta busca.");
+
+                    }
+
+                    cadastrarAlunoView.setListaAlunos(AlunoService.consultarAlunosService(ativos));
+                    cadastrarAlunoView.mostrarPainelFiltrosConsulta(true);
+
+                } catch (SistemaException ex) {
+
+                    Mensagens.mostraMensagemErro(cadastrarAlunoView.getPainel(), ex.getMessage());
+
+                }
+
+            }
+
+        };
+    }
+
     public Thread getThreadCadastrarAluno() {
 
         return new Thread() {
@@ -65,7 +98,7 @@ public class CadastrarAlunoController {
 
                     Aluno a = cadastrarAlunoView.getAluno();
 
-                    AlunoService.cadastrarAluno(a.getNome(), a.getSexo() + "", a.getTelefone(), a.getEmail());
+                    AlunoService.cadastrarAlunoService(a.getNome(), a.getSexo() + "", a.getTelefone(), a.getEmail());
 
                     Mensagens.mostraMensagemSucesso(cadastrarAlunoView.getPainel(), "Aluno Cadastrado com sucesso.");
 
@@ -96,14 +129,18 @@ public class CadastrarAlunoController {
 
         switch (botao) {
 
-            case ConstantesTelas.BTN_CANCELAR:
-                getThreadConfirmarCancelar().start();
+            case ConstantesTelas.BTN_BUSCAR:
+                getThreadConsultarAluno().start();
                 break;
 
             case ConstantesTelas.BTN_SALVAR:
                 getThreadCadastrarAluno().start();
                 break;
-                
+
+            case ConstantesTelas.BTN_CANCELAR:
+                getThreadConfirmarCancelar().start();
+                break;
+
             case ConstantesTelas.BTN_LIMPAR:
                 cadastrarAlunoView.limparCampos();
                 break;

@@ -23,7 +23,10 @@ import br.com.etefgarcia.armarios.util.Mensagens;
 import br.com.etefgarcia.armarios.util.TelaRenderUtil;
 import br.com.etefgarcia.armarios.util.TelaUtils;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
+import java.util.List;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -35,6 +38,7 @@ public class CadastrarAlunoView extends javax.swing.JFrame {
     private CadastrarAlunoController cadastrarAlunoController;
     private CadastrarAlunoViewAction cadastrarAlunoViewAction;
     private Boolean isAtualizar = Boolean.FALSE;
+    private List<Aluno> listaAlunos = null;
     
     private final Runnable threadChecaCampoNome = new Runnable() {
         
@@ -55,6 +59,7 @@ public class CadastrarAlunoView extends javax.swing.JFrame {
         configurarItens();
         
         mostrarTabela(false);
+        mostrarPainelFiltrosConsulta(false);
         
     }
     
@@ -70,6 +75,7 @@ public class CadastrarAlunoView extends javax.swing.JFrame {
         configurarItens();
         
         mostrarTabela(false);
+        mostrarPainelFiltrosConsulta(false);
         
         if (aluno != null) {
             vincularAluno();
@@ -100,6 +106,7 @@ public class CadastrarAlunoView extends javax.swing.JFrame {
     private void configurarItens() {
         
         TelaRenderUtil.habilitarCampos(jTableTabela, false);
+        TelaRenderUtil.habilitarCampos(jScrollPane1, false);
         
     }
     
@@ -148,6 +155,12 @@ public class CadastrarAlunoView extends javax.swing.JFrame {
         jTextFieldIdAluno = new javax.swing.JTextField();
         jLabelNome = new javax.swing.JLabel();
         jTextFieldNome = new javax.swing.JTextField();
+        jPanelInternoFiltrosBusca = new javax.swing.JPanel();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 0));
+        jcheckBoxFiltroFlgAtivo = new javax.swing.JCheckBox();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0));
+        jButton1 = new javax.swing.JButton();
+        jPanelInternoDadosAluno = new javax.swing.JPanel();
         jLabelSexo = new javax.swing.JLabel();
         jComboBoxSexo = new javax.swing.JComboBox();
         jLabelTelefone = new javax.swing.JLabel();
@@ -212,9 +225,44 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
     });
     jPanelEsquerdo.add(jTextFieldNome);
 
+    jPanelInternoFiltrosBusca.setPreferredSize(new java.awt.Dimension(483, 80));
+
+    filler3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+    jPanelInternoFiltrosBusca.add(filler3);
+
+    jcheckBoxFiltroFlgAtivo.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+    jcheckBoxFiltroFlgAtivo.setText("Exibir Somente Alunos Ativos");
+    jcheckBoxFiltroFlgAtivo.setMargin(new java.awt.Insets(0, 50, 0, 0));
+    jcheckBoxFiltroFlgAtivo.setMaximumSize(new java.awt.Dimension(400, 24));
+    jcheckBoxFiltroFlgAtivo.setMinimumSize(new java.awt.Dimension(400, 24));
+    jcheckBoxFiltroFlgAtivo.setPreferredSize(new java.awt.Dimension(400, 24));
+    jcheckBoxFiltroFlgAtivo.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jcheckBoxFiltroFlgAtivoActionPerformed(evt);
+        }
+    });
+    jPanelInternoFiltrosBusca.add(jcheckBoxFiltroFlgAtivo);
+
+    filler2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+    jPanelInternoFiltrosBusca.add(filler2);
+
+    jButton1.setText("Fechar Filtros");
+    jButton1.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jButton1ActionPerformed(evt);
+        }
+    });
+    jPanelInternoFiltrosBusca.add(jButton1);
+
+    jPanelEsquerdo.add(jPanelInternoFiltrosBusca);
+
+    jPanelInternoDadosAluno.setMaximumSize(new java.awt.Dimension(483, 80));
+    jPanelInternoDadosAluno.setMinimumSize(new java.awt.Dimension(483, 80));
+    jPanelInternoDadosAluno.setPreferredSize(new java.awt.Dimension(483, 80));
+
     jLabelSexo.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
     jLabelSexo.setText("Sexo:");
-    jPanelEsquerdo.add(jLabelSexo);
+    jPanelInternoDadosAluno.add(jLabelSexo);
 
     jComboBoxSexo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Selecione..." }));
     jComboBoxSexo.addActionListener(new java.awt.event.ActionListener() {
@@ -222,7 +270,7 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
             jComboBoxSexoActionPerformed(evt);
         }
     });
-    jPanelEsquerdo.add(jComboBoxSexo);
+    jPanelInternoDadosAluno.add(jComboBoxSexo);
 
     jLabelTelefone.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
     jLabelTelefone.setText("Telefone:");
@@ -230,7 +278,7 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
     jLabelTelefone.setMinimumSize(new java.awt.Dimension(80, 17));
     jLabelTelefone.setPreferredSize(new java.awt.Dimension(80, 17));
     jLabelTelefone.setRequestFocusEnabled(false);
-    jPanelEsquerdo.add(jLabelTelefone);
+    jPanelInternoDadosAluno.add(jLabelTelefone);
 
     jTextFieldTelefone.setMaximumSize(new java.awt.Dimension(220, 28));
     jTextFieldTelefone.setMinimumSize(new java.awt.Dimension(220, 28));
@@ -241,11 +289,11 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
             jTextFieldTelefoneFocusLost(evt);
         }
     });
-    jPanelEsquerdo.add(jTextFieldTelefone);
+    jPanelInternoDadosAluno.add(jTextFieldTelefone);
 
     jLabelEmail.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
     jLabelEmail.setText("E-Mail:");
-    jPanelEsquerdo.add(jLabelEmail);
+    jPanelInternoDadosAluno.add(jLabelEmail);
 
     jTextFieldEmail.setMaximumSize(new java.awt.Dimension(250, 28));
     jTextFieldEmail.setMinimumSize(new java.awt.Dimension(250, 28));
@@ -260,7 +308,7 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
             jTextFieldEmailFocusLost(evt);
         }
     });
-    jPanelEsquerdo.add(jTextFieldEmail);
+    jPanelInternoDadosAluno.add(jTextFieldEmail);
 
     jCheckBoxFlgAtivo.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
     jCheckBoxFlgAtivo.setText("Ativo ?");
@@ -273,7 +321,9 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
             jCheckBoxFlgAtivoActionPerformed(evt);
         }
     });
-    jPanelEsquerdo.add(jCheckBoxFlgAtivo);
+    jPanelInternoDadosAluno.add(jCheckBoxFlgAtivo);
+
+    jPanelEsquerdo.add(jPanelInternoDadosAluno);
 
     jSeparator1.setMaximumSize(new java.awt.Dimension(450, 15));
     jSeparator1.setMinimumSize(new java.awt.Dimension(450, 15));
@@ -389,12 +439,12 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
     private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
-     
-        if(jComboBoxSexo.getSelectedIndex()==0){
-        Mensagens.mostraMensagemAlerta("Selecione o Sexo.");
         
+        if (jComboBoxSexo.getSelectedIndex() == 0) {
+            Mensagens.mostraMensagemAlerta("Selecione o Sexo.");
+            
         }
-        
+
     }//GEN-LAST:event_jButtonSalvarActionPerformed
 
     private void jTextFieldNomeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldNomeKeyTyped
@@ -455,6 +505,16 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
         }
     }//GEN-LAST:event_jTextFieldTelefoneFocusLost
 
+    private void jcheckBoxFiltroFlgAtivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcheckBoxFiltroFlgAtivoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jcheckBoxFiltroFlgAtivoActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+        mostrarPainelFiltrosConsulta(false);
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -493,6 +553,9 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private br.com.etefgarcia.armarios.model.Aluno aluno;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler3;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonBuscar;
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonLimpar;
@@ -507,6 +570,8 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
     private javax.swing.JPanel jPanelBotoes;
     private javax.swing.JPanel jPanelEsquerdo;
     private javax.swing.JPanel jPanelFundo;
+    private javax.swing.JPanel jPanelInternoDadosAluno;
+    private javax.swing.JPanel jPanelInternoFiltrosBusca;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTableTabela;
@@ -514,6 +579,7 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
     private javax.swing.JTextField jTextFieldIdAluno;
     private javax.swing.JTextField jTextFieldNome;
     private javax.swing.JTextField jTextFieldTelefone;
+    private javax.swing.JCheckBox jcheckBoxFiltroFlgAtivo;
     // End of variables declaration//GEN-END:variables
 
     private void removeListeners() {
@@ -587,6 +653,9 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
         jComboBoxSexo.setSelectedIndex(0);
         
         configurarBotoes(false);
+        
+        jScrollPane1.setVisible(false);
+        jTableTabela.setVisible(false);
     }
     
     private void vincularAluno() {
@@ -603,9 +672,59 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
         
     }
     
-    private void mostrarTabela(boolean b) {
-        jTableTabela.setVisible(false);
-        jScrollPane1.setVisible(false);
+    private void mostrarTabela(boolean mostrar) {
+        
+        if (listaAlunos != null && mostrar) {
+            carregaTabela();
+            
+            jTableTabela.setVisible(mostrar);
+            jScrollPane1.setVisible(mostrar);
+            
+        }
+        
+    }
+    
+    private void carregaTabela() {
+        
+        DefaultTableModel modelTabela = new DefaultTableModel();
+
+        //monta os cabeçalhos das colunas da tabela
+        modelTabela.addColumn("Codigo");
+        modelTabela.addColumn("Nome");
+        modelTabela.addColumn("Sexo");
+        modelTabela.addColumn("Telefone");
+        modelTabela.addColumn("Email");
+        modelTabela.addColumn("Ativo");
+        
+        for (Aluno c : listaAlunos) {
+
+            //cria uma linha 'generica' com a quantidade de colunas do  modelTabela
+            Object[] vetorLinhas = new Object[modelTabela.getColumnCount()];
+
+            //preenche as colunas de cada linha do vetorLinhas para preenchar com os dados do Cliente
+            vetorLinhas[0] = c.getIdAluno();
+            vetorLinhas[1] = c.getNome();
+            vetorLinhas[2] = c.getSexo();
+            vetorLinhas[3] = c.getTelefone();
+            vetorLinhas[4] = c.getEmail();
+            vetorLinhas[5] = c.getFlgAtivo();
+
+            //adiciona esta linha ao model da tabela
+            modelTabela.addRow(vetorLinhas);
+            
+        }
+        //desabilita selecao de colunas na tabela
+        jTableTabela.setColumnSelectionAllowed(false);
+
+        //desabilita selecao de celulas na tabela
+        jTableTabela.setCellSelectionEnabled(false);
+
+        //habilita selecao de unica linha
+        jTableTabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        //finalmente adiciono o modelo ja pronto à minha tabela
+        jTableTabela.setModel(modelTabela);
+        
     }
     
     public javax.swing.JComponent getPainel() {
@@ -623,6 +742,32 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
         this.aluno.setSexo((String) jComboBoxSexo.getSelectedItem());
         
         return this.aluno;
+        
+    }
+    
+    public void mostrarPainelFiltrosConsulta(boolean mostrar) {
+        
+        TelaRenderUtil.habilitarCampos(jPanelInternoFiltrosBusca, mostrar);
+        TelaRenderUtil.habilitarCampos(jcheckBoxFiltroFlgAtivo, mostrar);
+        
+        TelaRenderUtil.habilitarCampos(jPanelInternoDadosAluno, !mostrar);
+        
+        TelaRenderUtil.habilitarBotao(jButtonSalvar, false);
+        TelaRenderUtil.habilitarBotao(jButtonLimpar, false);
+        
+        mostrarTabela(true);
+        
+    }
+    
+    public Boolean getFiltroAtivo() {
+        
+        return this.jcheckBoxFiltroFlgAtivo.isSelected();
+        
+    }
+    
+    public void setListaAlunos(List<Aluno> listaAlunos) {
+        
+        this.listaAlunos = listaAlunos;
         
     }
     
