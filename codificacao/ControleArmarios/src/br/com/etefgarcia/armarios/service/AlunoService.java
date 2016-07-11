@@ -112,4 +112,23 @@ public class AlunoService {
         return listaAlunos;
     }
 
+    public static List<Aluno> consultarAlunosByNomeService(String nome, boolean buscarAtivos) throws SistemaException {
+
+        List<Aluno> listaAlunos = null;
+
+        try {
+
+            dao = new AlunoDAOImpl();
+
+            listaAlunos = dao.getAlunoByNomeDao(nome, buscarAtivos);
+
+        } catch (Exception ex) {
+
+            throw new SistemaException(AlunoService.class, ex.getMessage());
+
+        }
+
+        return listaAlunos;
+    }
+
 }

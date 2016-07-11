@@ -26,6 +26,6 @@ import java.util.List;
  */
 public interface AlunoDAO extends BaseDAO<Aluno, Long> {
 
-    public List<Aluno> getAlunoByNomeDao(String nome) throws IOException, ClassNotFoundException, Exception;
+    public List<Aluno> getAlunoByNomeDao(String nome, Boolean ativo)  throws IOException, ClassNotFoundException, Exception;
 
 }

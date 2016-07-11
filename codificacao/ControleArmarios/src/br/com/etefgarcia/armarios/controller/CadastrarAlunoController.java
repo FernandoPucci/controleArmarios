@@ -65,15 +65,29 @@ public class CadastrarAlunoController {
 
                 try {
 
-                    List<Aluno> listaAlunos = AlunoService.consultarAlunosService(true);
+                    consultarAlunos();
 
-                    if (listaAlunos == null || listaAlunos.isEmpty()) {
-                        Mensagens.mostraMensagemAlerta(cadastrarAlunoView.getPainel(), "Não há resultados para esta busca.");
+                } catch (SistemaException ex) {
 
-                    }
+                    Mensagens.mostraMensagemErro(cadastrarAlunoView.getPainel(), ex.getMessage());
 
-                    cadastrarAlunoView.setListaAlunos(listaAlunos);
-                    cadastrarAlunoView.mostrarTabelas(true);
+                }
+
+            }
+
+        };
+    }
+
+    public Thread getThreadConsultarAlunoByNome() {
+
+        return new Thread() {
+
+            @Override
+            public void run() {
+
+                try {
+
+                    consultarAlunos();
 
                 } catch (SistemaException ex) {
 
@@ -96,7 +110,7 @@ public class CadastrarAlunoController {
                 Aluno a = cadastrarAlunoView.getAlunoSelecionado();
 
                 cadastrarAlunoView.setAluno(a);
-                
+
                 System.out.println(a);
 
             }
@@ -118,7 +132,7 @@ public class CadastrarAlunoController {
 
                     Mensagens.mostraMensagemSucesso(cadastrarAlunoView.getPainel(), a.getIdAluno() != null ? "Aluno Atualizado com sucesso." : "Aluno Cadastrado com sucesso.");
 
-                    cadastrarAlunoView.limparCampos();
+                    cadastrarAlunoView.limparCampos(true);
 
                 } catch (NegocioException | SistemaException ex) {
 
@@ -130,6 +144,22 @@ public class CadastrarAlunoController {
 
         };
 
+    }
+
+    //METODOS PRIVADOS
+    private void consultarAlunos() throws SistemaException {
+
+        List<Aluno> listaAlunos = AlunoService.consultarAlunosByNomeService(cadastrarAlunoView.getNome(), true);
+
+        if (listaAlunos == null || listaAlunos.isEmpty()) {
+            Mensagens.mostraMensagemAlerta(cadastrarAlunoView.getPainel(), "Não há resultados para esta busca.");
+            cadastrarAlunoView.limparCampos(false);
+
+        } else {
+
+            cadastrarAlunoView.setListaAlunos(listaAlunos);
+            cadastrarAlunoView.mostrarTabelas(true);
+        }
     }
 
     //ACOES
@@ -165,7 +195,7 @@ public class CadastrarAlunoController {
                 break;
 
             case ConstantesTelas.BTN_LIMPAR:
-                cadastrarAlunoView.limparCampos();
+                cadastrarAlunoView.limparCampos(true);
                 break;
 
             case ConstantesTelas.ITM_TABELA:

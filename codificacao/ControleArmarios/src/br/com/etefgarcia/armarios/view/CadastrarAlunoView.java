@@ -592,6 +592,7 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
 
             if (this.isAtualizar) {
 
+                cadastrarAlunoController.getThreadConsultarAlunoByNome().start();
                 System.out.println("consultar: " + jTextFieldNome.getText());
 
             }
@@ -599,6 +600,8 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
         } else {
 
             TelaRenderUtil.habilitarBotao(jButtonBuscar, false);
+            TelaRenderUtil.habilitarCampos(jTableTabela, false);
+            TelaRenderUtil.habilitarCampos(jScrollPane1, false);
 
         }
 
@@ -611,10 +614,14 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
 
     }
 
-    public void limparCampos() {
+    public void limparCampos(boolean limparNome) {
 
         jTextFieldEmail.setText("");
-        jTextFieldNome.setText("");
+
+        if (limparNome) {
+             jTextFieldNome.setText("");
+        }
+        
         jTextFieldIdAluno.setText("");
 
         jTextFieldTelefone.setText("");
@@ -778,6 +785,12 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
         int linhaSelecionada = jTableTabela.getSelectedRow();
 
         return listaAlunos.get(linhaSelecionada);
+
+    }
+
+    public String getNome() {
+
+        return this.jTextFieldNome.getText();
 
     }
 

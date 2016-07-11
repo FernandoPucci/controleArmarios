@@ -29,14 +29,15 @@ import javax.persistence.TypedQuery;
 public class AlunoDAOImpl extends BaseDAOImpl<Aluno, Long> implements AlunoDAO {
 
     @Override
-    public List<Aluno> getAlunoByNomeDao(String nome) throws IOException, ClassNotFoundException, Exception {
+    public List<Aluno> getAlunoByNomeDao(String nome, Boolean ativo) throws IOException, ClassNotFoundException, Exception {
 
         List<Aluno> listaSaida = null;
 
         TypedQuery<Aluno> query = getEntityManager().createQuery("SELECT A "
                 + "FROM Aluno A "
                 + "where  A.nome like :nomeQuery "
-                + "and A.flgAtivo = true ", Aluno.class);
+                + (ativo?"and A.flgAtivo = true ": "")
+                , Aluno.class);
 
         query.setParameter("nomeQuery", "%" + nome + "%");
         listaSaida = query.getResultList();
