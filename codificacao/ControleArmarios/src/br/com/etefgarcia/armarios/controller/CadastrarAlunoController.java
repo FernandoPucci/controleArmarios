@@ -62,7 +62,7 @@ public class CadastrarAlunoController {
 
             @Override
             public void run() {
-      
+
                 try {
 
                     List<Aluno> listaAlunos = AlunoService.consultarAlunosService(true);
@@ -80,6 +80,24 @@ public class CadastrarAlunoController {
                     Mensagens.mostraMensagemErro(cadastrarAlunoView.getPainel(), ex.getMessage());
 
                 }
+
+            }
+
+        };
+    }
+
+    public Thread getThreadGetAlunoSelecionado() {
+
+        return new Thread() {
+
+            @Override
+            public void run() {
+
+                Aluno a = cadastrarAlunoView.getAlunoSelecionado();
+
+                //TODO: setar aluno de volta para view
+                cadastrarAlunoView.setAluno(a);
+                System.out.println(a);
 
             }
 
@@ -123,6 +141,13 @@ public class CadastrarAlunoController {
         }
     }
 
+    public void acaoClickController(javax.swing.JTable botao) {
+
+        if (botao.isEnabled()) {
+            acaoController(botao.getName());
+        }
+    }
+
     private void acaoController(String botao) {
 
         switch (botao) {
@@ -141,6 +166,10 @@ public class CadastrarAlunoController {
 
             case ConstantesTelas.BTN_LIMPAR:
                 cadastrarAlunoView.limparCampos();
+                break;
+
+            case ConstantesTelas.ITM_TABELA:
+                getThreadGetAlunoSelecionado().start();
                 break;
 
         }

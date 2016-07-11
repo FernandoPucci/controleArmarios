@@ -27,9 +27,8 @@ import javax.swing.AbstractButton;
  */
 public class CadastrarAlunoViewAction implements MouseListener {
 
-    private final CadastrarAlunoController cadastrarAlunoController
-            
-;
+    private final CadastrarAlunoController cadastrarAlunoController;
+
     public CadastrarAlunoViewAction(CadastrarAlunoController cadastrarAlunoController) {
 
         this.cadastrarAlunoController = cadastrarAlunoController;
@@ -43,6 +42,10 @@ public class CadastrarAlunoViewAction implements MouseListener {
             if (source instanceof AbstractButton) {
 
                 cadastrarAlunoController.acaoClickController((AbstractButton) source);
+
+            } else if (source instanceof javax.swing.JTable) {
+
+                cadastrarAlunoController.acaoClickController((javax.swing.JTable) source);
 
             }
         }
