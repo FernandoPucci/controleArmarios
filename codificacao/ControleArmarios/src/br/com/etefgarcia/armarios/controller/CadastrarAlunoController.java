@@ -95,8 +95,8 @@ public class CadastrarAlunoController {
 
                 Aluno a = cadastrarAlunoView.getAlunoSelecionado();
 
-                //TODO: setar aluno de volta para view
                 cadastrarAlunoView.setAluno(a);
+                
                 System.out.println(a);
 
             }
@@ -114,9 +114,9 @@ public class CadastrarAlunoController {
 
                     Aluno a = cadastrarAlunoView.getAluno();
 
-                    AlunoService.cadastrarAlunoService(a.getNome(), a.getSexo() + "", a.getTelefone(), a.getEmail());
+                    AlunoService.cadastrarAtualizarAlunoService(a.getIdAluno(), a.getNome(), a.getSexo() + "", a.getTelefone(), a.getEmail(), a.getFlgAtivo());
 
-                    Mensagens.mostraMensagemSucesso(cadastrarAlunoView.getPainel(), "Aluno Cadastrado com sucesso.");
+                    Mensagens.mostraMensagemSucesso(cadastrarAlunoView.getPainel(), a.getIdAluno() != null ? "Aluno Atualizado com sucesso." : "Aluno Cadastrado com sucesso.");
 
                     cadastrarAlunoView.limparCampos();
 

@@ -137,6 +137,13 @@ public class CadastrarAlunoView extends javax.swing.JFrame {
         TelaRenderUtil.habilitarBotao(jButtonLimpar, habilitar);
         
     }
+    
+    private void habilitarSalvar(boolean habilitar) {
+        
+        TelaRenderUtil.habilitarBotao(jButtonSalvar, habilitar);
+        TelaRenderUtil.habilitarBotao(jButtonLimpar, habilitar);
+        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -295,9 +302,11 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
     jSeparator1.setRequestFocusEnabled(false);
     jPanelEsquerdo.add(jSeparator1);
 
-    jScrollPane1.setMaximumSize(new java.awt.Dimension(452, 300));
-    jScrollPane1.setMinimumSize(new java.awt.Dimension(452, 300));
-    jScrollPane1.setPreferredSize(new java.awt.Dimension(452, 300));
+    jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    jScrollPane1.setMaximumSize(new java.awt.Dimension(452, 270));
+    jScrollPane1.setMinimumSize(new java.awt.Dimension(452, 270));
+    jScrollPane1.setName(""); // NOI18N
+    jScrollPane1.setPreferredSize(new java.awt.Dimension(452, 270));
     jScrollPane1.setRequestFocusEnabled(false);
 
     jTableTabela.setModel(new javax.swing.table.DefaultTableModel(
@@ -316,11 +325,11 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
             return canEdit [columnIndex];
         }
     });
-    jTableTabela.setEditingRow(1);
-    jTableTabela.setMaximumSize(new java.awt.Dimension(400, 200));
-    jTableTabela.setMinimumSize(new java.awt.Dimension(400, 200));
+    jTableTabela.setEnabled(false);
+    jTableTabela.setMaximumSize(new java.awt.Dimension(400, 270));
+    jTableTabela.setMinimumSize(new java.awt.Dimension(400, 270));
     jTableTabela.setName(ConstantesTelas.ITM_TABELA);
-    jTableTabela.setPreferredSize(new java.awt.Dimension(400, 200));
+    jTableTabela.setPreferredSize(new java.awt.Dimension(400, 270));
     jTableTabela.setSelectionBackground(new java.awt.Color(254, 130, 140));
     jTableTabela.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
     jScrollPane1.setViewportView(jTableTabela);
@@ -577,7 +586,7 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
     
     private void validaCampoNome() {
         
-        if (jTextFieldNome.getText().length() > 0) {
+        if (jTextFieldNome.getText().length() > 3) {
             
             TelaRenderUtil.habilitarBotao(jButtonBuscar, true);
             
@@ -637,6 +646,8 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
             jScrollPane1.setEnabled(mostrar);
             jScrollPane1.setVisible(mostrar);
             
+            habilitarSalvar(false);
+            
         }
         
     }
@@ -671,6 +682,10 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
             
         }
 
+        //coloca checkbox no flgativo
+        //ajusta as barras de rolagem
+        jTableTabela.setPreferredScrollableViewportSize(jTableTabela.getPreferredSize());
+
         //desabilita selecao de colunas na tabela
         jTableTabela.setColumnSelectionAllowed(false);
 
@@ -682,12 +697,13 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
 
         //habilita selecao de linhas
         jTableTabela.setRowSelectionAllowed(true);
-        
+
+        //habilita tabela zebrada
         jTableTabela.setDefaultRenderer(Object.class, new ZebraCellRenderer());
 
         //finalmente adiciono o modelo ja pronto à minha tabela
         jTableTabela.setModel(modelTabela);
-        
+      
     }
     
     public javax.swing.JComponent getPainel() {
@@ -702,6 +718,14 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
         this.aluno.setNome(jTextFieldNome.getText());
         this.aluno.setEmail(jTextFieldEmail.getText());
         
+        try {
+            
+            this.aluno.setIdAluno(jTextFieldIdAluno.getText().isEmpty() ? null : Long.parseLong(jTextFieldIdAluno.getText()));
+            
+        } catch (Exception ex) {
+            this.aluno.setIdAluno(null);
+        }
+        
         this.aluno.setFlgAtivo(jCheckBoxFlgAtivo.isSelected());
         
         this.aluno.setSexo((String) jComboBoxSexo.getSelectedItem());
@@ -714,15 +738,17 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
         
         if (aluno != null) {
             
-            jTextFieldIdAluno.setText(aluno.getIdAluno() + "");
-            jTextFieldNome.setText(aluno.getNome());
-            jTextFieldTelefone.setText(aluno.getTelefone());
-            jTextFieldEmail.setText(aluno.getEmail());
+            this.jTextFieldIdAluno.setText(aluno.getIdAluno() + "");
+            this.jTextFieldNome.setText(aluno.getNome());
+            this.jTextFieldTelefone.setText(aluno.getTelefone());
+            this.jTextFieldEmail.setText(aluno.getEmail());
             
-            jComboBoxSexo.setSelectedItem(aluno.getSexo() == 'M' ? (String) "Masculino" : (String) "Feminino");
+            this.jComboBoxSexo.setSelectedItem(aluno.getSexo() == 'M' ? (String) "Masculino" : (String) "Feminino");
             
-            jCheckBoxFlgAtivo.setSelected(aluno.getFlgAtivo());
-            jCheckBoxFlgAtivo.setEnabled(true);
+            this.jCheckBoxFlgAtivo.setSelected(aluno.getFlgAtivo());
+            this.jCheckBoxFlgAtivo.setEnabled(true);
+            
+            habilitarSalvar(aluno.getIdAluno() != null);
         }
         
     }

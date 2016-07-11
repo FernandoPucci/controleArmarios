@@ -47,18 +47,22 @@ public class ZebraCellRenderer extends DefaultTableCellRenderer {
         Font fonte = table.getFont();
 
         if (table.getName().equals(ConstantesTelas.ITM_TABELA)) {
+            try {
 
-                        
-            if (table.getModel().getValueAt(row, 5).toString().equalsIgnoreCase("true")) {
+                if (table.getModel().getValueAt(row, 5).toString().equalsIgnoreCase("true")) {
 
-                setForeground(Color.GRAY);
+                    setForeground(Color.GRAY);
 
-            } else {
+                } else {
 
+                    setFont(fonte);
+                    setForeground(Color.BLUE);
+                }
+
+            } catch (Exception ex) {
                 setFont(fonte);
                 setForeground(Color.BLUE);
             }
-
         }
 
         return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);

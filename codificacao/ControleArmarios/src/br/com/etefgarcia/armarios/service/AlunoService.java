@@ -34,7 +34,7 @@ public class AlunoService {
 
     private static AlunoDAO dao = null;
 
-    public static void cadastrarAlunoService(String nome, String sexo, String telefone, String email) throws NegocioException, SistemaException {
+    public static void cadastrarAtualizarAlunoService(Long idAluno, String nome, String sexo, String telefone, String email, Boolean flgAtivo) throws NegocioException, SistemaException {
 
         int err = 0;
         StringBuilder sb = new StringBuilder();
@@ -73,10 +73,12 @@ public class AlunoService {
 
         Aluno a = new Aluno();
 
+        a.setIdAluno(idAluno);
         a.setNome(nome.trim().toUpperCase());
         a.setSexo(sexo);
         a.setTelefone(ServiceUtils.limpaTelefone(telefone));
         a.setEmail(email);
+        a.setFlgAtivo(flgAtivo);
 
         try {
 
