@@ -62,20 +62,18 @@ public class CadastrarAlunoController {
 
             @Override
             public void run() {
-
-                Boolean ativos = cadastrarAlunoView.getFiltroAtivo();
-
+      
                 try {
 
-                    List<Aluno> listaAlunos = AlunoService.consultarAlunosService(ativos);
+                    List<Aluno> listaAlunos = AlunoService.consultarAlunosService(true);
 
                     if (listaAlunos == null || listaAlunos.isEmpty()) {
                         Mensagens.mostraMensagemAlerta(cadastrarAlunoView.getPainel(), "Não há resultados para esta busca.");
 
                     }
 
-                    cadastrarAlunoView.setListaAlunos(AlunoService.consultarAlunosService(ativos));
-                    cadastrarAlunoView.mostrarPainelFiltrosConsulta(true);
+                    cadastrarAlunoView.setListaAlunos(listaAlunos);
+                    cadastrarAlunoView.mostrarTabelas(true);
 
                 } catch (SistemaException ex) {
 
