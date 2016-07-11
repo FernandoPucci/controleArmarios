@@ -17,11 +17,15 @@
 package br.com.etefgarcia.armarios.dao;
 
 import br.com.etefgarcia.armarios.model.Aluno;
+import java.io.IOException;
+import java.util.List;
 
 /**
  *
  * @author fernando-pucci
  */
 public interface AlunoDAO extends BaseDAO<Aluno, Long> {
+
+    public List<Aluno> getAlunoByNomeDao(String nome) throws IOException, ClassNotFoundException, Exception;
 
 }

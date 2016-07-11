@@ -61,12 +61,12 @@ public class AlunoDAOTest {
     public static void tearDownClass() throws ClassNotFoundException, Exception {
 
         dao = null;
-        
+
     }
 
     @Before
     public void setUp() throws ClassNotFoundException, Exception {
-        
+
         dao.save(alunoInativo);
         dao.save(alunoAtivo);
 
@@ -74,7 +74,7 @@ public class AlunoDAOTest {
 
     @After
     public void tearDown() throws ClassNotFoundException, Exception {
-        
+
         //limpa alunos
         for (Aluno a : dao.getAll(Aluno.class)) {
 
@@ -114,6 +114,22 @@ public class AlunoDAOTest {
         assertNotNull(lista);
         assertFalse(lista.isEmpty());
         assertTrue(lista.size() == 1);
+
+    }
+
+    @Test
+    @Transactional
+    public void getAlunoByNomeDaoTester() throws ClassNotFoundException , Exception{
+
+         List<Aluno> lista = dao.getAlunoByNomeDao("FER");
+
+        assertNotNull(lista);
+        assertFalse(lista.isEmpty());       
+
+        for(Aluno a : lista){
+            System.out.println(a.getNome());
+        
+        }
 
     }
 }

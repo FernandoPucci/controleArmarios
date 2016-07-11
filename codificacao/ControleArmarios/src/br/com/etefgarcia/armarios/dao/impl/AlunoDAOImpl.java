@@ -18,11 +18,31 @@ package br.com.etefgarcia.armarios.dao.impl;
 
 import br.com.etefgarcia.armarios.dao.AlunoDAO;
 import br.com.etefgarcia.armarios.model.Aluno;
+import java.io.IOException;
+import java.util.List;
+import javax.persistence.TypedQuery;
 
 /**
  *
  * @author fernando-pucci
  */
 public class AlunoDAOImpl extends BaseDAOImpl<Aluno, Long> implements AlunoDAO {
-    
+
+    @Override
+    public List<Aluno> getAlunoByNomeDao(String nome) throws IOException, ClassNotFoundException, Exception {
+
+        List<Aluno> listaSaida = null;
+
+        TypedQuery<Aluno> query = getEntityManager().createQuery("SELECT A "
+                + "FROM Aluno A "
+                + "where  A.nome like :nomeQuery "
+                + "and A.flgAtivo = true ", Aluno.class);
+
+        query.setParameter("nomeQuery", "%" + nome + "%");
+        listaSaida = query.getResultList();
+
+        return listaSaida;
+
+    }
+
 }
