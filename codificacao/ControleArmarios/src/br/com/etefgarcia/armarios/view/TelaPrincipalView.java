@@ -68,6 +68,7 @@ public class TelaPrincipalView extends javax.swing.JFrame {
         jMenuItemConfigurarBanco = new javax.swing.JMenuItem();
         jMenuItemSair = new javax.swing.JMenuItem();
         jMenuAlunos = new javax.swing.JMenu();
+        jMenuItemConsultarAluno = new javax.swing.JMenuItem();
         jMenuItemCadastrarAluno = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -101,7 +102,7 @@ public class TelaPrincipalView extends javax.swing.JFrame {
         jPanelBotoes.setLayout(new java.awt.GridLayout(5, 1));
         jPanelPrincipal.add(jPanelBotoes, new java.awt.GridBagConstraints());
 
-        jMenu.setMnemonic('A');
+        jMenu.setMnemonic('s');
         jMenu.setText("Ações");
         jMenu.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jMenu.setName("acoes"); // NOI18N
@@ -128,9 +129,21 @@ public class TelaPrincipalView extends javax.swing.JFrame {
 
         jMenuBar.add(jMenu);
 
+        jMenuAlunos.setMnemonic('A');
         jMenuAlunos.setText("Alunos");
         jMenuAlunos.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
 
+        jMenuItemConsultarAluno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemConsultarAluno.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jMenuItemConsultarAluno.setText("Buscar Alunos");
+        jMenuItemConsultarAluno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemConsultarAlunoActionPerformed(evt);
+            }
+        });
+        jMenuAlunos.add(jMenuItemConsultarAluno);
+
+        jMenuItemCadastrarAluno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItemCadastrarAluno.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jMenuItemCadastrarAluno.setText("Cadastrar Aluno");
         jMenuItemCadastrarAluno.addActionListener(new java.awt.event.ActionListener() {
@@ -164,7 +177,9 @@ public class TelaPrincipalView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSairActionPerformed
+
         telaPrincipalController.getThreadConfirmarSaida().start();
+
     }//GEN-LAST:event_jMenuItemSairActionPerformed
 
     private void jMenuItemCadastrarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCadastrarAlunoActionPerformed
@@ -174,8 +189,17 @@ public class TelaPrincipalView extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemCadastrarAlunoActionPerformed
 
     private void jMenuItemConfigurarBancoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConfigurarBancoActionPerformed
+
         telaPrincipalController.getThreadShowConfigurarBancoView().start();
+
     }//GEN-LAST:event_jMenuItemConfigurarBancoActionPerformed
+
+    private void jMenuItemConsultarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarAlunoActionPerformed
+
+        telaPrincipalController.getThreadShowConsultarAlunoView().start();
+
+
+    }//GEN-LAST:event_jMenuItemConsultarAlunoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -218,6 +242,7 @@ public class TelaPrincipalView extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JMenuItem jMenuItemCadastrarAluno;
     private javax.swing.JMenuItem jMenuItemConfigurarBanco;
+    private javax.swing.JMenuItem jMenuItemConsultarAluno;
     private javax.swing.JMenuItem jMenuItemSair;
     private javax.swing.JPanel jPanelBotoes;
     private javax.swing.JPanel jPanelEsquerdo;

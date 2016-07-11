@@ -119,16 +119,16 @@ public class AlunoDAOTest {
 
     @Test
     @Transactional
-    public void getAlunoByNomeDaoTester() throws ClassNotFoundException , Exception{
+    public void getAlunoByNomeDaoTester() throws ClassNotFoundException, Exception {
 
-         List<Aluno> lista = dao.getAlunoByNomeDao("FER");
+        List<Aluno> lista = dao.getAlunoByNomeDao("FER", true);
 
         assertNotNull(lista);
-        assertFalse(lista.isEmpty());       
+        assertFalse(lista.isEmpty());
 
-        for(Aluno a : lista){
+        for (Aluno a : lista) {
             System.out.println(a.getNome());
-        
+
         }
 
     }

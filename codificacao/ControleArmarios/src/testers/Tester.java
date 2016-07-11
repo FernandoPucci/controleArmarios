@@ -32,7 +32,7 @@ import br.com.etefgarcia.armarios.model.TipoUsuario;
 import br.com.etefgarcia.armarios.model.Usuario;
 import br.com.etefgarcia.armarios.util.ConfigUtils;
 import br.com.etefgarcia.armarios.view.CadastrarAluguelArmarioView;
-import br.com.etefgarcia.armarios.view.CadastrarAlunoView;
+import br.com.etefgarcia.armarios.view.aluno.CadastrarAlunoView;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;

@@ -27,7 +27,7 @@ public class ConstantesTelas {
     public static final int PISCA_INFO = 3;
 
     public static final String ERR_TOKEN_LISTA = "\n- ";
-    
+
     //Janelas
     public static final String TITULO_JANELA_PRINCIPAL = ".:: CONTROLE DE ARMARIOS";
     public static final String SUBTITULO_JANELA_CONFIG = "Configuração Inicial";
@@ -40,27 +40,34 @@ public class ConstantesTelas {
     public static final String TITULO_ALERTA = ".:: ATENÇAO";
 
     public static final String TITULO_CADASTRAR_ALUNO = "Cadastrar Aluno";
+    public static final String TITULO_CONSULTAR_ALUNO = "Consultar Aluno";
 
     //Botoes
     public static final String BTN_CANCELAR = "cancelar";
     public static final String BTN_SALVAR = "salvar";
     public static final String BTN_BUSCAR = "buscar";
+    public static final String BTN_BUSCAR_TELA_BUSCA = "buscarConsulta";
     public static final String BTN_LIMPAR = "limpar";
+    public static final String BTN_EDITAR = "edit";
     public static final String BTN_SALVAR_CONFIGURACAO = "salvarConfiguracao";
     public static final String BTN_TESTAR_CONFIGURACAO = "testarConfiguracao";
 
     public static final String BTN_SALVAR_ATUALIZAR_CONFIGURACAO = "atualizarConfiguracao";
     public static final String BTN_CANCELAR_ATUALIZAR_CONFIGURACAO = "cancelarAtualizarConfiguracao";
+    public static final String BTN_CANCELAR_CONSULTA_ALUNOS = "cancelarBuscarAluno";
 
     public static final String BTN_SAIR = "sair";
 
     //Itens
     public static final String ITM_TABELA = "tabelaSelecionar";
-    
+    public static final String ITM_TABELA_CONSULTAR = "tabelaSelecionarConsultar";
+
     //Tooltips
-    public static final String TT_BTN_CANCELAR = "Cancelar Operação";
+    public static final String TT_BTN_CANCELAR = "Fechar Tela";
     public static final String TT_BTN_SALVAR = "Gravar";
+    public static final String TT_BTN_EDITAR = "Abrir tela de Edição";
     public static final String TT_BTN_BUSCAR = "Pesquisar...";
     public static final String TT_BTN_LIMPAR = "Limpar Campos";
+    public static final String TT_BTN_LIMPAR_PESQUISA = "Limpar Pesquisa";
 
 }

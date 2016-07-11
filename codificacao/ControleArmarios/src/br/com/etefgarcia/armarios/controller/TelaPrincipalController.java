@@ -18,9 +18,10 @@ package br.com.etefgarcia.armarios.controller;
 
 import br.com.etefgarcia.armarios.util.Mensagens;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
-import br.com.etefgarcia.armarios.view.CadastrarAlunoView;
+import br.com.etefgarcia.armarios.view.aluno.CadastrarAlunoView;
 import br.com.etefgarcia.armarios.view.ConfigInicialView;
 import br.com.etefgarcia.armarios.view.TelaPrincipalView;
+import br.com.etefgarcia.armarios.view.aluno.ConsultarAlunoView;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -93,6 +94,20 @@ public class TelaPrincipalController {
             public void run() {
                 
                 new CadastrarAlunoView(false).setVisible(true);
+                
+            }
+            
+        };
+    }
+    
+        public Thread getThreadShowConsultarAlunoView() {
+        
+        return new Thread() {
+            
+            @Override
+            public void run() {
+                
+                new ConsultarAlunoView().setVisible(true);
                 
             }
             

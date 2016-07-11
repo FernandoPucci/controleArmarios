@@ -22,7 +22,8 @@ import br.com.etefgarcia.armarios.model.Aluno;
 import br.com.etefgarcia.armarios.service.AlunoService;
 import br.com.etefgarcia.armarios.util.Mensagens;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
-import br.com.etefgarcia.armarios.view.CadastrarAlunoView;
+import br.com.etefgarcia.armarios.view.aluno.CadastrarAlunoView;
+import br.com.etefgarcia.armarios.view.aluno.ConsultarAlunoView;
 import java.util.List;
 import javax.swing.AbstractButton;
 
@@ -32,7 +33,14 @@ import javax.swing.AbstractButton;
  */
 public class AlunoController {
 
-    private final CadastrarAlunoView cadastrarAlunoView;
+    private CadastrarAlunoView cadastrarAlunoView = null;
+    private ConsultarAlunoView consultarAlunoView = null;
+
+    public AlunoController(ConsultarAlunoView consultarAlunoView) {
+
+        this.consultarAlunoView = consultarAlunoView;
+
+    }
 
     public AlunoController(CadastrarAlunoView cadastrarAlunoView) {
 
@@ -49,7 +57,27 @@ public class AlunoController {
 
                 int opt = Mensagens.mostraMensagemPergunta("Tem certeza que fechar esta Janela?");
                 if (opt == 0) {
+
                     cadastrarAlunoView.dispose();
+
+                }
+            }
+
+        };
+    }
+
+    public Thread getThreadConfirmarCancelarBusca() {
+
+        return new Thread() {
+
+            @Override
+            public void run() {
+
+                int opt = Mensagens.mostraMensagemPergunta("Tem certeza que fechar esta Janela?");
+                if (opt == 0) {
+
+                    consultarAlunoView.dispose();
+
                 }
             }
 
@@ -100,6 +128,28 @@ public class AlunoController {
         };
     }
 
+    public Thread getThreadConsultarAlunoGeral() {
+
+        return new Thread() {
+
+            @Override
+            public void run() {
+
+                try {
+
+                    consultarAlunosGeral();
+
+                } catch (SistemaException ex) {
+
+                    Mensagens.mostraMensagemErro(cadastrarAlunoView.getPainel(), ex.getMessage());
+
+                }
+
+            }
+
+        };
+    }
+
     public Thread getThreadGetAlunoSelecionado() {
 
         return new Thread() {
@@ -110,6 +160,22 @@ public class AlunoController {
                 Aluno a = cadastrarAlunoView.getAlunoSelecionado();
 
                 cadastrarAlunoView.setAluno(a);
+
+                System.out.println(a);
+
+            }
+
+        };
+    }
+
+    public Thread getThreadGetAlunoSelecionadoConsultar() {
+
+        return new Thread() {
+
+            @Override
+            public void run() {
+
+                Aluno a = consultarAlunoView.getAlunoSelecionado();
 
                 System.out.println(a);
 
@@ -146,7 +212,25 @@ public class AlunoController {
 
     }
 
+    public Thread getThreadShowTelaCadastrarAtualizar() {
+
+        return new Thread() {
+
+            @Override
+            public void run() {
+
+                Aluno a = consultarAlunoView.getAlunoSelecionado();
+
+                new CadastrarAlunoView(a, true).setVisible(true);
+
+            }
+
+        };
+
+    }
+
     //METODOS PRIVADOS
+    //consulta alunos da tela de cadastro
     private void consultarAlunos() throws SistemaException {
 
         List<Aluno> listaAlunos = AlunoService.consultarAlunosByNomeService(cadastrarAlunoView.getNome(), true);
@@ -159,6 +243,22 @@ public class AlunoController {
 
             cadastrarAlunoView.setListaAlunos(listaAlunos);
             cadastrarAlunoView.mostrarTabelas(true);
+        }
+    }
+
+    //consulta aluno generica
+    private void consultarAlunosGeral() throws SistemaException {
+
+        List<Aluno> listaAlunos = AlunoService.consultarAlunosByNomeService(consultarAlunoView.getNome(), true);
+
+        if (listaAlunos == null || listaAlunos.isEmpty()) {
+            Mensagens.mostraMensagemAlerta(consultarAlunoView.getPainel(), "Não há resultados para esta busca.");
+            consultarAlunoView.limparCampos();
+
+        } else {
+
+            consultarAlunoView.setListaAlunos(listaAlunos);
+            consultarAlunoView.mostrarTabelas(true);
         }
     }
 
@@ -186,6 +286,10 @@ public class AlunoController {
                 getThreadConsultarAluno().start();
                 break;
 
+            case ConstantesTelas.BTN_BUSCAR_TELA_BUSCA:
+                getThreadConsultarAlunoGeral().start();
+                break;
+
             case ConstantesTelas.BTN_SALVAR:
                 getThreadCadastrarAluno().start();
                 break;
@@ -193,13 +297,31 @@ public class AlunoController {
             case ConstantesTelas.BTN_CANCELAR:
                 getThreadConfirmarCancelar().start();
                 break;
+            case ConstantesTelas.BTN_CANCELAR_CONSULTA_ALUNOS:
+                getThreadConfirmarCancelarBusca().start();
+                break;
+
+            case ConstantesTelas.BTN_EDITAR:
+                getThreadShowTelaCadastrarAtualizar().start();
+                break;
 
             case ConstantesTelas.BTN_LIMPAR:
-                cadastrarAlunoView.limparCampos(true);
+                if (cadastrarAlunoView != null) {
+                    cadastrarAlunoView.limparCampos(true);
+                }
+
+                if (consultarAlunoView != null) {
+                    consultarAlunoView.limparCampos();
+                }
+                
                 break;
 
             case ConstantesTelas.ITM_TABELA:
                 getThreadGetAlunoSelecionado().start();
+                break;
+
+            case ConstantesTelas.ITM_TABELA_CONSULTAR:
+                getThreadGetAlunoSelecionadoConsultar().start();
                 break;
 
         }
