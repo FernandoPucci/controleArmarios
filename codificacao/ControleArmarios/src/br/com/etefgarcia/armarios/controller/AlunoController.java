@@ -30,11 +30,11 @@ import javax.swing.AbstractButton;
  *
  * @author fernando-pucci
  */
-public class CadastrarAlunoController {
+public class AlunoController {
 
     private final CadastrarAlunoView cadastrarAlunoView;
 
-    public CadastrarAlunoController(CadastrarAlunoView cadastrarAlunoView) {
+    public AlunoController(CadastrarAlunoView cadastrarAlunoView) {
 
         this.cadastrarAlunoView = cadastrarAlunoView;
 

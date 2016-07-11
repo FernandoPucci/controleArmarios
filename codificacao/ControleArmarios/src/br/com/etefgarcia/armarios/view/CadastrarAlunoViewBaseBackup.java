@@ -17,7 +17,7 @@
 package br.com.etefgarcia.armarios.view;
 
 import br.com.etefgarcia.armarios.action.CadastrarAlunoViewAction;
-import br.com.etefgarcia.armarios.controller.CadastrarAlunoController;
+import br.com.etefgarcia.armarios.controller.AlunoController;
 import br.com.etefgarcia.armarios.model.Aluno;
 import br.com.etefgarcia.armarios.util.Mensagens;
 import br.com.etefgarcia.armarios.util.TelaRenderUtil;
@@ -35,7 +35,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class CadastrarAlunoViewBaseBackup extends javax.swing.JFrame {
     
-    private CadastrarAlunoController cadastrarAlunoController;
+    private AlunoController alunoController;
     private CadastrarAlunoViewAction cadastrarAlunoViewAction;
     private Boolean isAtualizar = Boolean.FALSE;
     private List<Aluno> listaAlunos = null;
@@ -96,7 +96,7 @@ public class CadastrarAlunoViewBaseBackup extends javax.swing.JFrame {
         jButtonCancelar.setToolTipText(ConstantesTelas.TT_BTN_CANCELAR);
         
       //  this.cadastrarAlunoController = new CadastrarAlunoController(this);
-        this.cadastrarAlunoViewAction = new CadastrarAlunoViewAction(cadastrarAlunoController);
+        this.cadastrarAlunoViewAction = new CadastrarAlunoViewAction(alunoController);
         
         removeListeners();
         adicionaListeners();

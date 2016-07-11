@@ -16,7 +16,7 @@
  */
 package br.com.etefgarcia.armarios.action;
 
-import br.com.etefgarcia.armarios.controller.CadastrarAlunoController;
+import br.com.etefgarcia.armarios.controller.AlunoController;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.AbstractButton;
@@ -27,11 +27,11 @@ import javax.swing.AbstractButton;
  */
 public class CadastrarAlunoViewAction implements MouseListener {
 
-    private final CadastrarAlunoController cadastrarAlunoController;
+    private final AlunoController alunoController;
 
-    public CadastrarAlunoViewAction(CadastrarAlunoController cadastrarAlunoController) {
+    public CadastrarAlunoViewAction(AlunoController alunoController) {
 
-        this.cadastrarAlunoController = cadastrarAlunoController;
+        this.alunoController = alunoController;
 
     }
 
@@ -41,11 +41,11 @@ public class CadastrarAlunoViewAction implements MouseListener {
             Object source = e.getSource();
             if (source instanceof AbstractButton) {
 
-                cadastrarAlunoController.acaoClickController((AbstractButton) source);
+                alunoController.acaoClickController((AbstractButton) source);
 
             } else if (source instanceof javax.swing.JTable) {
 
-                cadastrarAlunoController.acaoClickController((javax.swing.JTable) source);
+                alunoController.acaoClickController((javax.swing.JTable) source);
 
             }
         }
