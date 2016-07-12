@@ -77,6 +77,7 @@ public class CadastrarAlunoView extends javax.swing.JFrame {
         mostrarTabela(false);
 
         if (aluno != null) {
+            jCheckBoxFlgAtivo.setEnabled(true);
             vincularAluno();
         }
 
@@ -593,9 +594,12 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
             if (this.isAtualizar) {
 
                 alunoController.getThreadConsultarAlunoByNome().start();
-                System.out.println("consultar: " + jTextFieldNome.getText());
 
             }
+
+        } else if (this.isAtualizar) {
+
+            alunoController.getThreadConsultarAlunoByNome().start();
 
         } else {
 
@@ -764,9 +768,9 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
             this.jCheckBoxFlgAtivo.setEnabled(true);
 
             habilitarSalvar(aluno.getIdAluno() != null);
-            
+
             this.isAtualizar = Boolean.TRUE;
-            
+
         }
 
     }
@@ -785,7 +789,7 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
     }
 
     public Aluno getAlunoSelecionado() {
-    
+
         int linhaSelecionada = jTableTabela.getSelectedRow();
 
         return listaAlunos.get(linhaSelecionada);

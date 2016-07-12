@@ -101,7 +101,7 @@ public class AlunoService {
 
             dao = new AlunoDAOImpl();
 
-            listaAlunos = buscarAtivos ? dao.getAllAtivos(Aluno.class) : dao.getAll(Aluno.class);
+            listaAlunos = buscarAtivos ? dao.getAllAtivos(Aluno.class) : dao.getAllInativos(Aluno.class);
 
         } catch (Exception ex) {
 
@@ -121,6 +121,50 @@ public class AlunoService {
             dao = new AlunoDAOImpl();
 
             listaAlunos = dao.getAlunoByNomeDao(nome, buscarAtivos);
+
+        } catch (Exception ex) {
+
+            throw new SistemaException(AlunoService.class, ex.getMessage());
+
+        }
+
+        return listaAlunos;
+    }
+
+    public static Aluno consultarAlunosByCodigoService(String codigo) throws SistemaException, NegocioException {
+
+        Aluno alunoSaida = null;
+
+        if (codigo == null || Long.parseLong(codigo) <= 0) {
+
+            throw new NegocioException("Código inválido.");
+
+        }
+
+        try {
+
+            dao = new AlunoDAOImpl();
+
+            alunoSaida = dao.getById(Aluno.class, Long.parseLong(codigo));
+
+        } catch (Exception ex) {
+
+            throw new SistemaException(AlunoService.class, ex.getMessage());
+
+        }
+
+        return alunoSaida;
+    }
+
+    public static List<Aluno> consultarTodosAlunosService() throws SistemaException, NegocioException {
+
+        List<Aluno> listaAlunos = null;
+
+        try {
+
+            dao = new AlunoDAOImpl();
+
+            listaAlunos = dao.getAll(Aluno.class);
 
         } catch (Exception ex) {
 

@@ -23,6 +23,7 @@ import br.com.etefgarcia.armarios.util.TelaRenderUtil;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
 import br.com.etefgarcia.armarios.util.constantes.telas.render.ZebraCellRenderer;
 import java.util.List;
+import javax.swing.ButtonGroup;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
@@ -46,14 +47,26 @@ public class ConsultarAlunoView extends javax.swing.JFrame {
         }
     };
 
+    private final Runnable threadChecaCampoCodigo = new Runnable() {
+
+        @Override
+        public void run() {
+            validaCampocodigo();
+        }
+    };
+
     public ConsultarAlunoView() {
 
         initComponents();
 
         inicializar();
-        configurarBotoes(true);
+        configurarBotoes(false);
+        configurarBotoesFiltro(true);
+        inicializarRadioButtons();
         configurarCampos();
         configurarItens();
+
+        TelaRenderUtil.habilitarBotao(jButtonBuscar, true);
 
         mostrarTabela(false);
 
@@ -66,10 +79,16 @@ public class ConsultarAlunoView extends javax.swing.JFrame {
         jButtonEditar.setName(ConstantesTelas.BTN_EDITAR);
         jButtonCancelar.setName(ConstantesTelas.BTN_CANCELAR_CONSULTA_ALUNOS);
 
+        jRadioButtonSomenteAtivos.setName(ConstantesTelas.BTN_FILTRO_ATIVOS);
+        jRadioButtonSomenteInativos.setName(ConstantesTelas.BTN_FILTRO_INATIVOS);
+        jRadioButtonTodos.setName(ConstantesTelas.BTN_FILTRO_TODOS);
+
         jButtonBuscar.setToolTipText(ConstantesTelas.TT_BTN_BUSCAR);
         jButtonEditar.setToolTipText(ConstantesTelas.TT_BTN_EDITAR);
         jButtonLimpar.setToolTipText(ConstantesTelas.TT_BTN_LIMPAR_PESQUISA);
         jButtonCancelar.setToolTipText(ConstantesTelas.TT_BTN_CANCELAR);
+
+        jTextFieldNome.requestFocus();
 
         this.alunoController = new AlunoController(this);
         this.consultarAlunoViewAction = new ConsultarAlunoViewAction(alunoController);
@@ -99,6 +118,17 @@ public class ConsultarAlunoView extends javax.swing.JFrame {
         TelaRenderUtil.habilitarBotao(jButtonEditar, habilitar);
         TelaRenderUtil.habilitarBotao(jButtonLimpar, habilitar);
 
+        configurarBotoesFiltro(habilitar);
+
+    }
+
+    private void configurarBotoesFiltro(boolean habilitar) {
+
+        TelaRenderUtil.habilitarBotao(jRadioButtonSomenteAtivos, habilitar);
+        TelaRenderUtil.habilitarBotao(jRadioButtonSomenteInativos, habilitar);
+        TelaRenderUtil.habilitarBotao(jRadioButtonTodos, habilitar);
+
+        jRadioButtonSomenteAtivos.setSelected(true);
     }
 
     /**
@@ -118,8 +148,9 @@ public class ConsultarAlunoView extends javax.swing.JFrame {
         jLabelNome = new javax.swing.JLabel();
         jTextFieldNome = new javax.swing.JTextField();
         jPanelInternoFiltrosBusca = new javax.swing.JPanel();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 0));
-        jcheckBoxFiltroFlgAtivo = new javax.swing.JCheckBox();
+        jRadioButtonTodos = new javax.swing.JRadioButton();
+        jRadioButtonSomenteAtivos = new javax.swing.JRadioButton();
+        jRadioButtonSomenteInativos = new javax.swing.JRadioButton();
         jSeparator1 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableTabela = new javax.swing.JTable();
@@ -156,19 +187,24 @@ jTextFieldIdAluno.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
 jTextFieldIdAluno.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 jTextFieldIdAluno.setDisabledTextColor(new java.awt.Color(210, 20, 8));
 jTextFieldIdAluno.setPreferredSize(new java.awt.Dimension(90, 28));
-jPanelEsquerdo.add(jTextFieldIdAluno);
-
-jLabelNome.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-jLabelNome.setText("Nome:");
-jPanelEsquerdo.add(jLabelNome);
-
-jTextFieldNome.setMaximumSize(new java.awt.Dimension(286, 28));
-jTextFieldNome.setMinimumSize(new java.awt.Dimension(286, 28));
-jTextFieldNome.setPreferredSize(new java.awt.Dimension(286, 28));
-jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
-    public void focusLost(java.awt.event.FocusEvent evt) {
-        jTextFieldNomeFocusLost(evt);
+jTextFieldIdAluno.addKeyListener(new java.awt.event.KeyAdapter() {
+    public void keyTyped(java.awt.event.KeyEvent evt) {
+        jTextFieldIdAlunoKeyTyped(evt);
     }
+    });
+    jPanelEsquerdo.add(jTextFieldIdAluno);
+
+    jLabelNome.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+    jLabelNome.setText("Nome:");
+    jPanelEsquerdo.add(jLabelNome);
+
+    jTextFieldNome.setMaximumSize(new java.awt.Dimension(286, 28));
+    jTextFieldNome.setMinimumSize(new java.awt.Dimension(286, 28));
+    jTextFieldNome.setPreferredSize(new java.awt.Dimension(286, 28));
+    jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent evt) {
+            jTextFieldNomeFocusLost(evt);
+        }
     });
     jTextFieldNome.addKeyListener(new java.awt.event.KeyAdapter() {
         public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -181,21 +217,17 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
     jPanelInternoFiltrosBusca.setOpaque(false);
     jPanelInternoFiltrosBusca.setPreferredSize(new java.awt.Dimension(483, 80));
 
-    filler3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-    jPanelInternoFiltrosBusca.add(filler3);
+    jRadioButtonTodos.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+    jRadioButtonTodos.setText("Todos");
+    jPanelInternoFiltrosBusca.add(jRadioButtonTodos);
 
-    jcheckBoxFiltroFlgAtivo.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-    jcheckBoxFiltroFlgAtivo.setText("Exibir Somente Alunos Ativos");
-    jcheckBoxFiltroFlgAtivo.setMargin(new java.awt.Insets(0, 50, 0, 0));
-    jcheckBoxFiltroFlgAtivo.setMaximumSize(new java.awt.Dimension(400, 24));
-    jcheckBoxFiltroFlgAtivo.setMinimumSize(new java.awt.Dimension(400, 24));
-    jcheckBoxFiltroFlgAtivo.setPreferredSize(new java.awt.Dimension(400, 24));
-    jcheckBoxFiltroFlgAtivo.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jcheckBoxFiltroFlgAtivoActionPerformed(evt);
-        }
-    });
-    jPanelInternoFiltrosBusca.add(jcheckBoxFiltroFlgAtivo);
+    jRadioButtonSomenteAtivos.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+    jRadioButtonSomenteAtivos.setText("Somente Ativos");
+    jPanelInternoFiltrosBusca.add(jRadioButtonSomenteAtivos);
+
+    jRadioButtonSomenteInativos.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+    jRadioButtonSomenteInativos.setText("Somente Inativos");
+    jPanelInternoFiltrosBusca.add(jRadioButtonSomenteInativos);
 
     jPanelEsquerdo.add(jPanelInternoFiltrosBusca);
 
@@ -333,9 +365,9 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
         }
     }//GEN-LAST:event_jTextFieldNomeFocusLost
 
-    private void jcheckBoxFiltroFlgAtivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcheckBoxFiltroFlgAtivoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jcheckBoxFiltroFlgAtivoActionPerformed
+    private void jTextFieldIdAlunoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldIdAlunoKeyTyped
+        SwingUtilities.invokeLater(threadChecaCampoCodigo);
+    }//GEN-LAST:event_jTextFieldIdAlunoKeyTyped
 
     /**
      * @param args the command line arguments
@@ -375,7 +407,6 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private br.com.etefgarcia.armarios.model.Aluno aluno;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler3;
     private javax.swing.JButton jButtonBuscar;
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonEditar;
@@ -386,12 +417,14 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
     private javax.swing.JPanel jPanelEsquerdo;
     private javax.swing.JPanel jPanelFundo;
     private javax.swing.JPanel jPanelInternoFiltrosBusca;
+    private javax.swing.JRadioButton jRadioButtonSomenteAtivos;
+    private javax.swing.JRadioButton jRadioButtonSomenteInativos;
+    private javax.swing.JRadioButton jRadioButtonTodos;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTableTabela;
     private javax.swing.JTextField jTextFieldIdAluno;
     private javax.swing.JTextField jTextFieldNome;
-    private javax.swing.JCheckBox jcheckBoxFiltroFlgAtivo;
     // End of variables declaration//GEN-END:variables
 
     private void removeListeners() {
@@ -402,6 +435,10 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
         jButtonEditar.removeMouseListener(consultarAlunoViewAction);
 
         jTableTabela.removeMouseListener(consultarAlunoViewAction);
+
+        jRadioButtonSomenteAtivos.removeMouseListener(consultarAlunoViewAction);
+        jRadioButtonSomenteInativos.removeMouseListener(consultarAlunoViewAction);
+        jRadioButtonTodos.removeMouseListener(consultarAlunoViewAction);
 
     }
 
@@ -414,17 +451,42 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
 
         jTableTabela.addMouseListener(consultarAlunoViewAction);
 
+        jRadioButtonSomenteAtivos.addMouseListener(consultarAlunoViewAction);
+        jRadioButtonSomenteInativos.addMouseListener(consultarAlunoViewAction);
+        jRadioButtonTodos.addMouseListener(consultarAlunoViewAction);
+
     }
 
     private void validaCampoNome() {
 
-        if (jTextFieldNome.getText().length() > 0) {
+        if (jTextFieldNome.getText().length() > 3) {
 
             TelaRenderUtil.habilitarBotao(jButtonBuscar, true);
 
+            configurarBotoes(true);
+            configurarBotoesFiltro(true);
+
+            alunoController.getThreadConsultarAlunoGeral().start();
+
+        } else {
+            mostrarTabelas(false);
+            configurarBotoes(false);
+            TelaRenderUtil.habilitarBotao(jButtonBuscar, false);
+
+        }
+
+    }
+
+    private void validaCampocodigo() {
+
+        if (jTextFieldIdAluno.getText().trim().length() > 0) {
+
+            configurarBotoes(true);
+            configurarBotoesFiltro(false);
+
         } else {
 
-            TelaRenderUtil.habilitarBotao(jButtonBuscar, false);
+            configurarBotoes(false);
 
         }
 
@@ -519,6 +581,16 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
 
     }
 
+    private void inicializarRadioButtons() {
+
+        ButtonGroup bg1 = new ButtonGroup();
+
+        bg1.add(jRadioButtonTodos);
+        bg1.add(jRadioButtonSomenteAtivos);
+        bg1.add(jRadioButtonSomenteInativos);
+
+    }
+
     public javax.swing.JComponent getPainel() {
 
         return this.jPanelEsquerdo;
@@ -535,12 +607,6 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
 
         mostrarTabela(mostrar);
         habilitarEditar(mostrar);
-
-    }
-
-    public Boolean getFiltroAtivo() {
-
-        return this.jcheckBoxFiltroFlgAtivo.isSelected();
 
     }
 
@@ -567,6 +633,25 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
         int linhaSelecionada = jTableTabela.getSelectedRow();
 
         return listaAlunos.get(linhaSelecionada);
+    }
+
+    public String getFiltroSelecionado() {
+
+        if (jRadioButtonSomenteAtivos.isSelected()) {
+
+            return jRadioButtonSomenteAtivos.getName();
+
+        } else if (jRadioButtonSomenteInativos.isSelected()) {
+
+            return jRadioButtonSomenteInativos.getName();
+
+        } else if (jRadioButtonTodos.isSelected()) {
+
+            return jRadioButtonTodos.getName();
+
+        }
+
+        return jRadioButtonTodos.getName();
 
     }
 

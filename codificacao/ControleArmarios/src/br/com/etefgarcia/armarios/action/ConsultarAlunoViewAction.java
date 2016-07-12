@@ -47,6 +47,10 @@ public class ConsultarAlunoViewAction implements MouseListener {
 
                 alunoController.acaoClickController((javax.swing.JTable) source);
 
+            } else if (source instanceof javax.swing.JRadioButton) {
+
+                alunoController.acaoClickController((javax.swing.JTable) source);
+
             }
         }
     }

@@ -66,6 +66,13 @@ public abstract class BaseDAOImpl<T, I extends Serializable> implements BaseDAO<
 
         return getEntityManager().createQuery("select o from " + classe.getSimpleName() + " o WHERE o.flgAtivo = 1").getResultList();
     }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<T> getAllInativos(Class<T> classe) throws IOException, ClassNotFoundException, Exception {
+
+        return getEntityManager().createQuery("select o from " + classe.getSimpleName() + " o WHERE o.flgAtivo = 0").getResultList();
+    }
 
     @Override
     public EntityManager getEntityManager()throws IOException, ClassNotFoundException, Exception {

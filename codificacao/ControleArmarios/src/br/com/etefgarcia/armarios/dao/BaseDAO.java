@@ -37,5 +37,7 @@ public interface BaseDAO<T, I extends Serializable> {
 
     public List<T> getAllAtivos(Class<T> classe) throws IOException, ClassNotFoundException, Exception;
 
+    public List<T> getAllInativos(Class<T> classe) throws IOException, ClassNotFoundException, Exception;
+
     public EntityManager getEntityManager() throws IOException, ClassNotFoundException, Exception;
 }

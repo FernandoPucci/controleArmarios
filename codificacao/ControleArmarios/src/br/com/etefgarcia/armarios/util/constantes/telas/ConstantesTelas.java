@@ -55,6 +55,10 @@ public class ConstantesTelas {
     public static final String BTN_SALVAR_ATUALIZAR_CONFIGURACAO = "atualizarConfiguracao";
     public static final String BTN_CANCELAR_ATUALIZAR_CONFIGURACAO = "cancelarAtualizarConfiguracao";
     public static final String BTN_CANCELAR_CONSULTA_ALUNOS = "cancelarBuscarAluno";
+    
+    public static final String BTN_FILTRO_TODOS = "consultarFiltroTodos";
+    public static final String BTN_FILTRO_ATIVOS = "consultarFiltroAtivos";
+    public static final String BTN_FILTRO_INATIVOS = "consultarFiltroInativos";
 
     public static final String BTN_SAIR = "sair";
 

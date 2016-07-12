@@ -27,6 +27,12 @@ public class TelaRenderUtil {
         botao.setEnabled(habilitar);
 
     }
+    
+    public static void habilitarBotao(javax.swing.JRadioButton botao, boolean habilitar) {
+        
+        botao.setEnabled(habilitar);
+
+    }
 
     public static void habilitarCampos(Object obj, boolean habilitar) {
 

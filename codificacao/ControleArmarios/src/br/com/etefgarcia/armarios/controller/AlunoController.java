@@ -24,6 +24,7 @@ import br.com.etefgarcia.armarios.util.Mensagens;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
 import br.com.etefgarcia.armarios.view.aluno.CadastrarAlunoView;
 import br.com.etefgarcia.armarios.view.aluno.ConsultarAlunoView;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.AbstractButton;
 
@@ -137,11 +138,31 @@ public class AlunoController {
 
                 try {
 
-                    consultarAlunosGeral();
+                    switch (consultarAlunoView.getFiltroSelecionado()) {
 
-                } catch (SistemaException ex) {
+                        case ConstantesTelas.BTN_FILTRO_TODOS:
+                            consultarAlunosGeral(null);
+                            break;
+                        case ConstantesTelas.BTN_FILTRO_ATIVOS:
+                            consultarAlunosGeral(Boolean.TRUE);
+                            break;
+                        case ConstantesTelas.BTN_FILTRO_INATIVOS:
+                            consultarAlunosGeral(Boolean.FALSE);
+                            break;
 
-                    Mensagens.mostraMensagemErro(cadastrarAlunoView.getPainel(), ex.getMessage());
+                    }
+
+                } catch (SistemaException | NegocioException ex) {
+
+                    if (ex instanceof NegocioException) {
+
+                        Mensagens.mostraMensagemAlerta(consultarAlunoView.getPainel(), ex.getMessage());
+
+                    } else {
+
+                        Mensagens.mostraMensagemErro(consultarAlunoView.getPainel(), ex.getMessage());
+
+                    }
 
                 }
 
@@ -247,9 +268,35 @@ public class AlunoController {
     }
 
     //consulta aluno generica
-    private void consultarAlunosGeral() throws SistemaException {
+    private void consultarAlunosGeral(Boolean ativos) throws SistemaException, NegocioException {
 
-        List<Aluno> listaAlunos = AlunoService.consultarAlunosByNomeService(consultarAlunoView.getNome(), true);
+        List<Aluno> listaAlunos = null;
+
+        //pesquisa por todos alunos
+        if (ativos == null && (consultarAlunoView.getNome() == null || consultarAlunoView.getNome().trim().isEmpty())) {
+
+            listaAlunos = AlunoService.consultarTodosAlunosService();
+
+            //pesquisa por codito
+        } else if (consultarAlunoView.getCodigo() != null && !consultarAlunoView.getCodigo().trim().isEmpty()) {
+
+            Aluno a = AlunoService.consultarAlunosByCodigoService(consultarAlunoView.getCodigo());
+
+            if (a != null) {
+                listaAlunos = new ArrayList<>();
+                listaAlunos.add(a);
+            }
+
+            //pesquisa por nome
+        } else if (consultarAlunoView.getNome() != null && !consultarAlunoView.getNome().trim().isEmpty()) {
+
+            listaAlunos = AlunoService.consultarAlunosByNomeService(consultarAlunoView.getNome().trim(), ativos);
+
+        } else {
+
+            listaAlunos = AlunoService.consultarAlunosService(ativos);
+
+        }
 
         if (listaAlunos == null || listaAlunos.isEmpty()) {
             Mensagens.mostraMensagemAlerta(consultarAlunoView.getPainel(), "Não há resultados para esta busca.");
@@ -260,6 +307,7 @@ public class AlunoController {
             consultarAlunoView.setListaAlunos(listaAlunos);
             consultarAlunoView.mostrarTabelas(true);
         }
+
     }
 
     //ACOES
@@ -278,6 +326,13 @@ public class AlunoController {
         }
     }
 
+    public void acaoClickController(javax.swing.JRadioButton botao) {
+
+        if (botao.isEnabled()) {
+            acaoController(botao.getName());
+        }
+    }
+
     private void acaoController(String botao) {
 
         switch (botao) {
@@ -287,6 +342,18 @@ public class AlunoController {
                 break;
 
             case ConstantesTelas.BTN_BUSCAR_TELA_BUSCA:
+                getThreadConsultarAlunoGeral().start();
+                break;
+
+            case ConstantesTelas.BTN_FILTRO_TODOS:
+                getThreadConsultarAlunoGeral().start();
+                break;
+
+            case ConstantesTelas.BTN_FILTRO_ATIVOS:
+                getThreadConsultarAlunoGeral().start();
+                break;
+
+            case ConstantesTelas.BTN_FILTRO_INATIVOS:
                 getThreadConsultarAlunoGeral().start();
                 break;
 
@@ -313,7 +380,7 @@ public class AlunoController {
                 if (consultarAlunoView != null) {
                     consultarAlunoView.limparCampos();
                 }
-                
+
                 break;
 
             case ConstantesTelas.ITM_TABELA:
