@@ -18,6 +18,7 @@ package br.com.etefgarcia.armarios.dao.impl;
 
 import br.com.etefgarcia.armarios.dao.ArmarioDAO;
 import br.com.etefgarcia.armarios.model.Armario;
+import java.io.IOException;
 import java.util.List;
 import javax.persistence.TypedQuery;
 
@@ -52,6 +53,23 @@ public class ArmarioDAOImpl extends BaseDAOImpl<Armario, Long> implements Armari
                 + " where  A.flgOcupado = true"
                 + " and A.flgAtivo = true ", Armario.class);
 
+        listaSaida = query.getResultList();
+
+        return listaSaida;
+
+    }
+
+    @Override
+    public List<Armario> getArmarioByChaveDao(Long chave, Boolean ativo) throws IOException, ClassNotFoundException, Exception {
+
+        List<Armario> listaSaida = null;
+
+        TypedQuery<Armario> query = getEntityManager().createQuery("SELECT A "
+                + "FROM Armario A "
+                + "where  A.chave = :chaveQuery "
+                + (ativo == null ? " " : ativo ? "and A.flgAtivo = true " : "and A.flgAtivo = false"), Armario.class);
+
+        query.setParameter("chaveQuery", chave);
         listaSaida = query.getResultList();
 
         return listaSaida;

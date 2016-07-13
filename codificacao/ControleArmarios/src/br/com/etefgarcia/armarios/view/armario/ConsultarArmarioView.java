@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.etefgarcia.armarios.view.aluno;
+package br.com.etefgarcia.armarios.view.armario;
 
-import br.com.etefgarcia.armarios.action.aluno.ConsultarAlunoViewAction;
-import br.com.etefgarcia.armarios.controller.AlunoController;
-import br.com.etefgarcia.armarios.model.Aluno;
+import br.com.etefgarcia.armarios.action.armario.ConsultarArmarioViewAction;
+import br.com.etefgarcia.armarios.controller.ArmarioController;
+import br.com.etefgarcia.armarios.model.Armario;
 import br.com.etefgarcia.armarios.util.TelaRenderUtil;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
 import br.com.etefgarcia.armarios.util.constantes.telas.render.ZebraCellRenderer;
@@ -33,17 +33,17 @@ import javax.swing.table.DefaultTableModel;
  * @author fernando-pucci
  *
  */
-public class ConsultarAlunoView extends javax.swing.JFrame {
+public class ConsultarArmarioView extends javax.swing.JFrame {
 
-    private AlunoController alunoController;
-    private ConsultarAlunoViewAction consultarAlunoViewAction;
-    private List<Aluno> listaAlunos = null;
+    private ArmarioController armarioController;
+    private ConsultarArmarioViewAction consultarArmarioViewAction;
+    private List<Armario> listaArmarios = null;
 
-    private final Runnable threadChecaCampoNome = new Runnable() {
+    private final Runnable threadChecaCampoChave = new Runnable() {
 
         @Override
         public void run() {
-            validaCampoNome();
+            validaCampoChave();
         }
     };
 
@@ -55,7 +55,7 @@ public class ConsultarAlunoView extends javax.swing.JFrame {
         }
     };
 
-    public ConsultarAlunoView() {
+    public ConsultarArmarioView() {
 
         initComponents();
 
@@ -77,7 +77,7 @@ public class ConsultarAlunoView extends javax.swing.JFrame {
         jButtonBuscar.setName(ConstantesTelas.BTN_BUSCAR_TELA_BUSCA);
         jButtonCancelar.setName(ConstantesTelas.BTN_CANCELAR);
         jButtonEditar.setName(ConstantesTelas.BTN_EDITAR);
-        jButtonCancelar.setName(ConstantesTelas.BTN_CANCELAR_CONSULTA_ALUNOS);
+        jButtonCancelar.setName(ConstantesTelas.BTN_CANCELAR_CONSULTA_ARMARIOS);
 
         jRadioButtonSomenteAtivos.setName(ConstantesTelas.BTN_FILTRO_ATIVOS);
         jRadioButtonSomenteInativos.setName(ConstantesTelas.BTN_FILTRO_INATIVOS);
@@ -88,10 +88,10 @@ public class ConsultarAlunoView extends javax.swing.JFrame {
         jButtonLimpar.setToolTipText(ConstantesTelas.TT_BTN_LIMPAR_PESQUISA);
         jButtonCancelar.setToolTipText(ConstantesTelas.TT_BTN_CANCELAR);
 
-        jTextFieldNome.requestFocus();
+        jTextFieldChave.requestFocus();
 
-        this.alunoController = new AlunoController(this);
-        this.consultarAlunoViewAction = new ConsultarAlunoViewAction(alunoController);
+        this.armarioController = new ArmarioController(this);
+        this.consultarArmarioViewAction = new ConsultarArmarioViewAction(armarioController);
 
         removeListeners();
         adicionaListeners();
@@ -107,8 +107,8 @@ public class ConsultarAlunoView extends javax.swing.JFrame {
 
     private void configurarCampos() {
 
-        jTextFieldIdAluno.setEnabled(true);
-        jTextFieldIdAluno.setEditable(true);
+        jTextFieldIdArmario.setEnabled(true);
+        jTextFieldIdArmario.setEditable(true);
 
     }
 
@@ -140,13 +140,13 @@ public class ConsultarAlunoView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        aluno = new br.com.etefgarcia.armarios.model.Aluno();
+        armario = new br.com.etefgarcia.armarios.model.Armario();
         jPanelFundo = new javax.swing.JPanel();
         jPanelEsquerdo = new javax.swing.JPanel();
         jLabelIdAluno = new javax.swing.JLabel();
-        jTextFieldIdAluno = new javax.swing.JTextField();
-        jLabelNome = new javax.swing.JLabel();
-        jTextFieldNome = new javax.swing.JTextField();
+        jTextFieldIdArmario = new javax.swing.JTextField();
+        jLabelChave = new javax.swing.JLabel();
+        jTextFieldChave = new javax.swing.JTextField();
         jPanelInternoFiltrosBusca = new javax.swing.JPanel();
         jRadioButtonTodos = new javax.swing.JRadioButton();
         jRadioButtonSomenteAtivos = new javax.swing.JRadioButton();
@@ -162,7 +162,7 @@ public class ConsultarAlunoView extends javax.swing.JFrame {
         jButtonCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle(ConstantesTelas.TITULO_JANELA_PRINCIPAL + " - " + ConstantesTelas.TITULO_CONSULTAR_ALUNO);
+        setTitle(ConstantesTelas.TITULO_JANELA_PRINCIPAL + " - " + ConstantesTelas.TITULO_CONSULTAR_ARMARIO);
         setMinimumSize(new java.awt.Dimension(640, 480));
         setResizable(false);
 
@@ -173,7 +173,7 @@ public class ConsultarAlunoView extends javax.swing.JFrame {
         jPanelFundo.setRequestFocusEnabled(false);
         jPanelFundo.setLayout(new javax.swing.BoxLayout(jPanelFundo, javax.swing.BoxLayout.LINE_AXIS));
 
-        jPanelEsquerdo.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder(null, ConstantesTelas.TITULO_CONSULTAR_ALUNO
+        jPanelEsquerdo.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder(null, ConstantesTelas.TITULO_CONSULTAR_ARMARIO
             , javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14)), javax.swing.BorderFactory.createEtchedBorder())); // NOI18N
 jPanelEsquerdo.setMaximumSize(new java.awt.Dimension(500, 459));
 jPanelEsquerdo.setMinimumSize(new java.awt.Dimension(500, 459));
@@ -183,35 +183,35 @@ jLabelIdAluno.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
 jLabelIdAluno.setText("Cód.:");
 jPanelEsquerdo.add(jLabelIdAluno);
 
-jTextFieldIdAluno.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-jTextFieldIdAluno.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-jTextFieldIdAluno.setDisabledTextColor(new java.awt.Color(210, 20, 8));
-jTextFieldIdAluno.setPreferredSize(new java.awt.Dimension(90, 28));
-jTextFieldIdAluno.addKeyListener(new java.awt.event.KeyAdapter() {
+jTextFieldIdArmario.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+jTextFieldIdArmario.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+jTextFieldIdArmario.setDisabledTextColor(new java.awt.Color(210, 20, 8));
+jTextFieldIdArmario.setPreferredSize(new java.awt.Dimension(90, 28));
+jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
     public void keyTyped(java.awt.event.KeyEvent evt) {
-        jTextFieldIdAlunoKeyTyped(evt);
+        jTextFieldIdArmarioKeyTyped(evt);
     }
     });
-    jPanelEsquerdo.add(jTextFieldIdAluno);
+    jPanelEsquerdo.add(jTextFieldIdArmario);
 
-    jLabelNome.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-    jLabelNome.setText("Nome:");
-    jPanelEsquerdo.add(jLabelNome);
+    jLabelChave.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+    jLabelChave.setText("Chave:");
+    jPanelEsquerdo.add(jLabelChave);
 
-    jTextFieldNome.setMaximumSize(new java.awt.Dimension(286, 28));
-    jTextFieldNome.setMinimumSize(new java.awt.Dimension(286, 28));
-    jTextFieldNome.setPreferredSize(new java.awt.Dimension(286, 28));
-    jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
+    jTextFieldChave.setMaximumSize(new java.awt.Dimension(286, 28));
+    jTextFieldChave.setMinimumSize(new java.awt.Dimension(286, 28));
+    jTextFieldChave.setPreferredSize(new java.awt.Dimension(286, 28));
+    jTextFieldChave.addFocusListener(new java.awt.event.FocusAdapter() {
         public void focusLost(java.awt.event.FocusEvent evt) {
-            jTextFieldNomeFocusLost(evt);
+            jTextFieldChaveFocusLost(evt);
         }
     });
-    jTextFieldNome.addKeyListener(new java.awt.event.KeyAdapter() {
+    jTextFieldChave.addKeyListener(new java.awt.event.KeyAdapter() {
         public void keyTyped(java.awt.event.KeyEvent evt) {
-            jTextFieldNomeKeyTyped(evt);
+            jTextFieldChaveKeyTyped(evt);
         }
     });
-    jPanelEsquerdo.add(jTextFieldNome);
+    jPanelEsquerdo.add(jTextFieldChave);
 
     jPanelInternoFiltrosBusca.setEnabled(false);
     jPanelInternoFiltrosBusca.setOpaque(false);
@@ -353,21 +353,26 @@ jTextFieldIdAluno.addKeyListener(new java.awt.event.KeyAdapter() {
 
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
-    private void jTextFieldNomeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldNomeKeyTyped
+    private void jTextFieldChaveKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldChaveKeyTyped
 
-        SwingUtilities.invokeLater(threadChecaCampoNome);
-    }//GEN-LAST:event_jTextFieldNomeKeyTyped
+        String caracteres = "0987654321";
+        if (!caracteres.contains(evt.getKeyChar() + "")) {
+            evt.consume();
+        }
 
-    private void jTextFieldNomeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldNomeFocusLost
+        SwingUtilities.invokeLater(threadChecaCampoChave);
+    }//GEN-LAST:event_jTextFieldChaveKeyTyped
 
-        if (!jTextFieldNome.getText().trim().isEmpty()) {
+    private void jTextFieldChaveFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldChaveFocusLost
+
+        if (!jTextFieldChave.getText().trim().isEmpty()) {
             configurarBotoes(true);
         }
-    }//GEN-LAST:event_jTextFieldNomeFocusLost
+    }//GEN-LAST:event_jTextFieldChaveFocusLost
 
-    private void jTextFieldIdAlunoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldIdAlunoKeyTyped
+    private void jTextFieldIdArmarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldIdArmarioKeyTyped
         SwingUtilities.invokeLater(threadChecaCampoCodigo);
-    }//GEN-LAST:event_jTextFieldIdAlunoKeyTyped
+    }//GEN-LAST:event_jTextFieldIdArmarioKeyTyped
 
     /**
      * @param args the command line arguments
@@ -386,33 +391,33 @@ jTextFieldIdAluno.addKeyListener(new java.awt.event.KeyAdapter() {
 //                }
 //            }
 //        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(CadastrarAlunoView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(CadastrarArmarioView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(CadastrarAlunoView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(CadastrarArmarioView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(CadastrarAlunoView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(CadastrarArmarioView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(CadastrarAlunoView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(CadastrarArmarioView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        }
 //        //</editor-fold>
 //
 //        /* Create and display the form */
 //        java.awt.EventQueue.invokeLater(new Runnable() {
 //            public void run() {
-//                new CadastrarAlunoView().setVisible(true);
+//                new CadastrarArmarioView().setVisible(true);
 //            }
 //        });
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private br.com.etefgarcia.armarios.model.Aluno aluno;
+    private br.com.etefgarcia.armarios.model.Armario armario;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JButton jButtonBuscar;
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonEditar;
     private javax.swing.JButton jButtonLimpar;
+    private javax.swing.JLabel jLabelChave;
     private javax.swing.JLabel jLabelIdAluno;
-    private javax.swing.JLabel jLabelNome;
     private javax.swing.JPanel jPanelBotoes;
     private javax.swing.JPanel jPanelEsquerdo;
     private javax.swing.JPanel jPanelFundo;
@@ -423,50 +428,50 @@ jTextFieldIdAluno.addKeyListener(new java.awt.event.KeyAdapter() {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTableTabela;
-    private javax.swing.JTextField jTextFieldIdAluno;
-    private javax.swing.JTextField jTextFieldNome;
+    private javax.swing.JTextField jTextFieldChave;
+    private javax.swing.JTextField jTextFieldIdArmario;
     // End of variables declaration//GEN-END:variables
 
     private void removeListeners() {
 
-        jButtonBuscar.removeMouseListener(consultarAlunoViewAction);
-        jButtonCancelar.removeMouseListener(consultarAlunoViewAction);
-        jButtonLimpar.removeMouseListener(consultarAlunoViewAction);
-        jButtonEditar.removeMouseListener(consultarAlunoViewAction);
+        jButtonBuscar.removeMouseListener(consultarArmarioViewAction);
+        jButtonCancelar.removeMouseListener(consultarArmarioViewAction);
+        jButtonLimpar.removeMouseListener(consultarArmarioViewAction);
+        jButtonEditar.removeMouseListener(consultarArmarioViewAction);
 
-        jTableTabela.removeMouseListener(consultarAlunoViewAction);
+        jTableTabela.removeMouseListener(consultarArmarioViewAction);
 
-        jRadioButtonSomenteAtivos.removeMouseListener(consultarAlunoViewAction);
-        jRadioButtonSomenteInativos.removeMouseListener(consultarAlunoViewAction);
-        jRadioButtonTodos.removeMouseListener(consultarAlunoViewAction);
+        jRadioButtonSomenteAtivos.removeMouseListener(consultarArmarioViewAction);
+        jRadioButtonSomenteInativos.removeMouseListener(consultarArmarioViewAction);
+        jRadioButtonTodos.removeMouseListener(consultarArmarioViewAction);
 
     }
 
     private void adicionaListeners() {
 
-        jButtonBuscar.addMouseListener(consultarAlunoViewAction);
-        jButtonCancelar.addMouseListener(consultarAlunoViewAction);
-        jButtonLimpar.addMouseListener(consultarAlunoViewAction);
-        jButtonEditar.addMouseListener(consultarAlunoViewAction);
+        jButtonBuscar.addMouseListener(consultarArmarioViewAction);
+        jButtonCancelar.addMouseListener(consultarArmarioViewAction);
+        jButtonLimpar.addMouseListener(consultarArmarioViewAction);
+        jButtonEditar.addMouseListener(consultarArmarioViewAction);
 
-        jTableTabela.addMouseListener(consultarAlunoViewAction);
+        jTableTabela.addMouseListener(consultarArmarioViewAction);
 
-        jRadioButtonSomenteAtivos.addMouseListener(consultarAlunoViewAction);
-        jRadioButtonSomenteInativos.addMouseListener(consultarAlunoViewAction);
-        jRadioButtonTodos.addMouseListener(consultarAlunoViewAction);
+        jRadioButtonSomenteAtivos.addMouseListener(consultarArmarioViewAction);
+        jRadioButtonSomenteInativos.addMouseListener(consultarArmarioViewAction);
+        jRadioButtonTodos.addMouseListener(consultarArmarioViewAction);
 
     }
 
-    private void validaCampoNome() {
+    private void validaCampoChave() {
 
-        if (jTextFieldNome.getText().length() > 3) {
+        if ((jTextFieldChave.getText().length() > 0) && (listaArmarios != null) && (listaArmarios.size() > 0)) {
 
             TelaRenderUtil.habilitarBotao(jButtonBuscar, true);
 
             configurarBotoes(true);
             configurarBotoesFiltro(true);
 
-            alunoController.getThreadConsultarAlunoGeral().start();
+            armarioController.getThreadConsultarArmarioGeral().start();
 
         } else {
             mostrarTabelas(false);
@@ -475,15 +480,14 @@ jTextFieldIdAluno.addKeyListener(new java.awt.event.KeyAdapter() {
             TelaRenderUtil.habilitarBotao(jButtonBuscar, true);
             configurarBotoesFiltro(true);
 
-            TelaRenderUtil.habilitarBotao(jButtonBuscar, false);
+            TelaRenderUtil.habilitarBotao(jButtonBuscar, jTextFieldChave.getText().length() > 0);
 
         }
-
     }
 
     private void validaCampocodigo() {
 
-        if (jTextFieldIdAluno.getText().trim().length() > 0) {
+        if (jTextFieldIdArmario.getText().trim().length() > 0) {
 
             configurarBotoes(true);
             configurarBotoesFiltro(false);
@@ -498,8 +502,8 @@ jTextFieldIdAluno.addKeyListener(new java.awt.event.KeyAdapter() {
 
     public void limparCampos() {
 
-        jTextFieldNome.setText("");
-        jTextFieldIdAluno.setText("");
+        jTextFieldChave.setText("");
+        jTextFieldIdArmario.setText("");
 
         configurarBotoes(false);
 
@@ -509,7 +513,7 @@ jTextFieldIdAluno.addKeyListener(new java.awt.event.KeyAdapter() {
 
     private void mostrarTabela(boolean mostrar) {
 
-        if (listaAlunos != null && mostrar) {
+        if (listaArmarios != null && mostrar) {
             carregaTabela();
 
             jTableTabela.setVisible(mostrar);
@@ -530,24 +534,22 @@ jTextFieldIdAluno.addKeyListener(new java.awt.event.KeyAdapter() {
 
         //monta os cabeçalhos das colunas da tabela
         modelTabela.addColumn("Cod");
-        modelTabela.addColumn("Nome");
-        modelTabela.addColumn("Sexo");
-        modelTabela.addColumn("Telefone");
-        modelTabela.addColumn("Email");
+        modelTabela.addColumn("Chave");
+        modelTabela.addColumn("Descrição");
+        modelTabela.addColumn("Ocupado");
         modelTabela.addColumn("Ativo");
 
-        for (Aluno c : listaAlunos) {
+        for (Armario c : listaArmarios) {
 
             //cria uma linha 'generica' com a quantidade de colunas do  modelTabela
             Object[] vetorLinhas = new Object[modelTabela.getColumnCount()];
 
             //preenche as colunas de cada linha do vetorLinhas para preenchar com os dados do Cliente
-            vetorLinhas[0] = c.getIdAluno();
-            vetorLinhas[1] = c.getNome();
-            vetorLinhas[2] = c.getSexo();
-            vetorLinhas[3] = c.getTelefone();
-            vetorLinhas[4] = c.getEmail();
-            vetorLinhas[5] = c.getFlgAtivo();
+            vetorLinhas[0] = c.getIdArmario();
+            vetorLinhas[1] = c.getChave();
+            vetorLinhas[2] = c.getDescricao();
+            vetorLinhas[3] = c.getFlgOcupado();
+            vetorLinhas[4] = c.getFlgAtivo();
 
             //adiciona esta linha ao model da tabela
             modelTabela.addRow(vetorLinhas);
@@ -601,9 +603,9 @@ jTextFieldIdAluno.addKeyListener(new java.awt.event.KeyAdapter() {
 
     }
 
-    public Aluno getAluno() {
+    public Armario getArmario() {
 
-        return this.aluno;
+        return this.armario;
 
     }
 
@@ -614,29 +616,29 @@ jTextFieldIdAluno.addKeyListener(new java.awt.event.KeyAdapter() {
 
     }
 
-    public void setListaAlunos(List<Aluno> listaAlunos) {
+    public void setListaArmarios(List<Armario> listaArmarios) {
 
-        this.listaAlunos = listaAlunos;
+        this.listaArmarios = listaArmarios;
 
     }
 
-    public String getNome() {
+    public String getChave() {
 
-        return jTextFieldNome.getText();
+        return jTextFieldChave.getText().trim();
 
     }
 
     public String getCodigo() {
 
-        return jTextFieldIdAluno.getText();
+        return jTextFieldIdArmario.getText();
 
     }
 
-    public Aluno getAlunoSelecionado() {
+    public Armario getArmarioSelecionado() {
 
         int linhaSelecionada = jTableTabela.getSelectedRow();
 
-        return listaAlunos.get(linhaSelecionada);
+        return listaArmarios.get(linhaSelecionada);
     }
 
     public String getFiltroSelecionado() {

@@ -36,8 +36,7 @@ public class AlunoDAOImpl extends BaseDAOImpl<Aluno, Long> implements AlunoDAO {
         TypedQuery<Aluno> query = getEntityManager().createQuery("SELECT A "
                 + "FROM Aluno A "
                 + "where  A.nome like :nomeQuery "
-                + (ativo?"and A.flgAtivo = true ": "")
-                , Aluno.class);
+                + (ativo ==null?" ":ativo ? "and A.flgAtivo = true " : "and A.flgAtivo = false"), Aluno.class);
 
         query.setParameter("nomeQuery", "%" + nome + "%");
         listaSaida = query.getResultList();

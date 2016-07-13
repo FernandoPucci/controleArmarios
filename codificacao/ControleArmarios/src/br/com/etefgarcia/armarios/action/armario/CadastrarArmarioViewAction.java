@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.etefgarcia.armarios.action;
+package br.com.etefgarcia.armarios.action.armario;
 
-import br.com.etefgarcia.armarios.controller.AlunoController;
+import br.com.etefgarcia.armarios.controller.ArmarioController;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.AbstractButton;
@@ -25,13 +25,13 @@ import javax.swing.AbstractButton;
  *
  * @author fernando-pucci
  */
-public class ConsultarAlunoViewAction implements MouseListener {
+public class CadastrarArmarioViewAction implements MouseListener {
 
-    private final AlunoController alunoController;
+    private final ArmarioController armarioController;
 
-    public ConsultarAlunoViewAction(AlunoController alunoController) {
+    public CadastrarArmarioViewAction(ArmarioController armarioController) {
 
-        this.alunoController = alunoController;
+        this.armarioController = armarioController;
 
     }
 
@@ -41,15 +41,11 @@ public class ConsultarAlunoViewAction implements MouseListener {
             Object source = e.getSource();
             if (source instanceof AbstractButton) {
 
-                alunoController.acaoClickController((AbstractButton) source);
+                armarioController.acaoClickController((AbstractButton) source);
 
             } else if (source instanceof javax.swing.JTable) {
 
-                alunoController.acaoClickController((javax.swing.JTable) source);
-
-            } else if (source instanceof javax.swing.JRadioButton) {
-
-                alunoController.acaoClickController((javax.swing.JTable) source);
+                armarioController.acaoClickController((javax.swing.JTable) source);
 
             }
         }

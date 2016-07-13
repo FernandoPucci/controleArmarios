@@ -42,6 +42,9 @@ public class ConstantesTelas {
     public static final String TITULO_CADASTRAR_ALUNO = "Cadastrar Aluno";
     public static final String TITULO_CONSULTAR_ALUNO = "Consultar Aluno";
 
+    public static final String TITULO_CADASTRAR_ARMARIO = "Cadastrar Armario";
+    public static final String TITULO_CONSULTAR_ARMARIO = "Consultar Armario";
+
     //Botoes
     public static final String BTN_CANCELAR = "cancelar";
     public static final String BTN_SALVAR = "salvar";
@@ -55,7 +58,8 @@ public class ConstantesTelas {
     public static final String BTN_SALVAR_ATUALIZAR_CONFIGURACAO = "atualizarConfiguracao";
     public static final String BTN_CANCELAR_ATUALIZAR_CONFIGURACAO = "cancelarAtualizarConfiguracao";
     public static final String BTN_CANCELAR_CONSULTA_ALUNOS = "cancelarBuscarAluno";
-    
+    public static final String BTN_CANCELAR_CONSULTA_ARMARIOS = "cancelarBuscarArmarios";
+
     public static final String BTN_FILTRO_TODOS = "consultarFiltroTodos";
     public static final String BTN_FILTRO_ATIVOS = "consultarFiltroAtivos";
     public static final String BTN_FILTRO_INATIVOS = "consultarFiltroInativos";

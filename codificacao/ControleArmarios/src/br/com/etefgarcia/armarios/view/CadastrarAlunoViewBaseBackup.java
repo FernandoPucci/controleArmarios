@@ -16,7 +16,7 @@
  */
 package br.com.etefgarcia.armarios.view;
 
-import br.com.etefgarcia.armarios.action.CadastrarAlunoViewAction;
+import br.com.etefgarcia.armarios.action.aluno.CadastrarAlunoViewAction;
 import br.com.etefgarcia.armarios.controller.AlunoController;
 import br.com.etefgarcia.armarios.model.Aluno;
 import br.com.etefgarcia.armarios.util.Mensagens;

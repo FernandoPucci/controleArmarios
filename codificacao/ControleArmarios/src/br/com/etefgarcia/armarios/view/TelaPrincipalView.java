@@ -70,6 +70,9 @@ public class TelaPrincipalView extends javax.swing.JFrame {
         jMenuAlunos = new javax.swing.JMenu();
         jMenuItemConsultarAluno = new javax.swing.JMenuItem();
         jMenuItemCadastrarAluno = new javax.swing.JMenuItem();
+        jMenuArmario = new javax.swing.JMenu();
+        jMenuItemConsultarArmario = new javax.swing.JMenuItem();
+        jMenuItemCadastrarArmario = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(ConstantesTelas.TITULO_JANELA_PRINCIPAL + " " + ConstantesTelas.ETEC);
@@ -155,6 +158,30 @@ public class TelaPrincipalView extends javax.swing.JFrame {
 
         jMenuBar.add(jMenuAlunos);
 
+        jMenuArmario.setMnemonic('m');
+        jMenuArmario.setText("Armários");
+        jMenuArmario.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+
+        jMenuItemConsultarArmario.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jMenuItemConsultarArmario.setText("Consultar Armário");
+        jMenuItemConsultarArmario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemConsultarArmarioActionPerformed(evt);
+            }
+        });
+        jMenuArmario.add(jMenuItemConsultarArmario);
+
+        jMenuItemCadastrarArmario.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jMenuItemCadastrarArmario.setText("Cadastrar Armário");
+        jMenuItemCadastrarArmario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCadastrarArmarioActionPerformed(evt);
+            }
+        });
+        jMenuArmario.add(jMenuItemCadastrarArmario);
+
+        jMenuBar.add(jMenuArmario);
+
         setJMenuBar(jMenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -201,6 +228,18 @@ public class TelaPrincipalView extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jMenuItemConsultarAlunoActionPerformed
 
+    private void jMenuItemConsultarArmarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarArmarioActionPerformed
+
+        telaPrincipalController.getThreadShowConsultarArmarioView().start();
+
+    }//GEN-LAST:event_jMenuItemConsultarArmarioActionPerformed
+
+    private void jMenuItemCadastrarArmarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCadastrarArmarioActionPerformed
+
+        telaPrincipalController.getThreadShowCadastrarArmarioView().start();
+        
+    }//GEN-LAST:event_jMenuItemCadastrarArmarioActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -239,10 +278,13 @@ public class TelaPrincipalView extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu;
     private javax.swing.JMenu jMenuAlunos;
+    private javax.swing.JMenu jMenuArmario;
     private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JMenuItem jMenuItemCadastrarAluno;
+    private javax.swing.JMenuItem jMenuItemCadastrarArmario;
     private javax.swing.JMenuItem jMenuItemConfigurarBanco;
     private javax.swing.JMenuItem jMenuItemConsultarAluno;
+    private javax.swing.JMenuItem jMenuItemConsultarArmario;
     private javax.swing.JMenuItem jMenuItemSair;
     private javax.swing.JPanel jPanelBotoes;
     private javax.swing.JPanel jPanelEsquerdo;

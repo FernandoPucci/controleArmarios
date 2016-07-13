@@ -17,6 +17,7 @@
 package br.com.etefgarcia.armarios.dao;
 
 import br.com.etefgarcia.armarios.model.Armario;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -28,5 +29,7 @@ public interface ArmarioDAO extends BaseDAO<Armario, Long> {
     public List<Armario> getAllArmariosLivres() throws Exception;
 
     public List<Armario> getAllArmariosOcupados() throws Exception;
+
+    public List<Armario> getArmarioByChaveDao(Long chave, Boolean ativo) throws IOException, ClassNotFoundException, Exception;
 
 }

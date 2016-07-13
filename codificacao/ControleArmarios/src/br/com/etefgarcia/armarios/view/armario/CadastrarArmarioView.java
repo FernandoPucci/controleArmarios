@@ -14,14 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.etefgarcia.armarios.view.aluno;
+package br.com.etefgarcia.armarios.view.armario;
 
-import br.com.etefgarcia.armarios.action.aluno.CadastrarAlunoViewAction;
-import br.com.etefgarcia.armarios.controller.AlunoController;
-import br.com.etefgarcia.armarios.model.Aluno;
+import br.com.etefgarcia.armarios.action.armario.CadastrarArmarioViewAction;
+import br.com.etefgarcia.armarios.controller.ArmarioController;
+import br.com.etefgarcia.armarios.model.Armario;
 import br.com.etefgarcia.armarios.util.Mensagens;
 import br.com.etefgarcia.armarios.util.TelaRenderUtil;
-import br.com.etefgarcia.armarios.util.TelaUtils;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
 import br.com.etefgarcia.armarios.util.constantes.telas.render.ZebraCellRenderer;
 import java.util.List;
@@ -34,22 +33,23 @@ import javax.swing.table.DefaultTableModel;
  * @author fernando-pucci
  *
  */
-public class CadastrarAlunoView extends javax.swing.JFrame {
+public class CadastrarArmarioView extends javax.swing.JFrame {
 
-    private AlunoController alunoController;
-    private CadastrarAlunoViewAction cadastrarAlunoViewAction;
+    private ArmarioController armarioController;
+    private CadastrarArmarioViewAction cadastrarArmarioViewAction;
     private Boolean isAtualizar = Boolean.FALSE;
-    private List<Aluno> listaAlunos = null;
+    private List<Armario> listaArmarios = null;
 
-    private final Runnable threadChecaCampoNome = new Runnable() {
+    private final Runnable threadChecaCampoChave = new Runnable() {
 
         @Override
         public void run() {
-            validaCampoNome();
+            validaCampoChave();
+            populaDescricao();
         }
     };
 
-    public CadastrarAlunoView(Boolean isAtualizar) {
+    public CadastrarArmarioView(Boolean isAtualizar) {
         initComponents();
 
         this.isAtualizar = isAtualizar == null ? Boolean.FALSE : isAtualizar;
@@ -63,22 +63,22 @@ public class CadastrarAlunoView extends javax.swing.JFrame {
 
     }
 
-    public CadastrarAlunoView(Aluno aluno, Boolean isAtualizar) {
+    public CadastrarArmarioView(Armario armario, Boolean isAtualizar) {
 
         initComponents();
 
-        this.aluno = aluno;
+        this.armario = armario;
 
         inicializar();
-        configurarBotoes(aluno != null);
+        configurarBotoes(armario != null);
         configurarCampos();
         configurarItens();
 
         mostrarTabela(false);
 
-        if (aluno != null) {
+        if (armario != null) {
             jCheckBoxFlgAtivo.setEnabled(true);
-            vincularAluno();
+            vincularArmario();
         }
 
     }
@@ -95,9 +95,11 @@ public class CadastrarAlunoView extends javax.swing.JFrame {
         jButtonLimpar.setToolTipText(ConstantesTelas.TT_BTN_LIMPAR);
         jButtonCancelar.setToolTipText(ConstantesTelas.TT_BTN_CANCELAR);
 
-        this.alunoController = new AlunoController(this);
-        this.cadastrarAlunoViewAction = new CadastrarAlunoViewAction(alunoController);
+        this.armarioController = new ArmarioController(this);
+        this.cadastrarArmarioViewAction = new CadastrarArmarioViewAction(armarioController);
 
+        jTextFieldChave.requestFocus();
+        
         removeListeners();
         adicionaListeners();
 
@@ -112,8 +114,8 @@ public class CadastrarAlunoView extends javax.swing.JFrame {
 
     private void configurarCampos() {
 
-        jTextFieldIdAluno.setEnabled(false);
-        jTextFieldIdAluno.setEditable(false);
+        jTextFieldIdArmario.setEnabled(false);
+        jTextFieldIdArmario.setEditable(false);
 
         if (!isAtualizar) {
 
@@ -122,12 +124,10 @@ public class CadastrarAlunoView extends javax.swing.JFrame {
 
         } else {
 
-            jCheckBoxFlgAtivo.setSelected(this.aluno.getFlgAtivo());
+            jCheckBoxFlgAtivo.setSelected(this.armario.getFlgAtivo());
             TelaRenderUtil.habilitarCampos(jCheckBoxFlgAtivo, true);
 
         }
-
-        preencherComboSexo();
 
     }
 
@@ -155,20 +155,17 @@ public class CadastrarAlunoView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        aluno = new br.com.etefgarcia.armarios.model.Aluno();
+        armario = new br.com.etefgarcia.armarios.model.Armario();
         jPanelFundo = new javax.swing.JPanel();
         jPanelEsquerdo = new javax.swing.JPanel();
-        jLabelIdAluno = new javax.swing.JLabel();
-        jTextFieldIdAluno = new javax.swing.JTextField();
-        jLabelNome = new javax.swing.JLabel();
-        jTextFieldNome = new javax.swing.JTextField();
-        jPanelInternoDadosAluno = new javax.swing.JPanel();
-        jLabelSexo = new javax.swing.JLabel();
-        jComboBoxSexo = new javax.swing.JComboBox();
-        jLabelTelefone = new javax.swing.JLabel();
-        jTextFieldTelefone = new javax.swing.JTextField();
-        jLabelEmail = new javax.swing.JLabel();
-        jTextFieldEmail = new javax.swing.JTextField();
+        jLabelIdArmario = new javax.swing.JLabel();
+        jTextFieldIdArmario = new javax.swing.JTextField();
+        jLabelChave = new javax.swing.JLabel();
+        jTextFieldChave = new javax.swing.JTextField();
+        jPanelInternoDadosArmario = new javax.swing.JPanel();
+        jLabelDescricao = new javax.swing.JLabel();
+        jTextFieldDescricao = new javax.swing.JTextField();
+        jCheckBoxFlgOcupado = new javax.swing.JCheckBox();
         jCheckBoxFlgAtivo = new javax.swing.JCheckBox();
         jSeparator1 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -181,7 +178,7 @@ public class CadastrarAlunoView extends javax.swing.JFrame {
         jButtonCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle(ConstantesTelas.TITULO_JANELA_PRINCIPAL + " - " + ConstantesTelas.TITULO_CADASTRAR_ALUNO);
+        setTitle(ConstantesTelas.TITULO_JANELA_PRINCIPAL + " - " + ConstantesTelas.TITULO_CADASTRAR_ARMARIO);
         setMinimumSize(new java.awt.Dimension(640, 480));
         setResizable(false);
 
@@ -198,88 +195,70 @@ jPanelEsquerdo.setMaximumSize(new java.awt.Dimension(500, 459));
 jPanelEsquerdo.setMinimumSize(new java.awt.Dimension(500, 459));
 jPanelEsquerdo.setPreferredSize(new java.awt.Dimension(500, 459));
 
-jLabelIdAluno.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-jLabelIdAluno.setText("Cód.:");
-jPanelEsquerdo.add(jLabelIdAluno);
+jLabelIdArmario.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+jLabelIdArmario.setText("Cód.:");
+jPanelEsquerdo.add(jLabelIdArmario);
 
-jTextFieldIdAluno.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-jTextFieldIdAluno.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-jTextFieldIdAluno.setDisabledTextColor(new java.awt.Color(210, 20, 8));
-jTextFieldIdAluno.setPreferredSize(new java.awt.Dimension(90, 28));
-jPanelEsquerdo.add(jTextFieldIdAluno);
+jTextFieldIdArmario.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+jTextFieldIdArmario.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+jTextFieldIdArmario.setDisabledTextColor(new java.awt.Color(210, 20, 8));
+jTextFieldIdArmario.setPreferredSize(new java.awt.Dimension(90, 28));
+jPanelEsquerdo.add(jTextFieldIdArmario);
 
-jLabelNome.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-jLabelNome.setText("Nome:");
-jPanelEsquerdo.add(jLabelNome);
+jLabelChave.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+jLabelChave.setText("Chave:");
+jPanelEsquerdo.add(jLabelChave);
 
-jTextFieldNome.setMaximumSize(new java.awt.Dimension(286, 28));
-jTextFieldNome.setMinimumSize(new java.awt.Dimension(286, 28));
-jTextFieldNome.setPreferredSize(new java.awt.Dimension(286, 28));
-jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
+jTextFieldChave.setMaximumSize(new java.awt.Dimension(280, 28));
+jTextFieldChave.setMinimumSize(new java.awt.Dimension(280, 28));
+jTextFieldChave.setPreferredSize(new java.awt.Dimension(280, 28));
+jTextFieldChave.addFocusListener(new java.awt.event.FocusAdapter() {
     public void focusLost(java.awt.event.FocusEvent evt) {
-        jTextFieldNomeFocusLost(evt);
+        jTextFieldChaveFocusLost(evt);
     }
     });
-    jTextFieldNome.addKeyListener(new java.awt.event.KeyAdapter() {
+    jTextFieldChave.addKeyListener(new java.awt.event.KeyAdapter() {
         public void keyTyped(java.awt.event.KeyEvent evt) {
-            jTextFieldNomeKeyTyped(evt);
+            jTextFieldChaveKeyTyped(evt);
         }
     });
-    jPanelEsquerdo.add(jTextFieldNome);
+    jPanelEsquerdo.add(jTextFieldChave);
 
-    jPanelInternoDadosAluno.setMaximumSize(new java.awt.Dimension(483, 80));
-    jPanelInternoDadosAluno.setMinimumSize(new java.awt.Dimension(483, 80));
-    jPanelInternoDadosAluno.setPreferredSize(new java.awt.Dimension(483, 80));
+    jPanelInternoDadosArmario.setMaximumSize(new java.awt.Dimension(483, 80));
+    jPanelInternoDadosArmario.setMinimumSize(new java.awt.Dimension(483, 80));
+    jPanelInternoDadosArmario.setPreferredSize(new java.awt.Dimension(483, 80));
 
-    jLabelSexo.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-    jLabelSexo.setText("Sexo:");
-    jPanelInternoDadosAluno.add(jLabelSexo);
+    jLabelDescricao.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+    jLabelDescricao.setText("Descrição:");
+    jPanelInternoDadosArmario.add(jLabelDescricao);
 
-    jComboBoxSexo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Selecione..." }));
-    jComboBoxSexo.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jComboBoxSexoActionPerformed(evt);
-        }
-    });
-    jPanelInternoDadosAluno.add(jComboBoxSexo);
-
-    jLabelTelefone.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-    jLabelTelefone.setText("Telefone:");
-    jLabelTelefone.setMaximumSize(new java.awt.Dimension(80, 17));
-    jLabelTelefone.setMinimumSize(new java.awt.Dimension(80, 17));
-    jLabelTelefone.setPreferredSize(new java.awt.Dimension(80, 17));
-    jLabelTelefone.setRequestFocusEnabled(false);
-    jPanelInternoDadosAluno.add(jLabelTelefone);
-
-    jTextFieldTelefone.setMaximumSize(new java.awt.Dimension(220, 28));
-    jTextFieldTelefone.setMinimumSize(new java.awt.Dimension(220, 28));
-    jTextFieldTelefone.setName(""); // NOI18N
-    jTextFieldTelefone.setPreferredSize(new java.awt.Dimension(220, 28));
-    jTextFieldTelefone.addFocusListener(new java.awt.event.FocusAdapter() {
+    jTextFieldDescricao.setMaximumSize(new java.awt.Dimension(390, 28));
+    jTextFieldDescricao.setMinimumSize(new java.awt.Dimension(390, 28));
+    jTextFieldDescricao.setPreferredSize(new java.awt.Dimension(390, 28));
+    jTextFieldDescricao.addFocusListener(new java.awt.event.FocusAdapter() {
         public void focusLost(java.awt.event.FocusEvent evt) {
-            jTextFieldTelefoneFocusLost(evt);
+            jTextFieldDescricaoFocusLost(evt);
         }
     });
-    jPanelInternoDadosAluno.add(jTextFieldTelefone);
+    jTextFieldDescricao.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            jTextFieldDescricaoKeyTyped(evt);
+        }
+    });
+    jPanelInternoDadosArmario.add(jTextFieldDescricao);
 
-    jLabelEmail.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-    jLabelEmail.setText("E-Mail:");
-    jPanelInternoDadosAluno.add(jLabelEmail);
-
-    jTextFieldEmail.setMaximumSize(new java.awt.Dimension(250, 28));
-    jTextFieldEmail.setMinimumSize(new java.awt.Dimension(250, 28));
-    jTextFieldEmail.setPreferredSize(new java.awt.Dimension(250, 28));
-    jTextFieldEmail.addActionListener(new java.awt.event.ActionListener() {
+    jCheckBoxFlgOcupado.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+    jCheckBoxFlgOcupado.setText("Ocupado ?");
+    jCheckBoxFlgOcupado.setMargin(new java.awt.Insets(0, 50, 0, 0));
+    jCheckBoxFlgOcupado.setMaximumSize(new java.awt.Dimension(169, 24));
+    jCheckBoxFlgOcupado.setMinimumSize(new java.awt.Dimension(169, 24));
+    jCheckBoxFlgOcupado.setPreferredSize(new java.awt.Dimension(169, 24));
+    jCheckBoxFlgOcupado.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jTextFieldEmailActionPerformed(evt);
+            jCheckBoxFlgOcupadoActionPerformed(evt);
         }
     });
-    jTextFieldEmail.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent evt) {
-            jTextFieldEmailFocusLost(evt);
-        }
-    });
-    jPanelInternoDadosAluno.add(jTextFieldEmail);
+    jPanelInternoDadosArmario.add(jCheckBoxFlgOcupado);
 
     jCheckBoxFlgAtivo.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
     jCheckBoxFlgAtivo.setText("Ativo ?");
@@ -292,9 +271,9 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
             jCheckBoxFlgAtivoActionPerformed(evt);
         }
     });
-    jPanelInternoDadosAluno.add(jCheckBoxFlgAtivo);
+    jPanelInternoDadosArmario.add(jCheckBoxFlgAtivo);
 
-    jPanelEsquerdo.add(jPanelInternoDadosAluno);
+    jPanelEsquerdo.add(jPanelInternoDadosArmario);
 
     jSeparator1.setMaximumSize(new java.awt.Dimension(450, 15));
     jSeparator1.setMinimumSize(new java.awt.Dimension(450, 15));
@@ -415,31 +394,24 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
 
     private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
 
-        if (jComboBoxSexo.getSelectedIndex() == 0) {
-            Mensagens.mostraMensagemAlerta("Selecione o Sexo.");
-
-        }
-
     }//GEN-LAST:event_jButtonSalvarActionPerformed
 
-    private void jTextFieldNomeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldNomeKeyTyped
+    private void jTextFieldChaveKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldChaveKeyTyped
 
-        SwingUtilities.invokeLater(threadChecaCampoNome);
-    }//GEN-LAST:event_jTextFieldNomeKeyTyped
+        String caracteres = "0987654321";
+        if (!caracteres.contains(evt.getKeyChar() + "")) {
+            evt.consume();
+        }
 
-    private void jComboBoxSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxSexoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBoxSexoActionPerformed
+        SwingUtilities.invokeLater(threadChecaCampoChave);
 
-    private void jTextFieldEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldEmailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldEmailActionPerformed
+    }//GEN-LAST:event_jTextFieldChaveKeyTyped
 
     private void jCheckBoxFlgAtivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxFlgAtivoActionPerformed
 
         if (!jCheckBoxFlgAtivo.isSelected()) {
 
-            int opt = Mensagens.mostraMensagemPergunta("Se você desativar um aluno, ele deixará de figurar nas pesquisas de Ativos. \n Tem certeza?");
+            int opt = Mensagens.mostraMensagemPergunta("Se você desativar um armario, ele deixará de figurar nas pesquisas de Ativos. \n Tem certeza?");
             System.out.println(opt);
             if (0 == opt) {
                 jCheckBoxFlgAtivo.setSelected(false);
@@ -450,35 +422,33 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
 
     }//GEN-LAST:event_jCheckBoxFlgAtivoActionPerformed
 
-    private void jTextFieldEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldEmailFocusLost
+    private void jTextFieldChaveFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldChaveFocusLost
 
-        if (!jTextFieldEmail.getText().isEmpty() && !TelaUtils.validaEmail(jTextFieldEmail.getText())) {
-
-            Mensagens.mostraMensagemErro("Digite um e-mail válido.");
-            jTextFieldEmail.setText("");
-            jTextFieldEmail.requestFocus();
-
-        };
-
-    }//GEN-LAST:event_jTextFieldEmailFocusLost
-
-    private void jTextFieldNomeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldNomeFocusLost
-
-        if (!jTextFieldNome.getText().trim().isEmpty()) {
+        if (!jTextFieldChave.getText().trim().isEmpty()) {
             configurarBotoes(true);
         }
-    }//GEN-LAST:event_jTextFieldNomeFocusLost
+    }//GEN-LAST:event_jTextFieldChaveFocusLost
 
-    private void jTextFieldTelefoneFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldTelefoneFocusLost
+    private void jTextFieldDescricaoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldDescricaoFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldDescricaoFocusLost
 
-        if (!jTextFieldTelefone.getText().trim().isEmpty() && !TelaUtils.validaTelefone(jTextFieldTelefone.getText())) {
+    private void jTextFieldDescricaoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldDescricaoKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldDescricaoKeyTyped
 
-            Mensagens.mostraMensagemErro("Digite um telefone válido.");
-            jTextFieldTelefone.setText("");
-            jTextFieldTelefone.requestFocus();
+    private void jCheckBoxFlgOcupadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxFlgOcupadoActionPerformed
+        if (jCheckBoxFlgOcupado.isSelected()) {
 
+            int opt = Mensagens.mostraMensagemPergunta("Se você cadastrar um armário como Ocupado, ele não figurará na lista dos Armarios Livres. \n Tem certeza?");
+            System.out.println(opt);
+            if (0 == opt) {
+                jCheckBoxFlgOcupado.setSelected(true);
+            } else {
+                jCheckBoxFlgOcupado.setSelected(false);
+            };
         }
-    }//GEN-LAST:event_jTextFieldTelefoneFocusLost
+    }//GEN-LAST:event_jCheckBoxFlgOcupadoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -497,140 +467,97 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
 //                }
 //            }
 //        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(CadastrarAlunoView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(CadastrarArmarioView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(CadastrarAlunoView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(CadastrarArmarioView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(CadastrarAlunoView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(CadastrarArmarioView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(CadastrarAlunoView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(CadastrarArmarioView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        }
 //        //</editor-fold>
 //
 //        /* Create and display the form */
 //        java.awt.EventQueue.invokeLater(new Runnable() {
 //            public void run() {
-//                new CadastrarAlunoView().setVisible(true);
+//                new CadastrarArmarioView().setVisible(true);
 //            }
 //        });
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private br.com.etefgarcia.armarios.model.Aluno aluno;
+    private br.com.etefgarcia.armarios.model.Armario armario;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JButton jButtonBuscar;
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonLimpar;
     private javax.swing.JButton jButtonSalvar;
     private javax.swing.JCheckBox jCheckBoxFlgAtivo;
-    private javax.swing.JComboBox jComboBoxSexo;
-    private javax.swing.JLabel jLabelEmail;
-    private javax.swing.JLabel jLabelIdAluno;
-    private javax.swing.JLabel jLabelNome;
-    private javax.swing.JLabel jLabelSexo;
-    private javax.swing.JLabel jLabelTelefone;
+    private javax.swing.JCheckBox jCheckBoxFlgOcupado;
+    private javax.swing.JLabel jLabelChave;
+    private javax.swing.JLabel jLabelDescricao;
+    private javax.swing.JLabel jLabelIdArmario;
     private javax.swing.JPanel jPanelBotoes;
     private javax.swing.JPanel jPanelEsquerdo;
     private javax.swing.JPanel jPanelFundo;
-    private javax.swing.JPanel jPanelInternoDadosAluno;
+    private javax.swing.JPanel jPanelInternoDadosArmario;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTableTabela;
-    private javax.swing.JTextField jTextFieldEmail;
-    private javax.swing.JTextField jTextFieldIdAluno;
-    private javax.swing.JTextField jTextFieldNome;
-    private javax.swing.JTextField jTextFieldTelefone;
+    private javax.swing.JTextField jTextFieldChave;
+    private javax.swing.JTextField jTextFieldDescricao;
+    private javax.swing.JTextField jTextFieldIdArmario;
     // End of variables declaration//GEN-END:variables
 
     private void removeListeners() {
-        jButtonBuscar.removeMouseListener(cadastrarAlunoViewAction);
-        jButtonCancelar.removeMouseListener(cadastrarAlunoViewAction);
-        jButtonLimpar.removeMouseListener(cadastrarAlunoViewAction);
-        jButtonSalvar.removeMouseListener(cadastrarAlunoViewAction);
+        jButtonBuscar.removeMouseListener(cadastrarArmarioViewAction);
+        jButtonCancelar.removeMouseListener(cadastrarArmarioViewAction);
+        jButtonLimpar.removeMouseListener(cadastrarArmarioViewAction);
+        jButtonSalvar.removeMouseListener(cadastrarArmarioViewAction);
 
-        jTableTabela.removeMouseListener(cadastrarAlunoViewAction);
+        jTableTabela.removeMouseListener(cadastrarArmarioViewAction);
 
     }
 
     private void adicionaListeners() {
 
-        jButtonBuscar.addMouseListener(cadastrarAlunoViewAction);
-        jButtonCancelar.addMouseListener(cadastrarAlunoViewAction);
-        jButtonLimpar.addMouseListener(cadastrarAlunoViewAction);
-        jButtonSalvar.addMouseListener(cadastrarAlunoViewAction);
+        jButtonBuscar.addMouseListener(cadastrarArmarioViewAction);
+        jButtonCancelar.addMouseListener(cadastrarArmarioViewAction);
+        jButtonLimpar.addMouseListener(cadastrarArmarioViewAction);
+        jButtonSalvar.addMouseListener(cadastrarArmarioViewAction);
 
-        jTableTabela.addMouseListener(cadastrarAlunoViewAction);
+        jTableTabela.addMouseListener(cadastrarArmarioViewAction);
 
     }
 
-    private void formatarCampoTelefone() {
-        String telefone = jTextFieldTelefone.getText();
+    private void validaCampoChave() {
 
-        if (telefone.substring(telefone.indexOf("-"), telefone.length()).trim().length() == 4) {
-
-            String telefoneSaida = "";
-
-            for (int i = 0; i < telefone.length(); i++) {
-                if (telefone.charAt(i) == ')') {
-                    telefoneSaida += ") ";
-
-                } else {
-                    telefoneSaida += telefone.charAt(i);
-                }
-
-            }
-
-            jTextFieldTelefone.setText(telefoneSaida);
-
-        }
-    }
-
-    private void validaCampoNome() {
-
-        if ((jTextFieldNome.getText().length() > 3) && (!isAtualizar)) {
+        if (jTextFieldChave.getText().length() > 0) {
 
             TelaRenderUtil.habilitarBotao(jButtonBuscar, true);
 
-            if (this.isAtualizar) {
+            configurarBotoes(true);
 
-                alunoController.getThreadConsultarAlunoByNome().start();
-
-            }
-
-        } else if (this.isAtualizar) {
-
-            alunoController.getThreadConsultarAlunoByNome().start();
+            armarioController.getThreadConsultarArmarioGeral().start();
 
         } else {
-
+            mostrarTabelas(false);
+            configurarBotoes(false);
             TelaRenderUtil.habilitarBotao(jButtonBuscar, false);
-            TelaRenderUtil.habilitarCampos(jTableTabela, false);
-            TelaRenderUtil.habilitarCampos(jScrollPane1, false);
 
         }
-
-    }
-
-    private void preencherComboSexo() {
-
-        jComboBoxSexo.addItem("Masculino");
-        jComboBoxSexo.addItem("Feminino");
 
     }
 
     public void limparCampos(boolean limparNome) {
 
-        jTextFieldEmail.setText("");
-
         if (limparNome) {
-            jTextFieldNome.setText("");
+            jTextFieldChave.setText("");
         }
 
-        jTextFieldIdAluno.setText("");
+        jTextFieldIdArmario.setText("");
 
-        jTextFieldTelefone.setText("");
-
-        jComboBoxSexo.setSelectedIndex(0);
+        jTextFieldDescricao.setText("");
 
         configurarBotoes(false);
 
@@ -640,23 +567,20 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
         this.isAtualizar = Boolean.FALSE;
     }
 
-    private void vincularAluno() {
+    private void vincularArmario() {
 
-        jTextFieldIdAluno.setText(aluno.getIdAluno() + "");
-        jTextFieldNome.setText(aluno.getNome());
-        jTextFieldEmail.setText(aluno.getEmail());
+        jTextFieldIdArmario.setText(armario.getIdArmario() + "");
+        jTextFieldChave.setText(armario.getChave() + "");
+        jTextFieldDescricao.setText(armario.getDescricao());
 
-        jTextFieldTelefone.setText(aluno.getTelefone());
-
-        jCheckBoxFlgAtivo.setSelected(aluno.getFlgAtivo());
-
-        jComboBoxSexo.setSelectedIndex(aluno.getSexo() == 'M' ? 1 : 2);
+        jCheckBoxFlgOcupado.setSelected(armario.getFlgOcupado());
+        jCheckBoxFlgAtivo.setSelected(armario.getFlgAtivo());
 
     }
 
     private void mostrarTabela(boolean mostrar) {
 
-        if (listaAlunos != null && mostrar) {
+        if (listaArmarios != null && mostrar) {
             carregaTabela();
 
             jTableTabela.setVisible(mostrar);
@@ -677,24 +601,22 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
 
         //monta os cabeçalhos das colunas da tabela
         modelTabela.addColumn("Cod");
-        modelTabela.addColumn("Nome");
-        modelTabela.addColumn("Sexo");
-        modelTabela.addColumn("Telefone");
-        modelTabela.addColumn("Email");
+        modelTabela.addColumn("Chave");
+        modelTabela.addColumn("Descrição");
+        modelTabela.addColumn("Ocupado");
         modelTabela.addColumn("Ativo");
 
-        for (Aluno c : listaAlunos) {
+        for (Armario c : listaArmarios) {
 
             //cria uma linha 'generica' com a quantidade de colunas do  modelTabela
             Object[] vetorLinhas = new Object[modelTabela.getColumnCount()];
 
             //preenche as colunas de cada linha do vetorLinhas para preenchar com os dados do Cliente
-            vetorLinhas[0] = c.getIdAluno();
-            vetorLinhas[1] = c.getNome();
-            vetorLinhas[2] = c.getSexo();
-            vetorLinhas[3] = c.getTelefone();
-            vetorLinhas[4] = c.getEmail();
-            vetorLinhas[5] = c.getFlgAtivo();
+            vetorLinhas[0] = c.getIdArmario();
+            vetorLinhas[1] = c.getChave();
+            vetorLinhas[2] = c.getDescricao();
+            vetorLinhas[3] = c.getFlgOcupado();
+            vetorLinhas[4] = c.getFlgAtivo();
 
             //adiciona esta linha ao model da tabela
             modelTabela.addRow(vetorLinhas);
@@ -724,6 +646,14 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
         jTableTabela.setModel(modelTabela);
 
     }
+    
+    private void populaDescricao() {
+         if(jTextFieldChave.getText().trim().length() >0){
+         
+             jTextFieldDescricao.setText("Armário " + jTextFieldChave.getText() + " ");
+         
+         }
+        }
 
     public javax.swing.JComponent getPainel() {
 
@@ -731,43 +661,42 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
 
     }
 
-    public Aluno getAluno() {
+    public Armario getArmario() {
 
-        this.aluno.setTelefone(jTextFieldTelefone.getText());
-        this.aluno.setNome(jTextFieldNome.getText());
-        this.aluno.setEmail(jTextFieldEmail.getText());
+        this.armario.setDescricao(jTextFieldDescricao.getText());
 
         try {
 
-            this.aluno.setIdAluno(jTextFieldIdAluno.getText().isEmpty() ? null : Long.parseLong(jTextFieldIdAluno.getText()));
+            this.armario.setChave(jTextFieldChave.getText().isEmpty() ? null : Long.parseLong(jTextFieldChave.getText()));
+            this.armario.setIdArmario(jTextFieldIdArmario.getText().isEmpty() ? null : Long.parseLong(jTextFieldIdArmario.getText()));
 
         } catch (Exception ex) {
-            this.aluno.setIdAluno(null);
+            this.armario.setIdArmario(null);
         }
 
-        this.aluno.setFlgAtivo(jCheckBoxFlgAtivo.isSelected());
+        this.armario.setFlgOcupado(jCheckBoxFlgOcupado.isSelected());
+        this.armario.setFlgAtivo(jCheckBoxFlgAtivo.isSelected());
 
-        this.aluno.setSexo((String) jComboBoxSexo.getSelectedItem());
-
-        return this.aluno;
+        return this.armario;
 
     }
 
-    public void setAluno(Aluno aluno) {
+    public void setArmario(Armario armario) {
 
-        if (aluno != null) {
+        if (armario != null) {
 
-            this.jTextFieldIdAluno.setText(aluno.getIdAluno() + "");
-            this.jTextFieldNome.setText(aluno.getNome());
-            this.jTextFieldTelefone.setText(aluno.getTelefone());
-            this.jTextFieldEmail.setText(aluno.getEmail());
+            this.jTextFieldIdArmario.setText(armario.getIdArmario() + "");
+            this.jTextFieldChave.setText(armario.getChave() + "");
 
-            this.jComboBoxSexo.setSelectedItem(aluno.getSexo() == 'M' ? (String) "Masculino" : (String) "Feminino");
+            this.jTextFieldDescricao.setText(armario.getDescricao());
 
-            this.jCheckBoxFlgAtivo.setSelected(aluno.getFlgAtivo());
+            this.jCheckBoxFlgOcupado.setSelected(armario.getFlgOcupado());
             this.jCheckBoxFlgAtivo.setEnabled(true);
 
-            habilitarSalvar(aluno.getIdAluno() != null);
+            this.jCheckBoxFlgAtivo.setSelected(armario.getFlgAtivo());
+            this.jCheckBoxFlgAtivo.setEnabled(true);
+
+            habilitarSalvar(armario.getIdArmario() != null);
 
             this.isAtualizar = Boolean.TRUE;
 
@@ -782,23 +711,23 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
 
     }
 
-    public void setListaAlunos(List<Aluno> listaAlunos) {
+    public void setListaArmarios(List<Armario> listaArmarios) {
 
-        this.listaAlunos = listaAlunos;
+        this.listaArmarios = listaArmarios;
 
     }
 
-    public Aluno getAlunoSelecionado() {
+    public Armario getArmarioSelecionado() {
 
         int linhaSelecionada = jTableTabela.getSelectedRow();
 
-        return listaAlunos.get(linhaSelecionada);
+        return listaArmarios.get(linhaSelecionada);
 
     }
 
-    public String getNome() {
+    public String getChave() {
 
-        return this.jTextFieldNome.getText();
+        return this.jTextFieldChave.getText();
 
     }
 

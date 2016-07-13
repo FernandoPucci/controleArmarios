@@ -18,12 +18,12 @@ package br.com.etefgarcia.armarios.controller;
 
 import br.com.etefgarcia.armarios.exceptions.NegocioException;
 import br.com.etefgarcia.armarios.exceptions.SistemaException;
-import br.com.etefgarcia.armarios.model.Aluno;
-import br.com.etefgarcia.armarios.service.AlunoService;
+import br.com.etefgarcia.armarios.model.Armario;
+import br.com.etefgarcia.armarios.service.ArmarioService;
 import br.com.etefgarcia.armarios.util.Mensagens;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
-import br.com.etefgarcia.armarios.view.aluno.CadastrarAlunoView;
-import br.com.etefgarcia.armarios.view.aluno.ConsultarAlunoView;
+import br.com.etefgarcia.armarios.view.armario.CadastrarArmarioView;
+import br.com.etefgarcia.armarios.view.armario.ConsultarArmarioView;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.AbstractButton;
@@ -32,20 +32,20 @@ import javax.swing.AbstractButton;
  *
  * @author fernando-pucci
  */
-public class AlunoController {
+public class ArmarioController {
 
-    private CadastrarAlunoView cadastrarAlunoView = null;
-    private ConsultarAlunoView consultarAlunoView = null;
+    private CadastrarArmarioView cadastrarArmarioView = null;
+    private ConsultarArmarioView consultarArmarioView = null;
 
-    public AlunoController(ConsultarAlunoView consultarAlunoView) {
+    public ArmarioController(ConsultarArmarioView consultarArmarioView) {
 
-        this.consultarAlunoView = consultarAlunoView;
+        this.consultarArmarioView = consultarArmarioView;
 
     }
 
-    public AlunoController(CadastrarAlunoView cadastrarAlunoView) {
+    public ArmarioController(CadastrarArmarioView cadastrarArmarioView) {
 
-        this.cadastrarAlunoView = cadastrarAlunoView;
+        this.cadastrarArmarioView = cadastrarArmarioView;
 
     }
 
@@ -59,7 +59,7 @@ public class AlunoController {
                 int opt = Mensagens.mostraMensagemPergunta("Tem certeza que fechar esta Janela?");
                 if (opt == 0) {
 
-                    cadastrarAlunoView.dispose();
+                    cadastrarArmarioView.dispose();
 
                 }
             }
@@ -77,7 +77,7 @@ public class AlunoController {
                 int opt = Mensagens.mostraMensagemPergunta("Tem certeza que fechar esta Janela?");
                 if (opt == 0) {
 
-                    consultarAlunoView.dispose();
+                    consultarArmarioView.dispose();
 
                 }
             }
@@ -85,7 +85,7 @@ public class AlunoController {
         };
     }
 
-    public Thread getThreadConsultarAluno() {
+    public Thread getThreadConsultarArmario() {
 
         return new Thread() {
 
@@ -94,11 +94,11 @@ public class AlunoController {
 
                 try {
 
-                    consultarAlunos();
+                    consultarArmarios();
 
                 } catch (SistemaException ex) {
 
-                    Mensagens.mostraMensagemErro(cadastrarAlunoView.getPainel(), ex.getMessage());
+                    Mensagens.mostraMensagemErro(cadastrarArmarioView.getPainel(), ex.getMessage());
 
                 }
 
@@ -107,7 +107,7 @@ public class AlunoController {
         };
     }
 
-    public Thread getThreadConsultarAlunoByNome() {
+    public Thread getThreadConsultarArmarioByNome() {
 
         return new Thread() {
 
@@ -116,11 +116,11 @@ public class AlunoController {
 
                 try {
 
-                    consultarAlunos();
+                    consultarArmarios();
 
                 } catch (SistemaException ex) {
 
-                    Mensagens.mostraMensagemErro(cadastrarAlunoView.getPainel(), ex.getMessage());
+                    Mensagens.mostraMensagemErro(cadastrarArmarioView.getPainel(), ex.getMessage());
 
                 }
 
@@ -129,7 +129,7 @@ public class AlunoController {
         };
     }
 
-    public Thread getThreadConsultarAlunoGeral() {
+    public Thread getThreadConsultarArmarioGeral() {
 
         return new Thread() {
 
@@ -138,16 +138,16 @@ public class AlunoController {
 
                 try {
 
-                    switch (consultarAlunoView.getFiltroSelecionado()) {
+                    switch (consultarArmarioView.getFiltroSelecionado()) {
 
                         case ConstantesTelas.BTN_FILTRO_TODOS:
-                            consultarAlunosGeral(null);
+                            consultarArmariosGeral(null);
                             break;
                         case ConstantesTelas.BTN_FILTRO_ATIVOS:
-                            consultarAlunosGeral(Boolean.TRUE);
+                            consultarArmariosGeral(Boolean.TRUE);
                             break;
                         case ConstantesTelas.BTN_FILTRO_INATIVOS:
-                            consultarAlunosGeral(Boolean.FALSE);
+                            consultarArmariosGeral(Boolean.FALSE);
                             break;
 
                     }
@@ -156,11 +156,11 @@ public class AlunoController {
 
                     if (ex instanceof NegocioException) {
 
-                        Mensagens.mostraMensagemAlerta(consultarAlunoView.getPainel(), ex.getMessage());
+                        Mensagens.mostraMensagemAlerta(consultarArmarioView.getPainel(), ex.getMessage());
 
                     } else {
 
-                        Mensagens.mostraMensagemErro(consultarAlunoView.getPainel(), ex.getMessage());
+                        Mensagens.mostraMensagemErro(consultarArmarioView.getPainel(), ex.getMessage());
 
                     }
 
@@ -171,16 +171,16 @@ public class AlunoController {
         };
     }
 
-    public Thread getThreadGetAlunoSelecionado() {
+    public Thread getThreadGetArmarioSelecionado() {
 
         return new Thread() {
 
             @Override
             public void run() {
 
-                Aluno a = cadastrarAlunoView.getAlunoSelecionado();
+                Armario a = cadastrarArmarioView.getArmarioSelecionado();
 
-                cadastrarAlunoView.setAluno(a);
+                cadastrarArmarioView.setArmario(a);
 
                 System.out.println(a);
 
@@ -189,14 +189,14 @@ public class AlunoController {
         };
     }
 
-    public Thread getThreadGetAlunoSelecionadoConsultar() {
+    public Thread getThreadGetArmarioSelecionadoConsultar() {
 
         return new Thread() {
 
             @Override
             public void run() {
 
-                Aluno a = consultarAlunoView.getAlunoSelecionado();
+                Armario a = consultarArmarioView.getArmarioSelecionado();
 
                 System.out.println(a);
 
@@ -205,7 +205,7 @@ public class AlunoController {
         };
     }
 
-    public Thread getThreadCadastrarAluno() {
+    public Thread getThreadCadastrarArmario() {
 
         return new Thread() {
 
@@ -213,17 +213,17 @@ public class AlunoController {
             public void run() {
                 try {
 
-                    Aluno a = cadastrarAlunoView.getAluno();
+                    Armario a = cadastrarArmarioView.getArmario();
 
-                    AlunoService.cadastrarAtualizarAlunoService(a.getIdAluno(), a.getNome(), a.getSexo() + "", a.getTelefone(), a.getEmail(), a.getFlgAtivo());
+                    ArmarioService.cadastrarAtualizarArmarioService(a.getIdArmario(), a.getChave() + "", a.getDescricao(), a.getFlgOcupado(), a.getFlgAtivo());
 
-                    Mensagens.mostraMensagemSucesso(cadastrarAlunoView.getPainel(), a.getIdAluno() != null ? "Aluno Atualizado com sucesso." : "Aluno Cadastrado com sucesso.");
+                    Mensagens.mostraMensagemSucesso(cadastrarArmarioView.getPainel(), a.getIdArmario() != null ? "Armario Atualizado com sucesso." : "Armario Cadastrado com sucesso.");
 
-                    cadastrarAlunoView.limparCampos(true);
+                    cadastrarArmarioView.limparCampos(true);
 
                 } catch (NegocioException | SistemaException ex) {
 
-                    Mensagens.mostraMensagemErro(cadastrarAlunoView.getPainel(), ex.getMessage());
+                    Mensagens.mostraMensagemErro(cadastrarArmarioView.getPainel(), ex.getMessage());
 
                 }
 
@@ -240,9 +240,9 @@ public class AlunoController {
             @Override
             public void run() {
 
-                Aluno a = consultarAlunoView.getAlunoSelecionado();
+                Armario a = consultarArmarioView.getArmarioSelecionado();
 
-                new CadastrarAlunoView(a, true).setVisible(true);
+                new CadastrarArmarioView(a, true).setVisible(true);
 
             }
 
@@ -251,61 +251,61 @@ public class AlunoController {
     }
 
     //METODOS PRIVADOS
-    //consulta alunos da tela de cadastro
-    private void consultarAlunos() throws SistemaException {
+    //consulta armarios da tela de cadastro
+    private void consultarArmarios() throws SistemaException {
 
-        List<Aluno> listaAlunos = AlunoService.consultarAlunosByNomeService(cadastrarAlunoView.getNome(), true);
+        List<Armario> listaArmarios = ArmarioService.consultarArmariosByNomeService(new Long(cadastrarArmarioView.getChave()), true);
 
-        if (listaAlunos == null || listaAlunos.isEmpty()) {
-            Mensagens.mostraMensagemAlerta(cadastrarAlunoView.getPainel(), "Não há resultados para esta busca.");
-            cadastrarAlunoView.limparCampos(false);
+        if (listaArmarios == null || listaArmarios.isEmpty()) {
+            Mensagens.mostraMensagemAlerta(cadastrarArmarioView.getPainel(), "Não há resultados para esta busca.");
+            cadastrarArmarioView.limparCampos(false);
 
         } else {
 
-            cadastrarAlunoView.setListaAlunos(listaAlunos);
-            cadastrarAlunoView.mostrarTabelas(true);
+            cadastrarArmarioView.setListaArmarios(listaArmarios);
+            cadastrarArmarioView.mostrarTabelas(true);
         }
     }
 
-    //consulta aluno generica
-    private void consultarAlunosGeral(Boolean ativos) throws SistemaException, NegocioException {
+    //consulta armario generica
+    private void consultarArmariosGeral(Boolean ativos) throws SistemaException, NegocioException {
 
-        List<Aluno> listaAlunos = null;
+        List<Armario> listaArmarios = null;
 
-        //pesquisa por todos alunos
-        if (ativos == null && (consultarAlunoView.getNome() == null || consultarAlunoView.getNome().trim().isEmpty())) {
+        //pesquisa por todos armarios
+        if (ativos == null && (consultarArmarioView.getChave() == null || consultarArmarioView.getChave().isEmpty())) {
 
-            listaAlunos = AlunoService.consultarTodosAlunosService();
+            listaArmarios = ArmarioService.consultarTodosArmariosService();
 
-            //pesquisa por codiGo
-        } else if (consultarAlunoView.getCodigo() != null && !consultarAlunoView.getCodigo().trim().isEmpty()) {
+            //pesquisa por codigo
+        } else if (consultarArmarioView.getCodigo() != null && !consultarArmarioView.getCodigo().trim().isEmpty()) {
 
-            Aluno a = AlunoService.consultarAlunosByCodigoService(consultarAlunoView.getCodigo());
+            Armario a = ArmarioService.consultarArmariosByCodigoService(consultarArmarioView.getCodigo());
 
             if (a != null) {
-                listaAlunos = new ArrayList<>();
-                listaAlunos.add(a);
+                listaArmarios = new ArrayList<>();
+                listaArmarios.add(a);
             }
 
             //pesquisa por nome
-        } else if (consultarAlunoView.getNome() != null && !consultarAlunoView.getNome().trim().isEmpty()) {
+        } else if (consultarArmarioView.getChave() != null && !consultarArmarioView.getChave().isEmpty()) {
 
-            listaAlunos = AlunoService.consultarAlunosByNomeService(consultarAlunoView.getNome().trim(), ativos);
+            listaArmarios = ArmarioService.consultarArmariosByNomeService(new Long(consultarArmarioView.getChave()), ativos);
 
         } else {
 
-            listaAlunos = AlunoService.consultarAlunosService(ativos);
+            listaArmarios = ArmarioService.consultarArmariosService(ativos);
 
         }
 
-        if (listaAlunos == null || listaAlunos.isEmpty()) {
-            Mensagens.mostraMensagemAlerta(consultarAlunoView.getPainel(), "Não há resultados para esta busca.");
-            consultarAlunoView.limparCampos();
+        if (listaArmarios == null || listaArmarios.isEmpty()) {
+            Mensagens.mostraMensagemAlerta(consultarArmarioView.getPainel(), "Não há resultados para esta busca.");
+            consultarArmarioView.limparCampos();
 
         } else {
 
-            consultarAlunoView.setListaAlunos(listaAlunos);
-            consultarAlunoView.mostrarTabelas(true);
+            consultarArmarioView.setListaArmarios(listaArmarios);
+            consultarArmarioView.mostrarTabelas(true);
         }
 
     }
@@ -338,33 +338,33 @@ public class AlunoController {
         switch (botao) {
 
             case ConstantesTelas.BTN_BUSCAR:
-                getThreadConsultarAluno().start();
+                getThreadConsultarArmario().start();
                 break;
 
             case ConstantesTelas.BTN_BUSCAR_TELA_BUSCA:
-                getThreadConsultarAlunoGeral().start();
+                getThreadConsultarArmarioGeral().start();
                 break;
 
             case ConstantesTelas.BTN_FILTRO_TODOS:
-                getThreadConsultarAlunoGeral().start();
+                getThreadConsultarArmarioGeral().start();
                 break;
 
             case ConstantesTelas.BTN_FILTRO_ATIVOS:
-                getThreadConsultarAlunoGeral().start();
+                getThreadConsultarArmarioGeral().start();
                 break;
 
             case ConstantesTelas.BTN_FILTRO_INATIVOS:
-                getThreadConsultarAlunoGeral().start();
+                getThreadConsultarArmarioGeral().start();
                 break;
 
             case ConstantesTelas.BTN_SALVAR:
-                getThreadCadastrarAluno().start();
+                getThreadCadastrarArmario().start();
                 break;
 
             case ConstantesTelas.BTN_CANCELAR:
                 getThreadConfirmarCancelar().start();
                 break;
-            case ConstantesTelas.BTN_CANCELAR_CONSULTA_ALUNOS:
+            case ConstantesTelas.BTN_CANCELAR_CONSULTA_ARMARIOS:
                 getThreadConfirmarCancelarBusca().start();
                 break;
 
@@ -373,22 +373,22 @@ public class AlunoController {
                 break;
 
             case ConstantesTelas.BTN_LIMPAR:
-                if (cadastrarAlunoView != null) {
-                    cadastrarAlunoView.limparCampos(true);
+                if (cadastrarArmarioView != null) {
+                    cadastrarArmarioView.limparCampos(true);
                 }
 
-                if (consultarAlunoView != null) {
-                    consultarAlunoView.limparCampos();
+                if (consultarArmarioView != null) {
+                    consultarArmarioView.limparCampos();
                 }
 
                 break;
 
             case ConstantesTelas.ITM_TABELA:
-                getThreadGetAlunoSelecionado().start();
+                getThreadGetArmarioSelecionado().start();
                 break;
 
             case ConstantesTelas.ITM_TABELA_CONSULTAR:
-                getThreadGetAlunoSelecionadoConsultar().start();
+                getThreadGetArmarioSelecionadoConsultar().start();
                 break;
 
         }
