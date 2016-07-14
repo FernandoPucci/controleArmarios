@@ -189,7 +189,7 @@ public class CadastrarArmarioView extends javax.swing.JFrame {
         jPanelFundo.setRequestFocusEnabled(false);
         jPanelFundo.setLayout(new javax.swing.BoxLayout(jPanelFundo, javax.swing.BoxLayout.LINE_AXIS));
 
-        jPanelEsquerdo.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder(null, ConstantesTelas.TITULO_CADASTRAR_ALUNO
+        jPanelEsquerdo.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder(null, ConstantesTelas.TITULO_CADASTRAR_ARMARIO
             , javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14)), javax.swing.BorderFactory.createEtchedBorder())); // NOI18N
 jPanelEsquerdo.setMaximumSize(new java.awt.Dimension(500, 459));
 jPanelEsquerdo.setMinimumSize(new java.awt.Dimension(500, 459));
@@ -615,8 +615,8 @@ jTextFieldChave.addFocusListener(new java.awt.event.FocusAdapter() {
             vetorLinhas[0] = c.getIdArmario();
             vetorLinhas[1] = c.getChave();
             vetorLinhas[2] = c.getDescricao();
-            vetorLinhas[3] = c.getFlgOcupado();
-            vetorLinhas[4] = c.getFlgAtivo();
+            vetorLinhas[3] = c.getFlgOcupadoStr();
+            vetorLinhas[4] = c.getFlgAtivoStr();
 
             //adiciona esta linha ao model da tabela
             modelTabela.addRow(vetorLinhas);

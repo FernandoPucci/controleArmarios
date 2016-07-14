@@ -140,6 +140,17 @@ public class AluguelArmario implements Serializable {
         return flgDevolvido;
     }
 
+    public String getFlgDevolvidoStr() {
+
+        if (flgDevolvido == null) {
+
+            this.flgDevolvido = Boolean.FALSE;
+
+        }
+
+        return flgDevolvido ? "SIM" : "NÃO";
+    }
+
     public void setFlgDevolvido(Boolean flgDevolvido) {
         this.flgDevolvido = flgDevolvido;
     }

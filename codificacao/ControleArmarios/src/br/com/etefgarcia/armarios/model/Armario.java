@@ -98,12 +98,34 @@ public class Armario implements Serializable {
         return flgOcupado;
     }
 
+    public String getFlgOcupadoStr() {
+
+        if (flgOcupado == null) {
+            
+            this.flgOcupado = Boolean.FALSE;
+            
+        }
+
+        return flgOcupado ? "SIM" : "NÃO";
+    }
+
     public void setFlgOcupado(Boolean flgOcupado) {
         this.flgOcupado = flgOcupado;
     }
 
     public Boolean getFlgAtivo() {
         return flgAtivo;
+    }
+
+    public String getFlgAtivoStr() {
+
+        if (flgAtivo == null) {
+            
+            this.flgAtivo = Boolean.FALSE;
+            
+        }
+
+        return flgAtivo ? "SIM" : "NÃO";
     }
 
     public void setFlgAtivo(Boolean flgAtivo) {

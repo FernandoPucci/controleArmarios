@@ -148,6 +148,10 @@ public class ConsultarArmarioView extends javax.swing.JFrame {
         jLabelChave = new javax.swing.JLabel();
         jTextFieldChave = new javax.swing.JTextField();
         jPanelInternoFiltrosBusca = new javax.swing.JPanel();
+        jRadioButtonTodosLivresOcupados = new javax.swing.JRadioButton();
+        jRadioButtonLivres = new javax.swing.JRadioButton();
+        jRadioButtonOcupados = new javax.swing.JRadioButton();
+        jSeparator2 = new javax.swing.JSeparator();
         jRadioButtonTodos = new javax.swing.JRadioButton();
         jRadioButtonSomenteAtivos = new javax.swing.JRadioButton();
         jRadioButtonSomenteInativos = new javax.swing.JRadioButton();
@@ -216,6 +220,24 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
     jPanelInternoFiltrosBusca.setEnabled(false);
     jPanelInternoFiltrosBusca.setOpaque(false);
     jPanelInternoFiltrosBusca.setPreferredSize(new java.awt.Dimension(483, 80));
+
+    jRadioButtonTodosLivresOcupados.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+    jRadioButtonTodosLivresOcupados.setText("Todos");
+    jPanelInternoFiltrosBusca.add(jRadioButtonTodosLivresOcupados);
+
+    jRadioButtonLivres.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+    jRadioButtonLivres.setText("Somente Livres");
+    jPanelInternoFiltrosBusca.add(jRadioButtonLivres);
+
+    jRadioButtonOcupados.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+    jRadioButtonOcupados.setText("Somente Ocupados");
+    jPanelInternoFiltrosBusca.add(jRadioButtonOcupados);
+
+    jSeparator2.setMaximumSize(new java.awt.Dimension(405, 6));
+    jSeparator2.setMinimumSize(new java.awt.Dimension(405, 6));
+    jSeparator2.setPreferredSize(new java.awt.Dimension(405, 6));
+    jSeparator2.setRequestFocusEnabled(false);
+    jPanelInternoFiltrosBusca.add(jSeparator2);
 
     jRadioButtonTodos.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
     jRadioButtonTodos.setText("Todos");
@@ -422,11 +444,15 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
     private javax.swing.JPanel jPanelEsquerdo;
     private javax.swing.JPanel jPanelFundo;
     private javax.swing.JPanel jPanelInternoFiltrosBusca;
+    private javax.swing.JRadioButton jRadioButtonLivres;
+    private javax.swing.JRadioButton jRadioButtonOcupados;
     private javax.swing.JRadioButton jRadioButtonSomenteAtivos;
     private javax.swing.JRadioButton jRadioButtonSomenteInativos;
     private javax.swing.JRadioButton jRadioButtonTodos;
+    private javax.swing.JRadioButton jRadioButtonTodosLivresOcupados;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTable jTableTabela;
     private javax.swing.JTextField jTextFieldChave;
     private javax.swing.JTextField jTextFieldIdArmario;
@@ -548,8 +574,8 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
             vetorLinhas[0] = c.getIdArmario();
             vetorLinhas[1] = c.getChave();
             vetorLinhas[2] = c.getDescricao();
-            vetorLinhas[3] = c.getFlgOcupado();
-            vetorLinhas[4] = c.getFlgAtivo();
+            vetorLinhas[3] = c.getFlgOcupadoStr();
+            vetorLinhas[4] = c.getFlgAtivoStr();
 
             //adiciona esta linha ao model da tabela
             modelTabela.addRow(vetorLinhas);
@@ -589,11 +615,17 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
 
     private void inicializarRadioButtons() {
 
-        ButtonGroup bg1 = new ButtonGroup();
+        ButtonGroup bgFiltrosAtivos = new ButtonGroup();
 
-        bg1.add(jRadioButtonTodos);
-        bg1.add(jRadioButtonSomenteAtivos);
-        bg1.add(jRadioButtonSomenteInativos);
+        bgFiltrosAtivos.add(jRadioButtonTodos);
+        bgFiltrosAtivos.add(jRadioButtonSomenteAtivos);
+        bgFiltrosAtivos.add(jRadioButtonSomenteInativos);
+
+        ButtonGroup bgFiltrosOcupados = new ButtonGroup();
+
+        bgFiltrosOcupados.add(jRadioButtonTodosLivresOcupados);
+        bgFiltrosOcupados.add(jRadioButtonOcupados);
+        bgFiltrosOcupados.add(jRadioButtonLivres);
 
     }
 

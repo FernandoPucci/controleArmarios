@@ -125,6 +125,17 @@ public class Aluno implements Serializable {
         return flgAtivo;
     }
 
+    public String getFlgAtivoStr() {
+
+        if (flgAtivo == null) {
+
+            this.flgAtivo = Boolean.FALSE;
+
+        }
+
+        return flgAtivo ? "SIM" : "NÃO";
+    }
+
     public void setFlgAtivo(Boolean flgAtivo) {
         this.flgAtivo = flgAtivo;
     }

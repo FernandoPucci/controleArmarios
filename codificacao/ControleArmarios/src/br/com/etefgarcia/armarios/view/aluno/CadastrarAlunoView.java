@@ -694,7 +694,7 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
             vetorLinhas[2] = c.getSexo();
             vetorLinhas[3] = c.getTelefone();
             vetorLinhas[4] = c.getEmail();
-            vetorLinhas[5] = c.getFlgAtivo();
+            vetorLinhas[5] = c.getFlgAtivoStr();
 
             //adiciona esta linha ao model da tabela
             modelTabela.addRow(vetorLinhas);

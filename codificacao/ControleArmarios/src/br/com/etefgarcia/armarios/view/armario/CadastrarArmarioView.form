@@ -78,7 +78,7 @@
                 <CompoundBorder>
                   <Border PropertyName="outside" info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
                     <TitledBorder title="&lt;C&#xf3;digo do Usu&#xe1;rio&gt;">
-                      <Connection PropertyName="titleX" code="ConstantesTelas.TITULO_CADASTRAR_ALUNO&#xa;" type="code"/>
+                      <Connection PropertyName="titleX" code="ConstantesTelas.TITULO_CADASTRAR_ARMARIO&#xa;" type="code"/>
                       <Font PropertyName="font" name="Arial" size="14" style="1"/>
                     </TitledBorder>
                   </Border>
