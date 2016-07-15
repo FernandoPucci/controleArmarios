@@ -44,13 +44,14 @@ import org.hibernate.annotations.SelectBeforeUpdate;
 @SelectBeforeUpdate(true)
 public class AluguelArmario implements Serializable {
 
-    public AluguelArmario(Long idAluguelArmario, Armario armario, Aluno aluno, Usuario usuarioResponsavel, Date dataAluguel, Date dataDevolucao, Boolean flgDevolvido) {
+    public AluguelArmario(Long idAluguelArmario, Armario armario, Aluno aluno, Usuario usuarioResponsavel, Date dataAluguel, Date dataDevolucao, Integer duracao, Boolean flgDevolvido) {
         this.idAluguelArmario = idAluguelArmario;
         this.armario = armario;
         this.aluno = aluno;
         this.usuarioResponsavel = usuarioResponsavel;
         this.dataAluguel = dataAluguel;
         this.dataDevolucao = dataDevolucao;
+        this.duracao = duracao == null ? 0 : duracao;
         this.flgDevolvido = flgDevolvido;
     }
 
@@ -84,6 +85,9 @@ public class AluguelArmario implements Serializable {
     @Temporal(TemporalType.DATE)
     @Column(name = "DATA_DEVOLUCAO", nullable = true, insertable = false)//configuracoes para permitir insercao de datas null
     private Date dataDevolucao;
+
+    @Column(name = "DURACAO")
+    private Integer duracao;
 
     @Column(name = "FLG_DEVOLVIDO")
     private Boolean flgDevolvido;
@@ -155,9 +159,16 @@ public class AluguelArmario implements Serializable {
         this.flgDevolvido = flgDevolvido;
     }
 
-    @Override
-    public String toString() {
-        return "AluguelArmario{" + "idAluguelArmario=" + idAluguelArmario + ", armario=" + armario + ", aluno=" + aluno + ", usuarioResponsavel=" + usuarioResponsavel + ", dataAluguel=" + dataAluguel + ", dataDevolucao=" + dataDevolucao + ", flgDevolvido=" + flgDevolvido + '}';
+    public Integer getDuracao() {
+        return duracao;
     }
 
+    public void setDuracao(Integer duracao) {
+        this.duracao = duracao == null ? 0 : duracao;
+    }
+
+    @Override
+    public String toString() {
+        return "AluguelArmario{" + "idAluguelArmario=" + idAluguelArmario + ", armario=" + armario + ", aluno=" + aluno + ", usuarioResponsavel=" + usuarioResponsavel + ", dataAluguel=" + dataAluguel + ", dataDevolucao=" + dataDevolucao + ", duracao=" + duracao + ", flgDevolvido=" + flgDevolvido + '}';
+    }
 }

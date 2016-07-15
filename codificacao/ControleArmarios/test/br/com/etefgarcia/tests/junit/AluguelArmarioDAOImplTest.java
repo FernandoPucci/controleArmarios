@@ -72,7 +72,7 @@ public class AluguelArmarioDAOImplTest {
         aluno = new Aluno(null, "NOME ALUNO 1", 'M', "99999999999", "teste@teste.com", Boolean.TRUE);
         usuario = new Usuario(null, new TipoUsuario(1L, null, Boolean.TRUE), "NOME USUARIO 1", Boolean.TRUE);
 
-        aluguelArmario = new AluguelArmario(null, armario, aluno, usuario, new Date(), null, Boolean.FALSE);
+        aluguelArmario = new AluguelArmario(null, armario, aluno, usuario, new Date(), null, 0, Boolean.FALSE);
 
         daoUsuario.save(usuario);
         daoAluno.save(aluno);
@@ -156,7 +156,7 @@ public class AluguelArmarioDAOImplTest {
         Armario armarioAluguel = daoArmario.getAllAtivos(Armario.class).get(0);
         Usuario usuarioAluguel = daoUsuario.getAllAtivos(Usuario.class).get(0);
 
-        AluguelArmario aluguel = new AluguelArmario(null, armarioAluguel, alunoAluguel, usuarioAluguel, new Date(), null, Boolean.FALSE);
+        AluguelArmario aluguel = new AluguelArmario(null, armarioAluguel, alunoAluguel, usuarioAluguel, new Date(), null, 0, Boolean.FALSE);
         dao.save(aluguel);
 
     }

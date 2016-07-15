@@ -31,11 +31,9 @@ import br.com.etefgarcia.armarios.model.Config;
 import br.com.etefgarcia.armarios.model.TipoUsuario;
 import br.com.etefgarcia.armarios.model.Usuario;
 import br.com.etefgarcia.armarios.util.ConfigUtils;
-import br.com.etefgarcia.armarios.view.CadastrarAluguelArmarioView;
 import br.com.etefgarcia.armarios.view.aluno.CadastrarAlunoView;
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,11 +55,9 @@ public class Tester {
 
             System.out.println(c);
 
-           // inicializar();
-
+            // inicializar();
             //testarInsercaoMassa();
             //testarAluguel();
-            
 //            List<AluguelArmario> alugueisAbertos = dao.getAllAluguelArmarioEmAberto();
 //        
 //            for (AluguelArmario a : alugueisAbertos) {
@@ -83,9 +79,9 @@ public class Tester {
         } catch (Exception ex) {
             Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-          //  System.exit(0);
+            //  System.exit(0);
         }
-        
+
         Aluno a = new Aluno();
         a.setIdAluno(39L);
         a.setNome("FERNANDO PUCCI");
@@ -137,8 +133,7 @@ public class Tester {
         Armario armarioAluguel = daoArmario.getAllAtivos(Armario.class).get(0);
         Usuario usuarioAluguel = daoUsuario.getAllAtivos(Usuario.class).get(0);
 
-        
-        AluguelArmario aluguel = new AluguelArmario(null, armarioAluguel, alunoAluguel, usuarioAluguel, new Date(), null, Boolean.FALSE);
+        AluguelArmario aluguel = new AluguelArmario(null, armarioAluguel, alunoAluguel, usuarioAluguel, new Date(), null, 0, Boolean.FALSE);
         dao.save(aluguel);
     }
 
