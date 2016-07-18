@@ -21,8 +21,6 @@ import br.com.etefgarcia.armarios.dao.impl.ArmarioDAOImpl;
 import br.com.etefgarcia.armarios.exceptions.NegocioException;
 import br.com.etefgarcia.armarios.exceptions.SistemaException;
 import br.com.etefgarcia.armarios.model.Armario;
-import br.com.etefgarcia.armarios.util.ServiceUtils;
-import br.com.etefgarcia.armarios.util.TelaUtils;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
 import java.util.List;
 
@@ -45,7 +43,7 @@ public class ArmarioService {
         }
 
         if (descricao == null) {
-            
+
             descricao = "";
 
         }
@@ -66,9 +64,21 @@ public class ArmarioService {
 
         try {
 
+            List<Armario> aTeste = dao.getArmarioByChaveDao(a.getChave());
+
+            if (aTeste != null && aTeste.size() > 0) {
+
+                throw new NegocioException("Esta chave já está cadastrada.");
+
+            }
+
             dao = new ArmarioDAOImpl();
 
             dao.save(a);
+
+        } catch (NegocioException nex) {
+
+            throw nex;
 
         } catch (Exception ex) {
 
@@ -77,7 +87,7 @@ public class ArmarioService {
         }
     }
 
-    public static List<Armario> consultarArmariosService(boolean buscarAtivos) throws SistemaException {
+    public static List<Armario> consultarArmariosService(Boolean buscarOcupados, Boolean buscarAtivos) throws SistemaException {
 
         List<Armario> listaArmarios = null;
 
@@ -85,7 +95,7 @@ public class ArmarioService {
 
             dao = new ArmarioDAOImpl();
 
-            listaArmarios = buscarAtivos ? dao.getAllAtivos(Armario.class) : dao.getAllInativos(Armario.class);
+            listaArmarios = dao.getAllArmariosLivres(buscarOcupados, buscarAtivos);
 
         } catch (Exception ex) {
 
@@ -96,7 +106,7 @@ public class ArmarioService {
         return listaArmarios;
     }
 
-    public static List<Armario> consultarArmariosByNomeService(Long chave, boolean buscarAtivos) throws SistemaException {
+    public static List<Armario> consultarArmariosByChaveService(Long chave, boolean buscarAtivos) throws SistemaException {
 
         List<Armario> listaArmarios = null;
 
@@ -104,7 +114,7 @@ public class ArmarioService {
 
             dao = new ArmarioDAOImpl();
 
-            listaArmarios = dao.getArmarioByChaveDao(chave, buscarAtivos);
+            listaArmarios = dao.getArmarioByChaveDao(chave);
 
         } catch (Exception ex) {
 

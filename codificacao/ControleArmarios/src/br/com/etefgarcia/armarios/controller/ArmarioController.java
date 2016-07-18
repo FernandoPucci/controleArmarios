@@ -46,6 +46,7 @@ public class ArmarioController {
     public ArmarioController(CadastrarArmarioView cadastrarArmarioView) {
 
         this.cadastrarArmarioView = cadastrarArmarioView;
+        this.consultarArmarioView = new ConsultarArmarioView();
 
     }
 
@@ -94,29 +95,7 @@ public class ArmarioController {
 
                 try {
 
-                    consultarArmarios();
-
-                } catch (SistemaException ex) {
-
-                    Mensagens.mostraMensagemErro(cadastrarArmarioView.getPainel(), ex.getMessage());
-
-                }
-
-            }
-
-        };
-    }
-
-    public Thread getThreadConsultarArmarioByNome() {
-
-        return new Thread() {
-
-            @Override
-            public void run() {
-
-                try {
-
-                    consultarArmarios();
+                    consultarArmariosPorChave();
 
                 } catch (SistemaException ex) {
 
@@ -138,17 +117,40 @@ public class ArmarioController {
 
                 try {
 
-                    switch (consultarArmarioView.getFiltroSelecionado()) {
+                    Boolean filtroGeral = null;
 
-                        case ConstantesTelas.BTN_FILTRO_TODOS:
-                            consultarArmariosGeral(null);
-                            break;
-                        case ConstantesTelas.BTN_FILTRO_ATIVOS:
-                            consultarArmariosGeral(Boolean.TRUE);
-                            break;
-                        case ConstantesTelas.BTN_FILTRO_INATIVOS:
-                            consultarArmariosGeral(Boolean.FALSE);
-                            break;
+                    if (consultarArmarioView.getFiltroAtivosSelecionado() != null) {
+                        switch (consultarArmarioView.getFiltroAtivosSelecionado()) {
+
+                            case ConstantesTelas.BTN_FILTRO_TODOS:
+                                filtroGeral = null;
+                                break;
+                            case ConstantesTelas.BTN_FILTRO_ATIVOS:
+                                filtroGeral = Boolean.TRUE;
+                                break;
+                            case ConstantesTelas.BTN_FILTRO_INATIVOS:
+                                filtroGeral = Boolean.FALSE;
+                                break;
+
+                        }
+                    }
+
+                    if (consultarArmarioView.getFiltroArmariosLivresSelecionado() != null) {
+                        switch (consultarArmarioView.getFiltroArmariosLivresSelecionado()) {
+
+                            case ConstantesTelas.BTN_FILTRO_ARMARIOS_TODOS:
+                                consultarArmariosGeral(null, filtroGeral);
+                                break;
+                            case ConstantesTelas.BTN_FILTRO_ARMARIOS_OCUPADOS:
+                                consultarArmariosGeral(Boolean.TRUE, filtroGeral);
+                                break;
+                            case ConstantesTelas.BTN_FILTRO_ARMARIOS_LIVRES:
+                                consultarArmariosGeral(Boolean.FALSE, filtroGeral);
+                                break;
+
+                        }
+                    } else {
+                        consultarArmariosGeral(filtroGeral, null);
 
                     }
 
@@ -251,16 +253,21 @@ public class ArmarioController {
     }
 
     //METODOS PRIVADOS
-    //consulta armarios da tela de cadastro
-    private void consultarArmarios() throws SistemaException {
+    private void consultarArmariosPorChave() throws SistemaException {
 
-        List<Armario> listaArmarios = ArmarioService.consultarArmariosByNomeService(new Long(cadastrarArmarioView.getChave()), true);
+        List<Armario> listaArmarios = ArmarioService.consultarArmariosByChaveService(new Long(cadastrarArmarioView.getChave()), true);
 
-        if (listaArmarios == null || listaArmarios.isEmpty()) {
+        if (listaArmarios == null || listaArmarios.isEmpty() && !cadastrarArmarioView.isTesteChaveExistente()) {
             Mensagens.mostraMensagemAlerta(cadastrarArmarioView.getPainel(), "Não há resultados para esta busca.");
             cadastrarArmarioView.limparCampos(false);
 
         } else {
+
+            if (cadastrarArmarioView.isTesteChaveExistente()) {
+
+                Mensagens.mostraMensagemErro(cadastrarArmarioView.getPainel(), "Esta chave já esta cadastrada.");
+
+            }
 
             cadastrarArmarioView.setListaArmarios(listaArmarios);
             cadastrarArmarioView.mostrarTabelas(true);
@@ -268,17 +275,11 @@ public class ArmarioController {
     }
 
     //consulta armario generica
-    private void consultarArmariosGeral(Boolean ativos) throws SistemaException, NegocioException {
+    private void consultarArmariosGeral(Boolean ocupados, Boolean ativos) throws SistemaException, NegocioException {
 
         List<Armario> listaArmarios = null;
 
-        //pesquisa por todos armarios
-        if (ativos == null && (consultarArmarioView.getChave() == null || consultarArmarioView.getChave().isEmpty())) {
-
-            listaArmarios = ArmarioService.consultarTodosArmariosService();
-
-            //pesquisa por codigo
-        } else if (consultarArmarioView.getCodigo() != null && !consultarArmarioView.getCodigo().trim().isEmpty()) {
+        if (consultarArmarioView.getCodigo() != null && !consultarArmarioView.getCodigo().isEmpty()) {
 
             Armario a = ArmarioService.consultarArmariosByCodigoService(consultarArmarioView.getCodigo());
 
@@ -287,14 +288,17 @@ public class ArmarioController {
                 listaArmarios.add(a);
             }
 
-            //pesquisa por nome
         } else if (consultarArmarioView.getChave() != null && !consultarArmarioView.getChave().isEmpty()) {
 
-            listaArmarios = ArmarioService.consultarArmariosByNomeService(new Long(consultarArmarioView.getChave()), ativos);
+            listaArmarios = ArmarioService.consultarArmariosByChaveService(new Long(consultarArmarioView.getChave()), ativos);
+
+        } else if (ativos == null && (consultarArmarioView.getChave() == null || consultarArmarioView.getChave().isEmpty())) {
+
+            listaArmarios = ArmarioService.consultarTodosArmariosService();
 
         } else {
 
-            listaArmarios = ArmarioService.consultarArmariosService(ativos);
+            listaArmarios = ArmarioService.consultarArmariosService(ocupados, ativos);
 
         }
 
@@ -354,6 +358,16 @@ public class ArmarioController {
                 break;
 
             case ConstantesTelas.BTN_FILTRO_INATIVOS:
+                getThreadConsultarArmarioGeral().start();
+                break;
+
+            case ConstantesTelas.BTN_FILTRO_ARMARIOS_TODOS:
+                getThreadConsultarArmarioGeral().start();
+                break;
+            case ConstantesTelas.BTN_FILTRO_ARMARIOS_LIVRES:
+                getThreadConsultarArmarioGeral().start();
+                break;
+            case ConstantesTelas.BTN_FILTRO_ARMARIOS_OCUPADOS:
                 getThreadConsultarArmarioGeral().start();
                 break;
 

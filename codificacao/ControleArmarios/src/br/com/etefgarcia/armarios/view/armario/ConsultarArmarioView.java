@@ -83,6 +83,10 @@ public class ConsultarArmarioView extends javax.swing.JFrame {
         jRadioButtonSomenteInativos.setName(ConstantesTelas.BTN_FILTRO_INATIVOS);
         jRadioButtonTodos.setName(ConstantesTelas.BTN_FILTRO_TODOS);
 
+        jRadioButtonTodosLivresOcupados.setName(ConstantesTelas.BTN_FILTRO_ARMARIOS_TODOS);
+        jRadioButtonLivres.setName(ConstantesTelas.BTN_FILTRO_ARMARIOS_LIVRES);
+        jRadioButtonOcupados.setName(ConstantesTelas.BTN_FILTRO_ARMARIOS_OCUPADOS);
+
         jButtonBuscar.setToolTipText(ConstantesTelas.TT_BTN_BUSCAR);
         jButtonEditar.setToolTipText(ConstantesTelas.TT_BTN_EDITAR);
         jButtonLimpar.setToolTipText(ConstantesTelas.TT_BTN_LIMPAR_PESQUISA);
@@ -128,6 +132,11 @@ public class ConsultarArmarioView extends javax.swing.JFrame {
         TelaRenderUtil.habilitarBotao(jRadioButtonSomenteInativos, habilitar);
         TelaRenderUtil.habilitarBotao(jRadioButtonTodos, habilitar);
 
+        TelaRenderUtil.habilitarBotao(jRadioButtonTodosLivresOcupados, habilitar);
+        TelaRenderUtil.habilitarBotao(jRadioButtonLivres, habilitar);
+        TelaRenderUtil.habilitarBotao(jRadioButtonOcupados, habilitar);
+
+        jRadioButtonTodosLivresOcupados.setSelected(true);
         jRadioButtonSomenteAtivos.setSelected(true);
     }
 
@@ -472,6 +481,10 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
         jRadioButtonSomenteInativos.removeMouseListener(consultarArmarioViewAction);
         jRadioButtonTodos.removeMouseListener(consultarArmarioViewAction);
 
+        jRadioButtonTodosLivresOcupados.removeMouseListener(consultarArmarioViewAction);
+        jRadioButtonOcupados.removeMouseListener(consultarArmarioViewAction);
+        jRadioButtonLivres.removeMouseListener(consultarArmarioViewAction);
+
     }
 
     private void adicionaListeners() {
@@ -486,6 +499,10 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
         jRadioButtonSomenteAtivos.addMouseListener(consultarArmarioViewAction);
         jRadioButtonSomenteInativos.addMouseListener(consultarArmarioViewAction);
         jRadioButtonTodos.addMouseListener(consultarArmarioViewAction);
+
+        jRadioButtonTodosLivresOcupados.addMouseListener(consultarArmarioViewAction);
+        jRadioButtonOcupados.addMouseListener(consultarArmarioViewAction);
+        jRadioButtonLivres.addMouseListener(consultarArmarioViewAction);
 
     }
 
@@ -533,6 +550,7 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
         jTextFieldIdArmario.setText("");
 
         configurarBotoes(false);
+        configurarBotoesFiltro(true);
 
         jScrollPane1.setVisible(false);
         jTableTabela.setVisible(false);
@@ -674,7 +692,7 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
         return listaArmarios.get(linhaSelecionada);
     }
 
-    public String getFiltroSelecionado() {
+    public String getFiltroAtivosSelecionado() {
 
         if (jRadioButtonSomenteAtivos.isSelected()) {
 
@@ -691,6 +709,26 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
         }
 
         return jRadioButtonTodos.getName();
+
+    }
+
+    public String getFiltroArmariosLivresSelecionado() {
+
+        if (jRadioButtonLivres.isSelected()) {
+
+            return jRadioButtonLivres.getName();
+
+        } else if (jRadioButtonOcupados.isSelected()) {
+
+            return jRadioButtonOcupados.getName();
+
+        } else if (jRadioButtonTodosLivresOcupados.isSelected()) {
+
+            return jRadioButtonTodosLivresOcupados.getName();
+
+        }
+
+        return jRadioButtonTodosLivresOcupados.getName();
 
     }
 

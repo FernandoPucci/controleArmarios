@@ -40,6 +40,8 @@ public class CadastrarArmarioView extends javax.swing.JFrame {
     private Boolean isAtualizar = Boolean.FALSE;
     private List<Armario> listaArmarios = null;
 
+    private Boolean isTesteSeChaveExistente = Boolean.FALSE;
+
     private final Runnable threadChecaCampoChave = new Runnable() {
 
         @Override
@@ -77,7 +79,8 @@ public class CadastrarArmarioView extends javax.swing.JFrame {
         mostrarTabela(false);
 
         if (armario != null) {
-            jCheckBoxFlgAtivo.setEnabled(true);
+            jCheckBoxFlgAtivo.setEnabled(armario.getFlgAtivo() == null ? Boolean.FALSE : armario.getFlgAtivo());
+            jCheckBoxFlgOcupado.setEnabled(armario.getFlgOcupado() == null ? Boolean.FALSE : armario.getFlgOcupado());
             vincularArmario();
         }
 
@@ -99,7 +102,7 @@ public class CadastrarArmarioView extends javax.swing.JFrame {
         this.cadastrarArmarioViewAction = new CadastrarArmarioViewAction(armarioController);
 
         jTextFieldChave.requestFocus();
-        
+
         removeListeners();
         adicionaListeners();
 
@@ -236,6 +239,9 @@ jTextFieldChave.addFocusListener(new java.awt.event.FocusAdapter() {
     jTextFieldDescricao.setMinimumSize(new java.awt.Dimension(390, 28));
     jTextFieldDescricao.setPreferredSize(new java.awt.Dimension(390, 28));
     jTextFieldDescricao.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusGained(java.awt.event.FocusEvent evt) {
+            jTextFieldDescricaoFocusGained(evt);
+        }
         public void focusLost(java.awt.event.FocusEvent evt) {
             jTextFieldDescricaoFocusLost(evt);
         }
@@ -424,9 +430,8 @@ jTextFieldChave.addFocusListener(new java.awt.event.FocusAdapter() {
 
     private void jTextFieldChaveFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldChaveFocusLost
 
-        if (!jTextFieldChave.getText().trim().isEmpty()) {
-            configurarBotoes(true);
-        }
+        testaChaveExistente();
+        
     }//GEN-LAST:event_jTextFieldChaveFocusLost
 
     private void jTextFieldDescricaoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldDescricaoFocusLost
@@ -449,6 +454,10 @@ jTextFieldChave.addFocusListener(new java.awt.event.FocusAdapter() {
             };
         }
     }//GEN-LAST:event_jCheckBoxFlgOcupadoActionPerformed
+
+    private void jTextFieldDescricaoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldDescricaoFocusGained
+        testaChaveExistente();
+    }//GEN-LAST:event_jTextFieldDescricaoFocusGained
 
     /**
      * @param args the command line arguments
@@ -646,14 +655,26 @@ jTextFieldChave.addFocusListener(new java.awt.event.FocusAdapter() {
         jTableTabela.setModel(modelTabela);
 
     }
-    
+
     private void populaDescricao() {
-         if(jTextFieldChave.getText().trim().length() >0){
-         
-             jTextFieldDescricao.setText("Armário " + jTextFieldChave.getText() + " ");
-         
-         }
+        if (jTextFieldChave.getText().trim().length() > 0) {
+
+            jTextFieldDescricao.setText("Armário " + jTextFieldChave.getText() + " ");
+
         }
+    }
+
+    private void testaChaveExistente() {
+
+        if (!jTextFieldChave.getText().trim().isEmpty()) {
+
+            isTesteSeChaveExistente = Boolean.TRUE;
+
+            armarioController.getThreadConsultarArmario();
+
+            configurarBotoes(true);
+        }
+    }
 
     public javax.swing.JComponent getPainel() {
 
@@ -728,6 +749,12 @@ jTextFieldChave.addFocusListener(new java.awt.event.FocusAdapter() {
     public String getChave() {
 
         return this.jTextFieldChave.getText();
+
+    }
+
+    public Boolean isTesteChaveExistente() {
+
+        return this.isTesteSeChaveExistente;
 
     }
 

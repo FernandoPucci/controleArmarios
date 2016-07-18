@@ -29,45 +29,58 @@ import javax.persistence.TypedQuery;
 public class ArmarioDAOImpl extends BaseDAOImpl<Armario, Long> implements ArmarioDAO {
 
     @Override
-    public List<Armario> getAllArmariosLivres() throws Exception {
+    public List<Armario> getAllArmariosLivres(Boolean ocupados, Boolean ativos) throws Exception {
 
         List<Armario> listaSaida = null;
 
-        TypedQuery<Armario> query = getEntityManager().createQuery("SELECT A "
-                + " FROM Armario A "
-                + " where  A.flgOcupado = false"
-                + " and A.flgAtivo = true ", Armario.class);
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT A  FROM Armario A ");
 
+        if (ocupados != null || ativos != null) {
+
+            sb.append(" where ");
+
+        }
+
+        if (ocupados != null) {
+
+            sb.append(" A.flgOcupado = ");
+            sb.append(ocupados);
+
+        }
+
+        if (ativos != null) {
+
+            if (ocupados != null) {
+                sb.append(" and ");
+            }
+
+            sb.append(" A.flgAtivo = ");
+            sb.append(ativos);
+
+        }
+
+        System.out.println("\n\n\n++++++++++++++++++++++++++++++++++ \n" + sb.toString() + "\n++++++++++++++++++++++++++++++++++\n\n\n");
+
+        TypedQuery<Armario> query = getEntityManager().createQuery(sb.toString(), Armario.class);
+
+//        TypedQuery<Armario> query = getEntityManager().createQuery("SELECT A "
+//                + " FROM Armario A "
+//                + " where  A.flgOcupado = false"
+//                + " and A.flgAtivo = true ", Armario.class);
         listaSaida = query.getResultList();
 
         return listaSaida;
     }
 
     @Override
-    public List<Armario> getAllArmariosOcupados() throws Exception {
-
-        List<Armario> listaSaida = null;
-
-        TypedQuery<Armario> query = getEntityManager().createQuery("SELECT A "
-                + " FROM Armario A "
-                + " where  A.flgOcupado = true"
-                + " and A.flgAtivo = true ", Armario.class);
-
-        listaSaida = query.getResultList();
-
-        return listaSaida;
-
-    }
-
-    @Override
-    public List<Armario> getArmarioByChaveDao(Long chave, Boolean ativo) throws IOException, ClassNotFoundException, Exception {
+    public List<Armario> getArmarioByChaveDao(Long chave) throws IOException, ClassNotFoundException, Exception {
 
         List<Armario> listaSaida = null;
 
         TypedQuery<Armario> query = getEntityManager().createQuery("SELECT A "
                 + "FROM Armario A "
-                + "where  A.chave = :chaveQuery "
-                + (ativo == null ? " " : ativo ? "and A.flgAtivo = true " : "and A.flgAtivo = false"), Armario.class);
+                + "where  A.chave = :chaveQuery ", Armario.class);
 
         query.setParameter("chaveQuery", chave);
         listaSaida = query.getResultList();

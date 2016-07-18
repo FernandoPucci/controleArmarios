@@ -66,7 +66,7 @@ public class ArmarioDAOTest {
     public static void tearDownClass() throws ClassNotFoundException, Exception {
 
         dao = null;
-        
+
     }
 
     @Before
@@ -106,7 +106,7 @@ public class ArmarioDAOTest {
 
         dao.save(armarioUpdate);
 
-        List<Armario> lista = dao.getAllArmariosOcupados();
+        List<Armario> lista = dao.getAllArmariosLivres(Boolean.TRUE, null);
 
         assertNotNull(lista);
         assertFalse(lista.isEmpty());
@@ -118,7 +118,7 @@ public class ArmarioDAOTest {
     @Transactional
     public void getAllArmariosLivres() throws ClassNotFoundException, Exception {
 
-        List<Armario> lista = dao.getAllArmariosLivres();
+        List<Armario> lista = dao.getAllArmariosLivres(Boolean.FALSE, null);
 
         assertNotNull(lista);
         assertFalse(lista.isEmpty());
@@ -126,7 +126,7 @@ public class ArmarioDAOTest {
         for (Armario a : lista) {
 
             assertFalse(a.getFlgOcupado());
-            
+
         }
 
     }

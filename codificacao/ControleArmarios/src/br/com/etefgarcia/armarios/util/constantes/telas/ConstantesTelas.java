@@ -63,6 +63,10 @@ public class ConstantesTelas {
     public static final String BTN_FILTRO_TODOS = "consultarFiltroTodos";
     public static final String BTN_FILTRO_ATIVOS = "consultarFiltroAtivos";
     public static final String BTN_FILTRO_INATIVOS = "consultarFiltroInativos";
+    
+    public static final String BTN_FILTRO_ARMARIOS_TODOS = "consultarFiltroTodosArmarios";
+    public static final String BTN_FILTRO_ARMARIOS_OCUPADOS = "consultarFiltroArmariosOc";
+    public static final String BTN_FILTRO_ARMARIOS_LIVRES = "consultarFiltroArmariosLv";
 
     public static final String BTN_SAIR = "sair";
 

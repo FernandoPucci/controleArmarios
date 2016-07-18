@@ -26,10 +26,8 @@ import java.util.List;
  */
 public interface ArmarioDAO extends BaseDAO<Armario, Long> {
 
-    public List<Armario> getAllArmariosLivres() throws Exception;
+    public List<Armario> getAllArmariosLivres(Boolean ocupados, Boolean ativos) throws Exception;
 
-    public List<Armario> getAllArmariosOcupados() throws Exception;
-
-    public List<Armario> getArmarioByChaveDao(Long chave, Boolean ativo) throws IOException, ClassNotFoundException, Exception;
+    public List<Armario> getArmarioByChaveDao(Long chave) throws IOException, ClassNotFoundException, Exception;
 
 }
