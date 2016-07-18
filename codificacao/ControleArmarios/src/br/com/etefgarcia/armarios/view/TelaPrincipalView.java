@@ -18,6 +18,7 @@ package br.com.etefgarcia.armarios.view;
 
 import br.com.etefgarcia.armarios.action.TelaPrincipalViewAction;
 import br.com.etefgarcia.armarios.controller.TelaPrincipalController;
+import br.com.etefgarcia.armarios.model.Usuario;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
 
 /**
@@ -25,7 +26,7 @@ import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
  * @author fernando-pucci
  */
 public class TelaPrincipalView extends javax.swing.JFrame {
-
+    
     private TelaPrincipalController telaPrincipalController;
     private TelaPrincipalViewAction telaPrincipalViewAction;
 
@@ -36,16 +37,16 @@ public class TelaPrincipalView extends javax.swing.JFrame {
         initComponents();
         inicializar();
     }
-
+    
     private void inicializar() {
         this.telaPrincipalController = new TelaPrincipalController();
         this.telaPrincipalViewAction = new TelaPrincipalViewAction(telaPrincipalController);
-
+        
         removeListeners();
         adicionaListeners();
-
+        
     }
-
+    
     @Override
     public void dispose() {
         telaPrincipalController.getThreadConfirmarSaida().start();
@@ -60,9 +61,15 @@ public class TelaPrincipalView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        usuario = new br.com.etefgarcia.armarios.model.Usuario();
         jPanelPrincipal = new javax.swing.JPanel();
-        jPanelEsquerdo = new javax.swing.JPanel();
+        jPanelSuperior = new javax.swing.JPanel();
         jPanelBotoes = new javax.swing.JPanel();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        jPanelInferior = new javax.swing.JPanel();
+        jLabelDadosUsuario = new javax.swing.JLabel();
         jMenuBar = new javax.swing.JMenuBar();
         jMenu = new javax.swing.JMenu();
         jMenuItemConfigurarBanco = new javax.swing.JMenuItem();
@@ -80,30 +87,42 @@ public class TelaPrincipalView extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(640, 480));
         setResizable(false);
 
-        jPanelPrincipal.setLayout(new java.awt.GridBagLayout());
+        jPanelPrincipal.setLayout(new java.awt.GridLayout(5, 1));
 
-        jPanelEsquerdo.setPreferredSize(new java.awt.Dimension(500, 459));
+        jPanelSuperior.setMaximumSize(new java.awt.Dimension(460, 80));
+        jPanelSuperior.setMinimumSize(new java.awt.Dimension(460, 80));
+        jPanelSuperior.setName(""); // NOI18N
+        jPanelSuperior.setPreferredSize(new java.awt.Dimension(460, 80));
+        jPanelSuperior.setRequestFocusEnabled(false);
+        jPanelSuperior.setLayout(new java.awt.GridLayout(2, 1));
 
-        javax.swing.GroupLayout jPanelEsquerdoLayout = new javax.swing.GroupLayout(jPanelEsquerdo);
-        jPanelEsquerdo.setLayout(jPanelEsquerdoLayout);
-        jPanelEsquerdoLayout.setHorizontalGroup(
-            jPanelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
+        javax.swing.GroupLayout jPanelBotoesLayout = new javax.swing.GroupLayout(jPanelBotoes);
+        jPanelBotoes.setLayout(jPanelBotoesLayout);
+        jPanelBotoesLayout.setHorizontalGroup(
+            jPanelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 640, Short.MAX_VALUE)
         );
-        jPanelEsquerdoLayout.setVerticalGroup(
-            jPanelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 459, Short.MAX_VALUE)
+        jPanelBotoesLayout.setVerticalGroup(
+            jPanelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 45, Short.MAX_VALUE)
         );
 
-        jPanelPrincipal.add(jPanelEsquerdo, new java.awt.GridBagConstraints());
+        jPanelSuperior.add(jPanelBotoes);
 
-        jPanelBotoes.setMaximumSize(new java.awt.Dimension(100, 459));
-        jPanelBotoes.setMinimumSize(new java.awt.Dimension(100, 459));
-        jPanelBotoes.setName(""); // NOI18N
-        jPanelBotoes.setPreferredSize(new java.awt.Dimension(100, 459));
-        jPanelBotoes.setRequestFocusEnabled(false);
-        jPanelBotoes.setLayout(new java.awt.GridLayout(5, 1));
-        jPanelPrincipal.add(jPanelBotoes, new java.awt.GridBagConstraints());
+        jPanelPrincipal.add(jPanelSuperior);
+        jPanelPrincipal.add(filler3);
+        jPanelPrincipal.add(filler2);
+        jPanelPrincipal.add(filler4);
+
+        jPanelInferior.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Usuário Logado:"));
+        jPanelInferior.setPreferredSize(new java.awt.Dimension(500, 459));
+        jPanelInferior.setLayout(new javax.swing.BoxLayout(jPanelInferior, javax.swing.BoxLayout.LINE_AXIS));
+
+        jLabelDadosUsuario.setFont(new java.awt.Font("Arial", 0, 10)); // NOI18N
+        jLabelDadosUsuario.setText("jLabel1");
+        jPanelInferior.add(jLabelDadosUsuario);
+
+        jPanelPrincipal.add(jPanelInferior);
 
         jMenu.setMnemonic('s');
         jMenu.setText("Ações");
@@ -194,9 +213,9 @@ public class TelaPrincipalView extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 459, Short.MAX_VALUE)
+            .addGap(0, 453, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE))
         );
 
         setSize(new java.awt.Dimension(650, 510));
@@ -204,40 +223,40 @@ public class TelaPrincipalView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSairActionPerformed
-
+        
         telaPrincipalController.getThreadConfirmarSaida().start();
 
     }//GEN-LAST:event_jMenuItemSairActionPerformed
 
     private void jMenuItemCadastrarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCadastrarAlunoActionPerformed
-
+        
         telaPrincipalController.getThreadShowCadastrarAlunoView().start();
 
     }//GEN-LAST:event_jMenuItemCadastrarAlunoActionPerformed
 
     private void jMenuItemConfigurarBancoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConfigurarBancoActionPerformed
-
+        
         telaPrincipalController.getThreadShowConfigurarBancoView().start();
 
     }//GEN-LAST:event_jMenuItemConfigurarBancoActionPerformed
 
     private void jMenuItemConsultarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarAlunoActionPerformed
-
+        
         telaPrincipalController.getThreadShowConsultarAlunoView().start();
-
+        
 
     }//GEN-LAST:event_jMenuItemConsultarAlunoActionPerformed
 
     private void jMenuItemConsultarArmarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarArmarioActionPerformed
-
+        
         telaPrincipalController.getThreadShowConsultarArmarioView().start();
 
     }//GEN-LAST:event_jMenuItemConsultarArmarioActionPerformed
 
     private void jMenuItemCadastrarArmarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCadastrarArmarioActionPerformed
-
-        telaPrincipalController.getThreadShowCadastrarArmarioView().start();
         
+        telaPrincipalController.getThreadShowCadastrarArmarioView().start();
+
     }//GEN-LAST:event_jMenuItemCadastrarArmarioActionPerformed
 
     /**
@@ -276,6 +295,10 @@ public class TelaPrincipalView extends javax.swing.JFrame {
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler3;
+    private javax.swing.Box.Filler filler4;
+    private javax.swing.JLabel jLabelDadosUsuario;
     private javax.swing.JMenu jMenu;
     private javax.swing.JMenu jMenuAlunos;
     private javax.swing.JMenu jMenuArmario;
@@ -287,16 +310,42 @@ public class TelaPrincipalView extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemConsultarArmario;
     private javax.swing.JMenuItem jMenuItemSair;
     private javax.swing.JPanel jPanelBotoes;
-    private javax.swing.JPanel jPanelEsquerdo;
+    private javax.swing.JPanel jPanelInferior;
     private javax.swing.JPanel jPanelPrincipal;
+    private javax.swing.JPanel jPanelSuperior;
+    private br.com.etefgarcia.armarios.model.Usuario usuario;
     // End of variables declaration//GEN-END:variables
 
     private void removeListeners() {
         jMenuItemSair.removeMouseListener(telaPrincipalViewAction);
     }
-
+    
     private void adicionaListeners() {
-
+        
         jMenuItemSair.addMouseListener(telaPrincipalViewAction);
     }
+    
+    public javax.swing.JPanel getPainelInferior() {
+        
+        return this.jPanelInferior;
+    }
+    
+    public void setUsuario(Usuario usuario) {
+        
+        this.usuario = usuario;
+        
+    }
+    
+    public Usuario getUsuario() {
+        
+        return this.usuario;
+        
+    }
+    
+    public void mostrarDadosUsuarioLogado() {
+        
+        this.jLabelDadosUsuario.setText(usuario.toString());
+        
+    }
+    
 }

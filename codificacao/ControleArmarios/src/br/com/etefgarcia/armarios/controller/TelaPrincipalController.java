@@ -16,6 +16,10 @@
  */
 package br.com.etefgarcia.armarios.controller;
 
+import br.com.etefgarcia.armarios.exceptions.NegocioException;
+import br.com.etefgarcia.armarios.exceptions.SistemaException;
+import br.com.etefgarcia.armarios.model.Usuario;
+import br.com.etefgarcia.armarios.service.UsuarioService;
 import br.com.etefgarcia.armarios.util.Mensagens;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
 import br.com.etefgarcia.armarios.view.aluno.CadastrarAlunoView;
@@ -35,17 +39,64 @@ import javax.swing.AbstractButton;
  */
 public class TelaPrincipalController {
 
+    private TelaPrincipalView telaPrincipalView = null;
+
+    public TelaPrincipalController() {
+
+     //   this.telaPrincipalView = new TelaPrincipalView();
+
+    }
+
     public Thread getThreadShowTelaPrincipalView() {
 
         return new Thread() {
 
             @Override
             public void run() {
-                new TelaPrincipalView().setVisible(true);
+
+                
+             telaPrincipalView =    new TelaPrincipalView();
+                     
+                carregaUsuario();
+
+                if (telaPrincipalView.getUsuario() != null) {
+
+                    telaPrincipalView.setVisible(true);
+
+                } else {
+
+                    Mensagens.mostraMensagemAlerta("Problemas ao iniciar;");
+                    System.exit(0);
+                }
+            }
+  
+        };
+
+    }
+
+    private void carregaUsuario() {
+
+        try {
+
+            // TODO :  Mock usuario id 1L, criar regra de login
+            Usuario u = UsuarioService.getUsuarioById(1L);
+
+            if (u == null) {
+
+                throw new NegocioException("Usuário não localizado.");
+
+            } else {
+
+                telaPrincipalView.setUsuario(u);
+                telaPrincipalView.mostrarDadosUsuarioLogado();
 
             }
 
-        };
+        } catch (NegocioException | SistemaException sex) {
+
+            Mensagens.mostraMensagemErro(telaPrincipalView.getPainelInferior(), sex.getMessage());
+
+        }
 
     }
 

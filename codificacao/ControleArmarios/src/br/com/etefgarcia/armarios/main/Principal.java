@@ -47,8 +47,8 @@ public class Principal {
 
             } else {
 
-                telaPrincipalController = new TelaPrincipalController();
                 configController.testarConfiguracaoDbGeral();
+                telaPrincipalController = new TelaPrincipalController();
 
                 telaPrincipalController.getThreadShowTelaPrincipalView().start();
 

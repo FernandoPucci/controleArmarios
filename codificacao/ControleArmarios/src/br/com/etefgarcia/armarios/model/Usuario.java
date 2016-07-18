@@ -65,6 +65,12 @@ public class Usuario implements Serializable {
 
     @Column(name = "NOME")
     private String nome;
+    
+    @Column(name = "USERNAME")
+    private String username;
+    
+    @Column(name = "PW")
+    private String pw;
 
     @Column(name = "FLG_ATIVO", nullable = false)
     private Boolean flgAtivo;
@@ -114,7 +120,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "Usuario{" + "idUsuario=" + idUsuario + ", tipoUsuario=" + tipoUsuario + ", nome=" + nome + ", flgAtivo=" + flgAtivo + '}';
+        return "<html>" + nome +", <br/><hr/>" + tipoUsuario.getDescricao()+"</html>" ;
     }
 
 }
