@@ -233,9 +233,10 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
     jRadioButtonOcupados.setText("Somente Ocupados");
     jPanelInternoFiltrosBusca.add(jRadioButtonOcupados);
 
-    jSeparator2.setMaximumSize(new java.awt.Dimension(405, 6));
-    jSeparator2.setMinimumSize(new java.awt.Dimension(405, 6));
-    jSeparator2.setPreferredSize(new java.awt.Dimension(405, 6));
+    jSeparator2.setMaximumSize(new java.awt.Dimension(410, 6));
+    jSeparator2.setMinimumSize(new java.awt.Dimension(410, 6));
+    jSeparator2.setName(""); // NOI18N
+    jSeparator2.setPreferredSize(new java.awt.Dimension(410, 6));
     jSeparator2.setRequestFocusEnabled(false);
     jPanelInternoFiltrosBusca.add(jSeparator2);
 

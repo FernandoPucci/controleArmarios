@@ -86,7 +86,7 @@ public class AluguelArmario implements Serializable {
     @Column(name = "DATA_DEVOLUCAO", nullable = true, insertable = false)//configuracoes para permitir insercao de datas null
     private Date dataDevolucao;
 
-    @Column(name = "DURACAO")
+    @Column(name = "DURACAO", nullable = true)
     private Integer duracao;
 
     @Column(name = "FLG_DEVOLVIDO")
@@ -155,16 +155,16 @@ public class AluguelArmario implements Serializable {
         return flgDevolvido ? "SIM" : "NÃO";
     }
 
-    public void setFlgDevolvido(Boolean flgDevolvido) {
-        this.flgDevolvido = flgDevolvido;
-    }
-
     public Integer getDuracao() {
         return duracao;
     }
 
     public void setDuracao(Integer duracao) {
         this.duracao = duracao == null ? 0 : duracao;
+    }
+
+    public void setFlgDevolvido(Boolean flgDevolvido) {
+        this.flgDevolvido = flgDevolvido;
     }
 
     @Override

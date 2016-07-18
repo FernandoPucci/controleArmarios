@@ -141,7 +141,7 @@ public class ConfigController {
         } catch (Exception ex) {
 
             Mensagens.mostraMensagemErro("Erro ao inicializar configuração.\n\n" + ex.getMessage());
-
+            ex.printStackTrace();
         }
 
     }
