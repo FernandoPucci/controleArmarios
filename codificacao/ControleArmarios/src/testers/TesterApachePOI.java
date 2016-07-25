@@ -25,6 +25,7 @@ import br.com.etefgarcia.armarios.service.AlunoService;
 import br.com.etefgarcia.armarios.util.ServiceUtils;
 import br.com.etefgarcia.armarios.util.TelaUtils;
 import br.com.etefgarcia.armarios.util.constantes.ConstantesExcelHeaders;
+import br.com.etefgarcia.armarios.view.BarraProgresso;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,11 +46,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class TesterApachePOI {
 
-    private static final String CAMINHO_ARQUIVO = "/home/fernando-pucci/Projetos/ETEC/Diversos/base_xls/banco_alunos.xlsx";
+    private final String CAMINHO_ARQUIVO = "/home/fernando-pucci/Projetos/ETEC/Diversos/base_xls/banco_alunos.xlsx";
 
-    private static Map<String, Integer> mapaColunas;
+    private Map<String, Integer> mapaColunas;
 
-    public static void main(String[] args) {
+    private Double totalLinhas = 0.0;
+    private Double linhasAtualizadas = 0.0;
+
+    public void inicia() {
 
         try {
             System.out.println("TESTE APACHE POI");
@@ -57,6 +61,8 @@ public class TesterApachePOI {
             List<Aluno> listaAlunos = null;
 
             listaAlunos = carregaListaAlunos(CAMINHO_ARQUIVO, 4);
+
+            totalLinhas = Double.parseDouble(listaAlunos.size()+"");
 
             //TESTE - mostra mapa de colunas
 //            for (Map.Entry m : mapaColunas.entrySet()) {
@@ -71,8 +77,7 @@ public class TesterApachePOI {
 
             for (Aluno a : listaAlunos) {
 
-              //  System.out.println(a);
-
+                  System.out.println(a);
                 if (a.getTelefone() == null && a.getEmail() == null) {
 
                     throw new NegocioException("Aluno " + a.getIdAluno() + ", possui dados de contato inválidos");
@@ -101,7 +106,7 @@ public class TesterApachePOI {
                     AlunoService service = new AlunoService(dao);
 
                     service.cadastrarAluno(a);
-
+                    linhasAtualizadas++;
                 } catch (Exception e) {
 
                     throw new SistemaException(e.getMessage());
@@ -127,7 +132,7 @@ public class TesterApachePOI {
 
     }
 
-    private static List<Aluno> carregaListaAlunos(String arquivo, int linhaInicio) throws NegocioException, IOException {
+    private List<Aluno> carregaListaAlunos(String arquivo, int linhaInicio) throws NegocioException, IOException {
 
         List<Aluno> listaAlunos = null;
 
@@ -138,31 +143,31 @@ public class TesterApachePOI {
             listaAlunos = new ArrayList<>();
             mapaColunas = new HashMap<>();
 
-            //Create the input stream from the xlsx/xls file
             FileInputStream fis = new FileInputStream(arquivo);
 
-            //Create Workbook instance for xlsx/xls file input stream
             Workbook workbook = null;
+
             if (arquivo.toLowerCase().endsWith("xlsx")) {
+
                 workbook = new XSSFWorkbook(fis);
+
             } else if (arquivo.toLowerCase().endsWith("xls")) {
+
                 workbook = new HSSFWorkbook(fis);
+
             }
 
-            //Get the number of sheets in the xlsx file
-            int numberOfSheets = workbook.getNumberOfSheets();
+            int totalPaginas = workbook.getNumberOfSheets();
 
-            //loop through each of the sheets
-            for (int i = 0; i < numberOfSheets; i++) {
+            for (int i = 0; i < totalPaginas; i++) {
 
-                //Get the nth sheet from the workbook
+                //Iterator de planilha
                 Sheet sheet = workbook.getSheetAt(i);
 
-                //every sheet has rows, iterate over them
+                //Iterator de linha
                 Iterator<Row> rowIterator = sheet.iterator();
                 while (rowIterator.hasNext()) {
 
-                    //Get the row object
                     Row row = rowIterator.next();
 
                     if (row.getRowNum() < linhaInicio) {
@@ -173,14 +178,12 @@ public class TesterApachePOI {
 
                     Aluno a = new Aluno();
 
-                    //Every row has columns, get the column iterator and iterate over them
+                    //Iterator de celula
                     Iterator<Cell> cellIterator = row.cellIterator();
 
                     while (cellIterator.hasNext()) {
-                        //Get the Cell object
                         Cell cell = cellIterator.next();
 
-                        //System.out.println(row.getRowNum());
                         if (row.getRowNum() == linhaInicioReal) {
 
                             if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
@@ -202,7 +205,7 @@ public class TesterApachePOI {
 
                         String valor = null;
 
-                        //check the cell type and process accordingly
+                        //verifica o tipo do valor da celula
                         switch (cell.getCellType()) {
                             case Cell.CELL_TYPE_STRING:
                                 valor = cell.getStringCellValue();
@@ -242,14 +245,13 @@ public class TesterApachePOI {
 
                         }
 
-                    } //end of cell iterator
+                    }
 
                     listaAlunos.add(a);
-                } //end of rows iterator
+                }
 
-            } //end of sheets for loop
+            }
 
-            //close file input stream
             fis.close();
 
         } catch (IOException e) {
@@ -259,7 +261,7 @@ public class TesterApachePOI {
         return listaAlunos;
     }
 
-    private static boolean validaCampos() {
+    private boolean validaCampos() {
 
         for (Map.Entry m : mapaColunas.entrySet()) {
 
@@ -303,7 +305,7 @@ public class TesterApachePOI {
         return true;
     }
 
-    private static void populaMapaColunas(Cell cell) throws NegocioException {
+    private void populaMapaColunas(Cell cell) throws NegocioException {
 
         if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
 
@@ -336,6 +338,16 @@ public class TesterApachePOI {
         } else {
             throw new NegocioException("Arquivo fora do padrão de colunas.");
         }
+
+    }
+
+    public Double getTotalLinhas() {
+        return totalLinhas;
+
+    }
+
+    public Double getTotalLinhasAtualizadas() {
+        return linhasAtualizadas;
 
     }
 
