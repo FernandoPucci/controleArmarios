@@ -56,6 +56,7 @@ public class Principal {
         } catch (Exception ex) {
 
             Mensagens.mostraMensagemErro(ex.getMessage());
+            ex.printStackTrace();
             System.exit(0);
 
         }

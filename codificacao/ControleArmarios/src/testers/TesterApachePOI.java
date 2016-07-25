@@ -23,7 +23,6 @@ import br.com.etefgarcia.armarios.exceptions.SistemaException;
 import br.com.etefgarcia.armarios.model.Aluno;
 import br.com.etefgarcia.armarios.service.AlunoService;
 import br.com.etefgarcia.armarios.util.ServiceUtils;
-import br.com.etefgarcia.armarios.util.TelaRenderUtil;
 import br.com.etefgarcia.armarios.util.TelaUtils;
 import br.com.etefgarcia.armarios.util.constantes.ConstantesExcelHeaders;
 import java.io.FileInputStream;
@@ -33,8 +32,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -47,18 +44,18 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  * @author fernando-pucci
  */
 public class TesterApachePOI {
-    
+
     private static final String CAMINHO_ARQUIVO = "/home/fernando-pucci/Projetos/ETEC/Diversos/base_xls/banco_alunos.xlsx";
-    
+
     private static Map<String, Integer> mapaColunas;
-    
+
     public static void main(String[] args) {
-        
+
         try {
             System.out.println("TESTE APACHE POI");
-            
+
             List<Aluno> listaAlunos = null;
-            
+
             listaAlunos = carregaListaAlunos(CAMINHO_ARQUIVO, 4);
 
             //TESTE - mostra mapa de colunas
@@ -68,69 +65,76 @@ public class TesterApachePOI {
 //                
 //            }
             AlunoDAO dao = new AlunoDAOImpl();
-            
+
+            Long initTime = System.nanoTime();
+            System.out.println("AGUARDE...");
+
             for (Aluno a : listaAlunos) {
-                
-                System.out.println(a);
-                
+
+              //  System.out.println(a);
+
                 if (a.getTelefone() == null && a.getEmail() == null) {
-                    
+
                     throw new NegocioException("Aluno " + a.getIdAluno() + ", possui dados de contato inválidos");
-                    
+
                 }
-                
+
                 if (a.getEmail() != null) {
                     if (!TelaUtils.validaEmail(a.getEmail())) {
-                        
+
                         throw new NegocioException("Aluno " + a.getIdAluno() + ", possui dados de e-mail inválidos");
-                        
+
                     }
                 }
-                
+
                 if (a.getTelefone() != null) {
                     if (!TelaUtils.validaTelefone(a.getTelefone())) {
-                        
+
                         throw new NegocioException("Aluno " + a.getIdAluno() + ", possui dados de Telefone inválidos");
-                        
+
                     }
-                    
+
                 }
-                
+
                 try {
-                    
+
                     AlunoService service = new AlunoService(dao);
-                    
+
                     service.cadastrarAluno(a);
-                    
+
                 } catch (Exception e) {
-                    
+
                     throw new SistemaException(e.getMessage());
-                    
+
                 }
             }
-            
-            System.out.println(listaAlunos.size() + "registros.");
-            
+
+            Long finalTime = System.nanoTime() - initTime;
+
+            double tempoSegundos = (double) finalTime / 1000000000.0;
+
+            System.out.println(listaAlunos.size() + " registros em " + tempoSegundos / 60 + " minutos");
+
         } catch (SistemaException | NegocioException | IOException ex) {
-            
+
             System.out.println(ex.getMessage());
-            
+
         } finally {
-            
+
             System.exit(0);
-            
+
         }
-        
+
     }
-    
+
     private static List<Aluno> carregaListaAlunos(String arquivo, int linhaInicio) throws NegocioException, IOException {
-        
+
         List<Aluno> listaAlunos = null;
-        
+
         try {
-            
+
             int linhaInicioReal = linhaInicio - 1;
-            
+
             listaAlunos = new ArrayList<>();
             mapaColunas = new HashMap<>();
 
@@ -160,42 +164,42 @@ public class TesterApachePOI {
 
                     //Get the row object
                     Row row = rowIterator.next();
-                    
+
                     if (row.getRowNum() < linhaInicio) {
-                        
+
                         continue;
-                        
+
                     }
-                    
+
                     Aluno a = new Aluno();
 
                     //Every row has columns, get the column iterator and iterate over them
                     Iterator<Cell> cellIterator = row.cellIterator();
-                    
+
                     while (cellIterator.hasNext()) {
                         //Get the Cell object
                         Cell cell = cellIterator.next();
 
                         //System.out.println(row.getRowNum());
                         if (row.getRowNum() == linhaInicioReal) {
-                            
+
                             if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
-                                
+
                                 populaMapaColunas(cell);
-                                
+
                                 if (!validaCampos()) {
-                                    
+
                                     throw new NegocioException("Arquivo Inválido! - Formatação de Colunas Incorreta.");
-                                    
+
                                 }
-                                
+
                             } else {
                                 throw new NegocioException("Arquivo Inválido!");
-                                
+
                             }
-                            
+
                         }
-                        
+
                         String valor = null;
 
                         //check the cell type and process accordingly
@@ -204,14 +208,14 @@ public class TesterApachePOI {
                                 valor = cell.getStringCellValue();
                                 break;
                             case Cell.CELL_TYPE_NUMERIC:
-                                
+
                                 valor = cell.getNumericCellValue() + "";
-                                
+
                                 break;
                         }
-                        
+
                         switch (cell.getColumnIndex()) {
-                            
+
                             case ConstantesExcelHeaders.COLUNA_RM:
                                 a.setIdAluno(new Long(valor));
                                 break;
@@ -222,22 +226,22 @@ public class TesterApachePOI {
                                 a.setEmail(valor);
                                 break;
                             case ConstantesExcelHeaders.COLUNA_CELULAR:
-                                
+
                                 if (a.getTelefone() == null || !TelaUtils.validaTelefone(a.getTelefone())) {//se nao tiver telefone grava celular
                                     a.setTelefone(ServiceUtils.limpaTelefone(valor));
                                 }
-                                
+
                                 break;
-                            
+
                             case ConstantesExcelHeaders.COLUNA_TELEFONE:
                                 a.setTelefone(ServiceUtils.limpaTelefone(valor));
                                 break;
                             case ConstantesExcelHeaders.COLUNA_SEXO:
                                 a.setSexo(valor);
                                 break;
-                            
+
                         }
-                        
+
                     } //end of cell iterator
 
                     listaAlunos.add(a);
@@ -247,20 +251,20 @@ public class TesterApachePOI {
 
             //close file input stream
             fis.close();
-            
+
         } catch (IOException e) {
             throw e;
         }
-        
+
         return listaAlunos;
     }
-    
+
     private static boolean validaCampos() {
-        
+
         for (Map.Entry m : mapaColunas.entrySet()) {
-            
+
             switch ((int) m.getValue()) {
-                
+
                 case ConstantesExcelHeaders.COLUNA_RM:
                     if (!m.getKey().equals(ConstantesExcelHeaders.RM)) {
                         return false;
@@ -291,20 +295,20 @@ public class TesterApachePOI {
                         return false;
                     }
                     break;
-                
+
             }
-            
+
         }
-        
+
         return true;
     }
-    
+
     private static void populaMapaColunas(Cell cell) throws NegocioException {
-        
+
         if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
-            
+
             switch (cell.getStringCellValue()) {
-                
+
                 case ConstantesExcelHeaders.RM:
                     mapaColunas.put(ConstantesExcelHeaders.RM, cell.getColumnIndex());
                     break;
@@ -323,16 +327,16 @@ public class TesterApachePOI {
                 case ConstantesExcelHeaders.SEXO:
                     mapaColunas.put(ConstantesExcelHeaders.SEXO, cell.getColumnIndex());
                     break;
-                
+
                 default:
-                    
+
                     break;
             }
-            
+
         } else {
             throw new NegocioException("Arquivo fora do padrão de colunas.");
         }
-        
+
     }
-    
+
 }

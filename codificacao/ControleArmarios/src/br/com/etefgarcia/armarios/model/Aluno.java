@@ -17,6 +17,7 @@
 package br.com.etefgarcia.armarios.model;
 
 import java.io.Serializable;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,6 +25,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
 /**
@@ -54,7 +56,10 @@ public class Aluno implements Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "GeradorDeId")
+    @GenericGenerator(name = "GeradorDeId",
+            strategy = "br.com.etefgarcia.armarios.util.GeraIdAluno")
     @Column(name = "ID_ALUNO", nullable = false)
     private Long idAluno;
 
@@ -79,6 +84,10 @@ public class Aluno implements Serializable {
 
     public void setIdAluno(Long idAluno) {
         this.idAluno = idAluno;
+    }
+
+    public void setRmAluno(Long rmAluno) {
+        this.idAluno = rmAluno;
     }
 
     public String getNome() {
