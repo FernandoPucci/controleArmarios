@@ -32,12 +32,42 @@ import java.util.List;
  */
 public class AlunoService {
 
+    public AlunoService(AlunoDAO dao) {
+
+        if (dao == null) {
+
+            dao = dao;
+
+        }
+
+    }
+
     private static AlunoDAO dao = null;
+
+    public void cadastrarAluno(Aluno aluno) throws NegocioException, SistemaException {
+
+        if (aluno == null) {
+            throw new NegocioException("Aluno nulo!");
+        }
+
+        if (dao == null) {
+
+            dao = new AlunoDAOImpl();
+
+        }
+
+        cadastrarAtualizarAlunoService(aluno.getIdAluno(), aluno.getNome(), aluno.getSexo() + "", aluno.getTelefone(), aluno.getEmail(), aluno.getFlgAtivo());
+
+    }
 
     public static void cadastrarAtualizarAlunoService(Long idAluno, String nome, String sexo, String telefone, String email, Boolean flgAtivo) throws NegocioException, SistemaException {
 
         int err = 0;
         StringBuilder sb = new StringBuilder();
+
+        if (email == null) {
+            email = "";
+        }
 
         if (nome == null || nome.isEmpty()) {
             sb.append(ConstantesTelas.ERR_TOKEN_LISTA + "Nome vazio.");
@@ -49,7 +79,7 @@ public class AlunoService {
             err++;
         }
 
-        if ((email == null || email.trim().isEmpty()) && (telefone == null || telefone.trim().isEmpty())) {
+        if (email.trim().isEmpty() && (telefone == null || telefone.trim().isEmpty())) {
 
             sb.append(ConstantesTelas.ERR_TOKEN_LISTA + "O aluno deve possuir um contato. E-mail ou telefone");
             err++;
@@ -82,7 +112,11 @@ public class AlunoService {
 
         try {
 
-            dao = new AlunoDAOImpl();
+            if (dao == null) {
+
+                dao = new AlunoDAOImpl();
+
+            }
 
             dao.save(a);
 
