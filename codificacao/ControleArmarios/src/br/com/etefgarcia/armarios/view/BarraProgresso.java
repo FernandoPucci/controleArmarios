@@ -16,6 +16,8 @@
  */
 package br.com.etefgarcia.armarios.view;
 
+import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
+
 /**
  *
  * @author fernando-pucci
@@ -46,6 +48,7 @@ public class BarraProgresso extends javax.swing.JFrame {
         jLabelTotal = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle(ConstantesTelas.TITULO_PROCESSAMENTO);
         setAlwaysOnTop(true);
         getContentPane().setLayout(new java.awt.GridLayout(4, 1));
 

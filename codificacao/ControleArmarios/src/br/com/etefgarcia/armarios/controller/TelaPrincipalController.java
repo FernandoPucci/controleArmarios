@@ -25,6 +25,7 @@ import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
 import br.com.etefgarcia.armarios.view.aluno.CadastrarAlunoView;
 import br.com.etefgarcia.armarios.view.ConfigInicialView;
 import br.com.etefgarcia.armarios.view.TelaPrincipalView;
+import br.com.etefgarcia.armarios.view.aluno.CarregarPlanilhaAlunoView;
 import br.com.etefgarcia.armarios.view.aluno.ConsultarAlunoView;
 import br.com.etefgarcia.armarios.view.armario.CadastrarArmarioView;
 import br.com.etefgarcia.armarios.view.armario.ConsultarArmarioView;
@@ -160,6 +161,20 @@ public class TelaPrincipalController {
             public void run() {
 
                 new ConsultarAlunoView().setVisible(true);
+
+            }
+
+        };
+    }
+    
+    public Thread getThreadShowCarregarPlanilhaAlunoView() {
+
+        return new Thread() {
+
+            @Override
+            public void run() {
+
+                new CarregarPlanilhaAlunoView().setVisible(true);
 
             }
 

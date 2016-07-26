@@ -21,7 +21,7 @@ import br.com.etefgarcia.armarios.controller.ArmarioController;
 import br.com.etefgarcia.armarios.model.Armario;
 import br.com.etefgarcia.armarios.util.TelaRenderUtil;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
-import br.com.etefgarcia.armarios.util.constantes.telas.render.ZebraCellRenderer;
+import br.com.etefgarcia.armarios.util.telas.render.ZebraCellRenderer;
 import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.ListSelectionModel;
@@ -271,6 +271,7 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
     jPanelEsquerdo.add(jSeparator1);
 
     jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    jScrollPane1.setAutoscrolls(true);
     jScrollPane1.setMaximumSize(new java.awt.Dimension(452, 270));
     jScrollPane1.setMinimumSize(new java.awt.Dimension(452, 270));
     jScrollPane1.setName(""); // NOI18N

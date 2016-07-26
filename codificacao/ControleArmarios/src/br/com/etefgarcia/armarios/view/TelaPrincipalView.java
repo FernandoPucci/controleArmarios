@@ -26,7 +26,7 @@ import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
  * @author fernando-pucci
  */
 public class TelaPrincipalView extends javax.swing.JFrame {
-    
+
     private TelaPrincipalController telaPrincipalController;
     private TelaPrincipalViewAction telaPrincipalViewAction;
 
@@ -37,16 +37,16 @@ public class TelaPrincipalView extends javax.swing.JFrame {
         initComponents();
         inicializar();
     }
-    
+
     private void inicializar() {
         this.telaPrincipalController = new TelaPrincipalController();
         this.telaPrincipalViewAction = new TelaPrincipalViewAction(telaPrincipalController);
-        
+
         removeListeners();
         adicionaListeners();
-        
+
     }
-    
+
     @Override
     public void dispose() {
         telaPrincipalController.getThreadConfirmarSaida().start();
@@ -77,6 +77,8 @@ public class TelaPrincipalView extends javax.swing.JFrame {
         jMenuAlunos = new javax.swing.JMenu();
         jMenuItemConsultarAluno = new javax.swing.JMenuItem();
         jMenuItemCadastrarAluno = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        jMenuItemCarregarPlanilha = new javax.swing.JMenuItem();
         jMenuArmario = new javax.swing.JMenu();
         jMenuItemConsultarArmario = new javax.swing.JMenuItem();
         jMenuItemCadastrarArmario = new javax.swing.JMenuItem();
@@ -175,6 +177,19 @@ public class TelaPrincipalView extends javax.swing.JFrame {
         });
         jMenuAlunos.add(jMenuItemCadastrarAluno);
 
+        jSeparator1.setForeground(new java.awt.Color(30, 25, 25));
+        jSeparator1.setPreferredSize(new java.awt.Dimension(2, 2));
+        jMenuAlunos.add(jSeparator1);
+
+        jMenuItemCarregarPlanilha.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jMenuItemCarregarPlanilha.setText("Carregar Planilha");
+        jMenuItemCarregarPlanilha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCarregarPlanilhaActionPerformed(evt);
+            }
+        });
+        jMenuAlunos.add(jMenuItemCarregarPlanilha);
+
         jMenuBar.add(jMenuAlunos);
 
         jMenuArmario.setMnemonic('m');
@@ -223,41 +238,45 @@ public class TelaPrincipalView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSairActionPerformed
-        
+
         telaPrincipalController.getThreadConfirmarSaida().start();
 
     }//GEN-LAST:event_jMenuItemSairActionPerformed
 
     private void jMenuItemCadastrarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCadastrarAlunoActionPerformed
-        
+
         telaPrincipalController.getThreadShowCadastrarAlunoView().start();
 
     }//GEN-LAST:event_jMenuItemCadastrarAlunoActionPerformed
 
     private void jMenuItemConfigurarBancoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConfigurarBancoActionPerformed
-        
+
         telaPrincipalController.getThreadShowConfigurarBancoView().start();
 
     }//GEN-LAST:event_jMenuItemConfigurarBancoActionPerformed
 
     private void jMenuItemConsultarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarAlunoActionPerformed
-        
+
         telaPrincipalController.getThreadShowConsultarAlunoView().start();
-        
+
 
     }//GEN-LAST:event_jMenuItemConsultarAlunoActionPerformed
 
     private void jMenuItemConsultarArmarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConsultarArmarioActionPerformed
-        
+
         telaPrincipalController.getThreadShowConsultarArmarioView().start();
 
     }//GEN-LAST:event_jMenuItemConsultarArmarioActionPerformed
 
     private void jMenuItemCadastrarArmarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCadastrarArmarioActionPerformed
-        
+
         telaPrincipalController.getThreadShowCadastrarArmarioView().start();
 
     }//GEN-LAST:event_jMenuItemCadastrarArmarioActionPerformed
+
+    private void jMenuItemCarregarPlanilhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCarregarPlanilhaActionPerformed
+        telaPrincipalController.getThreadShowCarregarPlanilhaAlunoView().start();
+    }//GEN-LAST:event_jMenuItemCarregarPlanilhaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -305,6 +324,7 @@ public class TelaPrincipalView extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JMenuItem jMenuItemCadastrarAluno;
     private javax.swing.JMenuItem jMenuItemCadastrarArmario;
+    private javax.swing.JMenuItem jMenuItemCarregarPlanilha;
     private javax.swing.JMenuItem jMenuItemConfigurarBanco;
     private javax.swing.JMenuItem jMenuItemConsultarAluno;
     private javax.swing.JMenuItem jMenuItemConsultarArmario;
@@ -313,39 +333,40 @@ public class TelaPrincipalView extends javax.swing.JFrame {
     private javax.swing.JPanel jPanelInferior;
     private javax.swing.JPanel jPanelPrincipal;
     private javax.swing.JPanel jPanelSuperior;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private br.com.etefgarcia.armarios.model.Usuario usuario;
     // End of variables declaration//GEN-END:variables
 
     private void removeListeners() {
         jMenuItemSair.removeMouseListener(telaPrincipalViewAction);
     }
-    
+
     private void adicionaListeners() {
-        
+
         jMenuItemSair.addMouseListener(telaPrincipalViewAction);
     }
-    
+
     public javax.swing.JPanel getPainelInferior() {
-        
+
         return this.jPanelInferior;
     }
-    
+
     public void setUsuario(Usuario usuario) {
-        
+
         this.usuario = usuario;
-        
+
     }
-    
+
     public Usuario getUsuario() {
-        
+
         return this.usuario;
-        
+
     }
-    
+
     public void mostrarDadosUsuarioLogado() {
-        
+
         this.jLabelDadosUsuario.setText(usuario.toString());
-        
+
     }
-    
+
 }

@@ -16,6 +16,9 @@
  */
 package br.com.etefgarcia.armarios.util;
 
+import br.com.etefgarcia.armarios.util.constantes.Constantes;
+import java.text.SimpleDateFormat;
+
 /**
  *
  * @author fernando-pucci
@@ -39,6 +42,38 @@ public class ServiceUtils {
         }
 
         return telefoneSaida;
+
+    }
+
+    public static String formataData(java.sql.Date data) {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat(Constantes.FORMATO_DATA);
+
+        return dateFormat.format(data);
+
+    }
+
+    public static String formataData(java.util.Date data) {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat(Constantes.FORMATO_DATA);
+
+        return dateFormat.format(data);
+
+    }
+
+    public static String formataDataHora(java.sql.Date data) {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat(Constantes.FORMATO_DATA_HORA);
+
+        return dateFormat.format(data);
+
+    }
+
+    public static String formataDataHora(java.util.Date data) {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat(Constantes.FORMATO_DATA_HORA);
+
+        return dateFormat.format(data);
 
     }
 

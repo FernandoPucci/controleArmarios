@@ -41,9 +41,14 @@ public class ConstantesTelas {
 
     public static final String TITULO_CADASTRAR_ALUNO = "Cadastrar Aluno";
     public static final String TITULO_CONSULTAR_ALUNO = "Consultar Aluno";
+    public static final String TITULO_CARREGAR_ARQUIVO = "Carregar Arquivo de Alunos";
 
     public static final String TITULO_CADASTRAR_ARMARIO = "Cadastrar Armario";
     public static final String TITULO_CONSULTAR_ARMARIO = "Consultar Armario";
+
+    public static final String TITULO_PROCESSAMENTO = "Processando, aguarde.";
+
+    public static final String TEXTO_INICIAL_TELA_CARREGAR_ARQUIVO = "Clique no botão da lupa para selecionar o arquivo.";
 
     //Botoes
     public static final String BTN_CANCELAR = "cancelar";
@@ -60,10 +65,14 @@ public class ConstantesTelas {
     public static final String BTN_CANCELAR_CONSULTA_ALUNOS = "cancelarBuscarAluno";
     public static final String BTN_CANCELAR_CONSULTA_ARMARIOS = "cancelarBuscarArmarios";
 
+    public static final String BTN_SALVAR_PLANILHA = "salvarPlanilhaPOI";
+    public static final String BTN_CARREGAR_ARQUIVO = "fileChoose";
+    public static final String BTN_CANCELAR_ENVIO = "cancelarTelaUpload";
+
     public static final String BTN_FILTRO_TODOS = "consultarFiltroTodos";
     public static final String BTN_FILTRO_ATIVOS = "consultarFiltroAtivos";
     public static final String BTN_FILTRO_INATIVOS = "consultarFiltroInativos";
-    
+
     public static final String BTN_FILTRO_ARMARIOS_TODOS = "consultarFiltroTodosArmarios";
     public static final String BTN_FILTRO_ARMARIOS_OCUPADOS = "consultarFiltroArmariosOc";
     public static final String BTN_FILTRO_ARMARIOS_LIVRES = "consultarFiltroArmariosLv";
@@ -81,5 +90,7 @@ public class ConstantesTelas {
     public static final String TT_BTN_BUSCAR = "Pesquisar...";
     public static final String TT_BTN_LIMPAR = "Limpar Campos";
     public static final String TT_BTN_LIMPAR_PESQUISA = "Limpar Pesquisa";
+    public static final String TT_BTN_SALVAR_UPLOAD = " Carregar Planilha para o Banco de Dados";
+    public static final String TT_BTN_CARREGAR_ARQUIVO = "Escolher arquivo";
 
 }

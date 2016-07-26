@@ -38,8 +38,12 @@ public class Constantes {
     public static final String SERVER = "localhost";
     public static final String PORT = "3306";
     public static final String DB = "CONTROLE_ARMARIOS_" + ENVIRONMENT;
-  
+
     //PERSISTENCE UNIT
     public static final String UNIT_NAME = "PersistenciaPU";
+
+    //FORMATO DATA
+    public static final String FORMATO_DATA_HORA = "dd/MM/yyyy - HH:mm:ss";
+    public static final String FORMATO_DATA = "dd/MM/yyyy";
 
 }

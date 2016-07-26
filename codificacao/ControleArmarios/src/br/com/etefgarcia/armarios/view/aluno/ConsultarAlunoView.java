@@ -21,7 +21,7 @@ import br.com.etefgarcia.armarios.controller.AlunoController;
 import br.com.etefgarcia.armarios.model.Aluno;
 import br.com.etefgarcia.armarios.util.TelaRenderUtil;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
-import br.com.etefgarcia.armarios.util.constantes.telas.render.ZebraCellRenderer;
+import br.com.etefgarcia.armarios.util.telas.render.ZebraCellRenderer;
 import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.ListSelectionModel;

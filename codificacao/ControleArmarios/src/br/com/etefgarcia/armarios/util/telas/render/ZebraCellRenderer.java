@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.etefgarcia.armarios.util.constantes.telas.render;
+package br.com.etefgarcia.armarios.util.telas.render;
 
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
 import java.awt.Color;
