@@ -300,15 +300,20 @@ public class AlunoController {
                 ExcelThreads et = null;
 
                 try {
-                    et = new ExcelThreads(carregarPlanilhaAlunoView.getFileChooser().getSelectedFile(), carregarPlanilhaAlunoView);
+
+                    int opt = Mensagens.mostraMensagemPergunta("Este procedimento é longo e depois de iniciado não pode ser revertido. \n Continuar?");
+
+                    if (opt == 0) {
+                        et = new ExcelThreads(carregarPlanilhaAlunoView.getFileChooser().getSelectedFile(), carregarPlanilhaAlunoView);
+                    }
 
                 } catch (NegocioException | IOException | SistemaException ex) {
-                   
+
                     ExcelThreads.bp.dispose();
                     carregarPlanilhaAlunoView.processarErro("Ocorreu um erro ao processar a planilha. " + ex.getMessage());
 
                 } catch (Exception ex) {
-                    
+
                     ex.printStackTrace();
                     ExcelThreads.bp.dispose();
                     carregarPlanilhaAlunoView.processarErro("Ocorreu um erro fatal. " + ex.getMessage());
@@ -497,7 +502,6 @@ public class AlunoController {
 
         //TEST:
         //System.out.println(botao);
-
     }
 
 }
