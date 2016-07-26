@@ -36,4 +36,11 @@ public class ConstantesExcelHeaders {
     public static final int COLUNA_E_MAIL = 10;
     public static final int COLUNA_SEXO = 26;
 
+    public static final String CELULA_RM = "A4";
+    public static final String CELULA_NOME = "B4";
+    public static final String CELULA_TELEFONE = "I4";
+    public static final String CELULA_CELULAR = "J4";
+    public static final String CELULA_E_MAIL = "K4";
+    public static final String CELULA_SEXO = "AA4";
+    
 }

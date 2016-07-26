@@ -27,6 +27,7 @@ import br.com.etefgarcia.armarios.view.aluno.CadastrarAlunoView;
 import br.com.etefgarcia.armarios.view.aluno.CarregarPlanilhaAlunoView;
 import br.com.etefgarcia.armarios.view.aluno.ConsultarAlunoView;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.AbstractButton;
@@ -295,15 +296,21 @@ public class AlunoController {
 
             @Override
             public void run() {
-                
+
                 ExcelThreads et = null;
-                
+
                 try {
                     et = new ExcelThreads(carregarPlanilhaAlunoView.getFileChooser().getSelectedFile(), carregarPlanilhaAlunoView);
-                    
+
+                } catch (NegocioException | IOException | SistemaException ex) {
+                    ex.printStackTrace();
+                    ExcelThreads.bp.dispose();
+                    carregarPlanilhaAlunoView.processarErro("Ocorreu um erro ao processar a planilha. " + ex.getMessage());
+
                 } catch (Exception ex) {
-                    //ExcelThreads.bp.dispose();
-                    carregarPlanilhaAlunoView.processarErro("Ocorreu um erro ao processar a planilha." + ex.getMessage());
+                    ex.printStackTrace();
+                    ExcelThreads.bp.dispose();
+                    carregarPlanilhaAlunoView.processarErro("Ocorreu um erro fatal. " + ex.getMessage());
 
                 }
 

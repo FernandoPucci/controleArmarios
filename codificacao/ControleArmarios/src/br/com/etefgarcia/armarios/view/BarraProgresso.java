@@ -50,6 +50,8 @@ public class BarraProgresso extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(ConstantesTelas.TITULO_PROCESSAMENTO);
         setAlwaysOnTop(true);
+        setMaximumSize(new java.awt.Dimension(150, 120));
+        setResizable(false);
         getContentPane().setLayout(new java.awt.GridLayout(4, 1));
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N

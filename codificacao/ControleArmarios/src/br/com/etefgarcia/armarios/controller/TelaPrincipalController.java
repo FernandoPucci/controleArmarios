@@ -43,9 +43,7 @@ public class TelaPrincipalController {
     private TelaPrincipalView telaPrincipalView = null;
 
     public TelaPrincipalController() {
-
-     //   this.telaPrincipalView = new TelaPrincipalView();
-
+  
     }
 
     public Thread getThreadShowTelaPrincipalView() {

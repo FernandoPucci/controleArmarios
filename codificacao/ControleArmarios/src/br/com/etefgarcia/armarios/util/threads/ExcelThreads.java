@@ -16,10 +16,13 @@
  */
 package br.com.etefgarcia.armarios.util.threads;
 
+import br.com.etefgarcia.armarios.exceptions.NegocioException;
+import br.com.etefgarcia.armarios.exceptions.SistemaException;
 import br.com.etefgarcia.armarios.service.ExcelService;
 import br.com.etefgarcia.armarios.view.BarraProgresso;
 import br.com.etefgarcia.armarios.view.aluno.CarregarPlanilhaAlunoView;
 import java.io.File;
+import java.io.IOException;
 
 /**
  *
@@ -29,10 +32,10 @@ public class ExcelThreads {
 
     private ExcelService excelService = null;
     private CarregarPlanilhaAlunoView carregarPlanilhaAlunoView = null;
-   
+
     public final static BarraProgresso bp = new BarraProgresso();
 
-    public ExcelThreads(File arquivo, CarregarPlanilhaAlunoView carregarPlanilhaAlunoView) {
+    public ExcelThreads(File arquivo, CarregarPlanilhaAlunoView carregarPlanilhaAlunoView) throws NegocioException, IOException, SistemaException {
 
         this.carregarPlanilhaAlunoView = carregarPlanilhaAlunoView;
 

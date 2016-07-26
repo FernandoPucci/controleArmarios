@@ -21,7 +21,6 @@ import br.com.etefgarcia.armarios.dao.impl.AlunoDAOImpl;
 import br.com.etefgarcia.armarios.exceptions.NegocioException;
 import br.com.etefgarcia.armarios.exceptions.SistemaException;
 import br.com.etefgarcia.armarios.model.Aluno;
-import br.com.etefgarcia.armarios.util.threads.ExcelThreads;
 import br.com.etefgarcia.armarios.util.ServiceUtils;
 import br.com.etefgarcia.armarios.util.TelaUtils;
 import br.com.etefgarcia.armarios.util.constantes.Constantes;
@@ -68,78 +67,75 @@ public class ExcelService {
         this.carregarPlanilhaAlunoView = carregarPlanilhaAlunoView;
     }
 
-    public void inicia() {
+    public void inicia() throws NegocioException, IOException, SistemaException {
 
-        try {
+        List<Aluno> listaAlunos = null;
 
-            List<Aluno> listaAlunos = null;
+        carregarPlanilhaAlunoView.habilitarSalvar(false);
 
-            carregarPlanilhaAlunoView.habilitarSalvar(false);
+        listaAlunos = carregaListaAlunos(caminhoArquivo, Constantes.LINHA_CABECALHO_PLANILHA);
 
-            listaAlunos = carregaListaAlunos(caminhoArquivo, Constantes.LINHA_CABECALHO_PLANILHA);
+        totalLinhas = Double.parseDouble(listaAlunos.size() + "");
 
-            totalLinhas = Double.parseDouble(listaAlunos.size() + "");
+        AlunoDAO dao = new AlunoDAOImpl();
 
-            AlunoDAO dao = new AlunoDAOImpl();
+        Long initTime = System.nanoTime();
 
-            Long initTime = System.nanoTime();
+        carregarPlanilhaAlunoView.setLogger("AGUARDE...");
 
-            carregarPlanilhaAlunoView.setLogger("AGUARDE...");
+        for (Aluno a : listaAlunos) {
 
-            for (Aluno a : listaAlunos) {
+            if (a == null) {
+                System.out.println("*");
+                continue;
 
-                if (a.getTelefone() == null && a.getEmail() == null) {
+            }
 
-                    throw new NegocioException("Aluno " + a.getIdAluno() + ", possui dados de contato inválidos");
+            if (a.getTelefone() == null && a.getEmail() == null) {
 
-                }
+                throw new NegocioException("Aluno " + a.getIdAluno() + ", possui dados de contato inválidos");
 
-                if (a.getEmail() != null) {
-                    if (!TelaUtils.validaEmail(a.getEmail())) {
+            }
 
-                        throw new NegocioException("Aluno " + a.getIdAluno() + ", possui dados de e-mail inválidos");
+            if (a.getEmail() != null) {
+                if (!TelaUtils.validaEmail(a.getEmail())) {
 
-                    }
-                }
-
-                if (a.getTelefone() != null) {
-                    if (!TelaUtils.validaTelefone(a.getTelefone())) {
-
-                        throw new NegocioException("Aluno " + a.getIdAluno() + ", possui dados de Telefone inválidos");
-
-                    }
-
-                }
-
-                try {
-
-                    AlunoService service = new AlunoService(dao);
-
-                    service.cadastrarAluno(a);
-                    linhasAtualizadas++;
-
-                } catch (NegocioException | SistemaException e) {
-
-                    throw new SistemaException(e.getMessage());
+                    throw new NegocioException("Aluno " + a.getIdAluno() + ", possui dados de e-mail inválidos");
 
                 }
             }
 
-            Long finalTime = System.nanoTime() - initTime;
+            if (a.getTelefone() != null) {
+                if (!TelaUtils.validaTelefone(a.getTelefone())) {
 
-            BigDecimal tempoSegundos = new BigDecimal((double) finalTime / 1000000000.0);
+                    throw new NegocioException("Aluno " + a.getIdAluno() + ", possui dados de Telefone inválidos");
 
-            tempoSegundos = tempoSegundos.setScale(1, BigDecimal.ROUND_HALF_UP);
+                }
 
-            carregarPlanilhaAlunoView.processarSucesso(listaAlunos.size() + " registros em " + (tempoSegundos) + " segundos");
-            carregarPlanilhaAlunoView.setInstrucao("Pronto!");
+            }
 
-        } catch (SistemaException | NegocioException | IOException ex) {
+            try {
 
-            ExcelThreads.bp.dispose();
-            carregarPlanilhaAlunoView.processarErro(ex.getMessage());
+                AlunoService service = new AlunoService(dao);
 
+                service.cadastrarAluno(a);
+                linhasAtualizadas++;
+
+            } catch (NegocioException | SistemaException e) {
+
+                throw new SistemaException(e.getMessage());
+
+            }
         }
+
+        Long finalTime = System.nanoTime() - initTime;
+
+        BigDecimal tempoSegundos = new BigDecimal((double) finalTime / 1000000000.0);
+
+        tempoSegundos = tempoSegundos.setScale(1, BigDecimal.ROUND_HALF_UP);
+
+        carregarPlanilhaAlunoView.processarSucesso(listaAlunos.size() + " registros em " + (tempoSegundos) + " segundos");
+        carregarPlanilhaAlunoView.setInstrucao("Pronto!");
 
     }
 
@@ -147,211 +143,184 @@ public class ExcelService {
 
         List<Aluno> listaAlunos = null;
 
-        try {
+        int linhaInicioReal = linhaInicio - 1;
 
-            int linhaInicioReal = linhaInicio - 1;
+        listaAlunos = new ArrayList<>();
+        mapaColunas = new HashMap<>();
 
-            listaAlunos = new ArrayList<>();
-            mapaColunas = new HashMap<>();
+        FileInputStream fis = new FileInputStream(arquivo);
 
-            FileInputStream fis = new FileInputStream(arquivo);
+        Workbook workbook = null;
 
-            Workbook workbook = null;
+        if (arquivo.toLowerCase().endsWith("xlsx")) {
 
-            if (arquivo.toLowerCase().endsWith("xlsx")) {
+            workbook = new XSSFWorkbook(fis);
 
-                workbook = new XSSFWorkbook(fis);
+        } else if (arquivo.toLowerCase().endsWith("xls")) {
 
-            } else if (arquivo.toLowerCase().endsWith("xls")) {
+            workbook = new HSSFWorkbook(fis);
 
-                workbook = new HSSFWorkbook(fis);
+        }
 
-            }
+        int totalPaginas = workbook.getNumberOfSheets();
 
-            int totalPaginas = workbook.getNumberOfSheets();
+        for (int i = 0; i < totalPaginas; i++) {
 
-            for (int i = 0; i < totalPaginas; i++) {
+            //Iterator de planilha
+            Sheet sheet = workbook.getSheetAt(i);
 
-                //Iterator de planilha
-                Sheet sheet = workbook.getSheetAt(i);
+            //Iterator de linha
+            Iterator<Row> rowIterator = sheet.iterator();
+            while (rowIterator.hasNext()) {
 
-                //Iterator de linha
-                Iterator<Row> rowIterator = sheet.iterator();
-                while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
 
-                    Row row = rowIterator.next();
+                if (row.getRowNum() < linhaInicioReal) {
+                    System.out.println(row.getRowNum());
+                    continue;
 
-                    if (row.getRowNum() < linhaInicio) {
+                }
+
+                Aluno a = new Aluno();
+
+                //Iterator de celula
+                Iterator<Cell> cellIterator = row.cellIterator();
+
+                while (cellIterator.hasNext()) {
+
+                    Cell cell = cellIterator.next();
+
+                    if (row.getRowNum() == linhaInicioReal) {
+
+                        System.out.println("validando cabeçalho");
+                        System.out.println(cell.getStringCellValue());
+                        if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+
+                            boolean isCamposValidos = false;
+                            //varre as colunas do cabeçalho
+                            switch (cell.getColumnIndex()) {
+
+                                case ConstantesExcelHeaders.COLUNA_RM:
+                                    isCamposValidos = validaCampos(cell);
+                                    break;
+                                case ConstantesExcelHeaders.COLUNA_NOME:
+                                    isCamposValidos = validaCampos(cell);
+                                    break;
+                                case ConstantesExcelHeaders.COLUNA_TELEFONE:
+                                    isCamposValidos = validaCampos(cell);
+                                    break;
+                                case ConstantesExcelHeaders.COLUNA_CELULAR:
+                                    isCamposValidos = validaCampos(cell);
+                                    break;
+                                case ConstantesExcelHeaders.COLUNA_E_MAIL:
+                                    isCamposValidos = validaCampos(cell);
+                                    break;
+                                case ConstantesExcelHeaders.COLUNA_SEXO:
+                                    isCamposValidos = validaCampos(cell);
+                                    break;
+                                default:
+                                    continue;
+
+                            }
+
+                            if (!isCamposValidos) {
+
+                                throw new NegocioException("Arquivo Inválido! - Formatação de Colunas Incorreta.");
+
+                            }
+
+                        } else {
+                            throw new NegocioException("Arquivo Inválido!");
+
+                        }
 
                         continue;
 
                     }
 
-                    Aluno a = new Aluno();
+                    String valor = null;
 
-                    //Iterator de celula
-                    Iterator<Cell> cellIterator = row.cellIterator();
+                    //verifica o tipo do valor da celula
+                    switch (cell.getCellType()) {
+                        case Cell.CELL_TYPE_STRING:
+                            valor = cell.getStringCellValue();
+                            break;
+                        case Cell.CELL_TYPE_NUMERIC:
 
-                    while (cellIterator.hasNext()) {
-                        Cell cell = cellIterator.next();
+                            valor = cell.getNumericCellValue() + "";
 
-                        if (row.getRowNum() == linhaInicioReal) {
+                            break;
+                    }
 
-                            if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+                    switch (cell.getColumnIndex()) {
 
-                                populaMapaColunas(cell);
+                        case ConstantesExcelHeaders.COLUNA_RM:
+                            a.setIdAluno(new Long(valor));
+                            break;
+                        case ConstantesExcelHeaders.COLUNA_NOME:
+                            a.setNome(valor);
+                            break;
+                        case ConstantesExcelHeaders.COLUNA_E_MAIL:
+                            a.setEmail(valor);
+                            break;
+                        case ConstantesExcelHeaders.COLUNA_CELULAR:
 
-                                if (!validaCampos()) {
-
-                                    throw new NegocioException("Arquivo Inválido! - Formatação de Colunas Incorreta.");
-
-                                }
-
-                            } else {
-                                throw new NegocioException("Arquivo Inválido!");
-
+                            if (a.getTelefone() == null || !TelaUtils.validaTelefone(a.getTelefone())) {//se nao tiver telefone grava celular
+                                a.setTelefone(ServiceUtils.limpaTelefone(valor));
                             }
 
-                        }
+                            break;
 
-                        String valor = null;
-
-                        //verifica o tipo do valor da celula
-                        switch (cell.getCellType()) {
-                            case Cell.CELL_TYPE_STRING:
-                                valor = cell.getStringCellValue();
-                                break;
-                            case Cell.CELL_TYPE_NUMERIC:
-
-                                valor = cell.getNumericCellValue() + "";
-
-                                break;
-                        }
-
-                        switch (cell.getColumnIndex()) {
-
-                            case ConstantesExcelHeaders.COLUNA_RM:
-                                a.setIdAluno(new Long(valor));
-                                break;
-                            case ConstantesExcelHeaders.COLUNA_NOME:
-                                a.setNome(valor);
-                                break;
-                            case ConstantesExcelHeaders.COLUNA_E_MAIL:
-                                a.setEmail(valor);
-                                break;
-                            case ConstantesExcelHeaders.COLUNA_CELULAR:
-
-                                if (a.getTelefone() == null || !TelaUtils.validaTelefone(a.getTelefone())) {//se nao tiver telefone grava celular
-                                    a.setTelefone(ServiceUtils.limpaTelefone(valor));
-                                }
-
-                                break;
-
-                            case ConstantesExcelHeaders.COLUNA_TELEFONE:
-                                a.setTelefone(ServiceUtils.limpaTelefone(valor));
-                                break;
-                            case ConstantesExcelHeaders.COLUNA_SEXO:
-                                a.setSexo(valor);
-                                break;
-
-                        }
+                        case ConstantesExcelHeaders.COLUNA_TELEFONE:
+                            a.setTelefone(ServiceUtils.limpaTelefone(valor));
+                            break;
+                        case ConstantesExcelHeaders.COLUNA_SEXO:
+                            a.setSexo(valor);
+                            break;
 
                     }
 
-                    listaAlunos.add(a);
                 }
 
+                if (a.getIdAluno() != null) {
+                    listaAlunos.add(a);
+                } 
             }
 
-            fis.close();
-
-        } catch (IOException e) {
-            throw e;
         }
 
+        fis.close();
+        
         return listaAlunos;
     }
 
-    private boolean validaCampos() {
+    private boolean validaCampos(Cell celula) {
 
-        for (Map.Entry m : mapaColunas.entrySet()) {
+        if (celula.getCellType() != Cell.CELL_TYPE_STRING) {
 
-            switch ((int) m.getValue()) {
-
-                case ConstantesExcelHeaders.COLUNA_RM:
-                    if (!m.getKey().equals(ConstantesExcelHeaders.RM)) {
-                        return false;
-                    }
-                    break;
-                case ConstantesExcelHeaders.COLUNA_NOME:
-                    if (!m.getKey().equals(ConstantesExcelHeaders.NOME)) {
-                        return false;
-                    }
-                    break;
-                case ConstantesExcelHeaders.COLUNA_TELEFONE:
-                    if (!m.getKey().equals(ConstantesExcelHeaders.TELEFONE)) {
-                        return false;
-                    }
-                    break;
-                case ConstantesExcelHeaders.COLUNA_CELULAR:
-                    if (!m.getKey().equals(ConstantesExcelHeaders.CELULAR)) {
-                        return false;
-                    }
-                    break;
-                case ConstantesExcelHeaders.COLUNA_E_MAIL:
-                    if (!m.getKey().equals(ConstantesExcelHeaders.EMAIL)) {
-                        return false;
-                    }
-                    break;
-                case ConstantesExcelHeaders.COLUNA_SEXO:
-                    if (!m.getKey().equals(ConstantesExcelHeaders.SEXO)) {
-                        return false;
-                    }
-                    break;
-
-            }
+            return false;
 
         }
 
-        return true;
-    }
+        switch (celula.getStringCellValue()) {
 
-    private void populaMapaColunas(Cell cell) throws NegocioException {
+            case ConstantesExcelHeaders.RM:
+                return celula.getAddress().toString().equals(ConstantesExcelHeaders.CELULA_RM);
+            case ConstantesExcelHeaders.NOME:
+                return celula.getAddress().toString().equals(ConstantesExcelHeaders.CELULA_NOME);
+            case ConstantesExcelHeaders.TELEFONE:
+                return celula.getAddress().toString().equals(ConstantesExcelHeaders.CELULA_TELEFONE);
+            case ConstantesExcelHeaders.CELULAR:
+                return celula.getAddress().toString().equals(ConstantesExcelHeaders.CELULA_CELULAR);
+            case ConstantesExcelHeaders.EMAIL:
+                return celula.getAddress().toString().equals(ConstantesExcelHeaders.CELULA_E_MAIL);
+            case ConstantesExcelHeaders.SEXO:
+                return celula.getAddress().toString().equals(ConstantesExcelHeaders.CELULA_SEXO);
+            default:
+                return false;
 
-        if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
-
-            switch (cell.getStringCellValue()) {
-
-                case ConstantesExcelHeaders.RM:
-                    mapaColunas.put(ConstantesExcelHeaders.RM, cell.getColumnIndex());
-                    break;
-                case ConstantesExcelHeaders.NOME:
-                    mapaColunas.put(ConstantesExcelHeaders.NOME, cell.getColumnIndex());
-                    break;
-                case ConstantesExcelHeaders.TELEFONE:
-                    mapaColunas.put(ConstantesExcelHeaders.TELEFONE, cell.getColumnIndex());
-                    break;
-                case ConstantesExcelHeaders.CELULAR:
-                    mapaColunas.put(ConstantesExcelHeaders.CELULAR, cell.getColumnIndex());
-                    break;
-                case ConstantesExcelHeaders.EMAIL:
-                    mapaColunas.put(ConstantesExcelHeaders.EMAIL, cell.getColumnIndex());
-                    break;
-                case ConstantesExcelHeaders.SEXO:
-                    mapaColunas.put(ConstantesExcelHeaders.SEXO, cell.getColumnIndex());
-                    break;
-
-                default:
-
-                    break;
-            }
-
-        } else {
-            throw new NegocioException("Arquivo fora do padrão de colunas.");
         }
-
     }
-
     public Double getTotalLinhas() {
         return totalLinhas;
 
