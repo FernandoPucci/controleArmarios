@@ -313,10 +313,9 @@ jButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
         jTextPaneLogger.setText("");
 
         StringBuilder sb = new StringBuilder();
-        // sb.append("<html>");
+
         sb.append(this.log);
 
-        //  sb.append(jTextPaneLogger.getText());
         sb.append("<p>");
         sb.append("<i>");
         sb.append("<b>");
@@ -324,16 +323,13 @@ jButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
         sb.append("</b>");
         sb.append("</i>");
         sb.append("</p>");
-        //sb.append("<p>");
+
         sb.append(log);
-        //  sb.append("</p>");
-        // sb.append("</html>");
         jTextPaneLogger.setText(sb.toString());
 
         this.log += sb.toString();
 
         jTextPaneLogger.setCaretPosition(jTextPaneLogger.getDocument().getLength());
-        System.out.println(sb.toString());
 
     }
 

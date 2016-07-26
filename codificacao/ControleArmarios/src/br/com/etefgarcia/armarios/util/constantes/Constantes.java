@@ -46,4 +46,7 @@ public class Constantes {
     public static final String FORMATO_DATA_HORA = "dd/MM/yyyy - HH:mm:ss";
     public static final String FORMATO_DATA = "dd/MM/yyyy";
 
+    //EXCEL POI
+    public static final int LINHA_CABECALHO_PLANILHA = 4; 
+    
 }

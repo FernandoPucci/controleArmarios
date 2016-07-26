@@ -14,14 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.etefgarcia.armarios.util;
+package br.com.etefgarcia.armarios.service;
 
+import br.com.etefgarcia.armarios.dao.AlunoDAO;
+import br.com.etefgarcia.armarios.dao.impl.AlunoDAOImpl;
 import br.com.etefgarcia.armarios.exceptions.NegocioException;
+import br.com.etefgarcia.armarios.exceptions.SistemaException;
 import br.com.etefgarcia.armarios.model.Aluno;
+import br.com.etefgarcia.armarios.util.threads.ExcelThreads;
+import br.com.etefgarcia.armarios.util.ServiceUtils;
+import br.com.etefgarcia.armarios.util.TelaUtils;
+import br.com.etefgarcia.armarios.util.constantes.Constantes;
 import br.com.etefgarcia.armarios.util.constantes.ConstantesExcelHeaders;
+import br.com.etefgarcia.armarios.view.aluno.CarregarPlanilhaAlunoView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -37,15 +46,104 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 /**
  *
  * @author fernando-pucci
+ *
+ * Classe responsável por leitura, validação e persistencia de dados de arquivo
+ * Excel
+ *
  */
-public class ExcelUtil {
+public class ExcelService {
+
+    private CarregarPlanilhaAlunoView carregarPlanilhaAlunoView = null;
+
+    private String caminhoArquivo = null;
 
     private Map<String, Integer> mapaColunas;
 
     private Double totalLinhas = 0.0;
     private Double linhasAtualizadas = 0.0;
 
-    public List<Aluno> carregaListaAlunos(File arquivo, int linhaInicio) throws NegocioException, IOException {
+    public ExcelService(File arquivo, CarregarPlanilhaAlunoView carregarPlanilhaAlunoView) {
+
+        this.caminhoArquivo = arquivo.getAbsolutePath();
+        this.carregarPlanilhaAlunoView = carregarPlanilhaAlunoView;
+    }
+
+    public void inicia() {
+
+        try {
+
+            List<Aluno> listaAlunos = null;
+
+            carregarPlanilhaAlunoView.habilitarSalvar(false);
+
+            listaAlunos = carregaListaAlunos(caminhoArquivo, Constantes.LINHA_CABECALHO_PLANILHA);
+
+            totalLinhas = Double.parseDouble(listaAlunos.size() + "");
+
+            AlunoDAO dao = new AlunoDAOImpl();
+
+            Long initTime = System.nanoTime();
+
+            carregarPlanilhaAlunoView.setLogger("AGUARDE...");
+
+            for (Aluno a : listaAlunos) {
+
+                if (a.getTelefone() == null && a.getEmail() == null) {
+
+                    throw new NegocioException("Aluno " + a.getIdAluno() + ", possui dados de contato inválidos");
+
+                }
+
+                if (a.getEmail() != null) {
+                    if (!TelaUtils.validaEmail(a.getEmail())) {
+
+                        throw new NegocioException("Aluno " + a.getIdAluno() + ", possui dados de e-mail inválidos");
+
+                    }
+                }
+
+                if (a.getTelefone() != null) {
+                    if (!TelaUtils.validaTelefone(a.getTelefone())) {
+
+                        throw new NegocioException("Aluno " + a.getIdAluno() + ", possui dados de Telefone inválidos");
+
+                    }
+
+                }
+
+                try {
+
+                    AlunoService service = new AlunoService(dao);
+
+                    service.cadastrarAluno(a);
+                    linhasAtualizadas++;
+
+                } catch (NegocioException | SistemaException e) {
+
+                    throw new SistemaException(e.getMessage());
+
+                }
+            }
+
+            Long finalTime = System.nanoTime() - initTime;
+
+            BigDecimal tempoSegundos = new BigDecimal((double) finalTime / 1000000000.0);
+
+            tempoSegundos = tempoSegundos.setScale(1, BigDecimal.ROUND_HALF_UP);
+
+            carregarPlanilhaAlunoView.processarSucesso(listaAlunos.size() + " registros em " + (tempoSegundos) + " segundos");
+            carregarPlanilhaAlunoView.setInstrucao("Pronto!");
+
+        } catch (SistemaException | NegocioException | IOException ex) {
+
+            ExcelThreads.bp.dispose();
+            carregarPlanilhaAlunoView.processarErro(ex.getMessage());
+
+        }
+
+    }
+
+    private List<Aluno> carregaListaAlunos(String arquivo, int linhaInicio) throws NegocioException, IOException {
 
         List<Aluno> listaAlunos = null;
 
@@ -60,17 +158,13 @@ public class ExcelUtil {
 
             Workbook workbook = null;
 
-            if (arquivo.getName().toLowerCase().endsWith("xlsx")) {
+            if (arquivo.toLowerCase().endsWith("xlsx")) {
 
                 workbook = new XSSFWorkbook(fis);
 
-            } else if (arquivo.getName().toLowerCase().endsWith("xls")) {
+            } else if (arquivo.toLowerCase().endsWith("xls")) {
 
                 workbook = new HSSFWorkbook(fis);
-
-            } else {
-
-                throw new NegocioException("Arquivo com problemas de validação.");
 
             }
 
