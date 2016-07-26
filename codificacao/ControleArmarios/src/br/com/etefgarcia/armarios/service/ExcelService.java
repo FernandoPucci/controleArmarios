@@ -85,11 +85,6 @@ public class ExcelService {
 
         for (Aluno a : listaAlunos) {
 
-            if (a == null) {
-                System.out.println("*");
-                continue;
-
-            }
 
             if (a.getTelefone() == null && a.getEmail() == null) {
 
@@ -175,10 +170,9 @@ public class ExcelService {
 
                 Row row = rowIterator.next();
 
-                if (row.getRowNum() < linhaInicioReal) {
-                    System.out.println(row.getRowNum());
+                //se ainda não é a linha do cabeçalho, avança
+                if (row.getRowNum() < linhaInicioReal) {                   
                     continue;
-
                 }
 
                 Aluno a = new Aluno();
@@ -192,8 +186,6 @@ public class ExcelService {
 
                     if (row.getRowNum() == linhaInicioReal) {
 
-                        System.out.println("validando cabeçalho");
-                        System.out.println(cell.getStringCellValue());
                         if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
 
                             boolean isCamposValidos = false;
@@ -284,13 +276,13 @@ public class ExcelService {
 
                 if (a.getIdAluno() != null) {
                     listaAlunos.add(a);
-                } 
+                }
             }
 
         }
 
         fis.close();
-        
+
         return listaAlunos;
     }
 
@@ -321,6 +313,7 @@ public class ExcelService {
 
         }
     }
+
     public Double getTotalLinhas() {
         return totalLinhas;
 

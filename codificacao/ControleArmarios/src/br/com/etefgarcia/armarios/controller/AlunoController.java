@@ -303,11 +303,12 @@ public class AlunoController {
                     et = new ExcelThreads(carregarPlanilhaAlunoView.getFileChooser().getSelectedFile(), carregarPlanilhaAlunoView);
 
                 } catch (NegocioException | IOException | SistemaException ex) {
-                    ex.printStackTrace();
+                   
                     ExcelThreads.bp.dispose();
                     carregarPlanilhaAlunoView.processarErro("Ocorreu um erro ao processar a planilha. " + ex.getMessage());
 
                 } catch (Exception ex) {
+                    
                     ex.printStackTrace();
                     ExcelThreads.bp.dispose();
                     carregarPlanilhaAlunoView.processarErro("Ocorreu um erro fatal. " + ex.getMessage());
@@ -495,7 +496,7 @@ public class AlunoController {
         }
 
         //TEST:
-        System.out.println(botao);
+        //System.out.println(botao);
 
     }
 
