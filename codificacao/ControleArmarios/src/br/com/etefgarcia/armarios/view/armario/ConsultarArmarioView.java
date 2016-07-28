@@ -270,37 +270,21 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
     jSeparator1.setRequestFocusEnabled(false);
     jPanelEsquerdo.add(jSeparator1);
 
-    jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    jScrollPane1.setAutoscrolls(true);
-    jScrollPane1.setMaximumSize(new java.awt.Dimension(452, 270));
-    jScrollPane1.setMinimumSize(new java.awt.Dimension(452, 270));
-    jScrollPane1.setName(""); // NOI18N
-    jScrollPane1.setPreferredSize(new java.awt.Dimension(452, 270));
-    jScrollPane1.setRequestFocusEnabled(false);
+    jScrollPane1.setPreferredSize(new java.awt.Dimension(452, 290));
 
     jTableTabela.setModel(new javax.swing.table.DefaultTableModel(
         new Object [][] {
-            {null}
+            {null, null, null, null},
+            {null, null, null, null},
+            {null, null, null, null},
+            {null, null, null, null}
         },
         new String [] {
-            "Título 1"
+            "Title 1", "Title 2", "Title 3", "Title 4"
         }
-    ) {
-        boolean[] canEdit = new boolean [] {
-            false
-        };
-
-        public boolean isCellEditable(int rowIndex, int columnIndex) {
-            return canEdit [columnIndex];
-        }
-    });
-    jTableTabela.setEnabled(false);
-    jTableTabela.setMaximumSize(new java.awt.Dimension(400, 270));
-    jTableTabela.setMinimumSize(new java.awt.Dimension(400, 270));
+    ));
     jTableTabela.setName(ConstantesTelas.ITM_TABELA_CONSULTAR);
-    jTableTabela.setPreferredSize(new java.awt.Dimension(400, 270));
     jTableTabela.setSelectionBackground(new java.awt.Color(254, 130, 140));
-    jTableTabela.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
     jScrollPane1.setViewportView(jTableTabela);
 
     jPanelEsquerdo.add(jScrollPane1);
