@@ -78,6 +78,8 @@ public class AluguelArmarioController {
                     try {
 
                         AluguelArmarioService.cadastrarAtualizarArmarioService(aluno, armario, cadastrarAluguelArmarioView.getUsuario());
+                        Mensagens.mostraMensagemSucesso(cadastrarAluguelArmarioView.getPainel(), "Chave Retirada com Sucesso!");
+                        cadastrarAluguelArmarioView.dispose();
 
                     } catch (NegocioException | SistemaException ex) {
 
