@@ -214,6 +214,22 @@ public class TelaPrincipalController {
         };
     }
 
+    
+        public Thread getThreadShowConsultaArmariosOcupados() {
+
+        return new Thread() {
+
+            @Override
+            public void run() {
+
+                new ConsultarArmarioView(Boolean.TRUE).setVisible(true);
+
+            }
+
+        };
+    }
+    
+    
     public Thread getThreadShowMensagemFuncaoNaoImplementada() {
 
         return new Thread() {
@@ -275,7 +291,7 @@ public class TelaPrincipalController {
                 getThreadShowMensagemFuncaoNaoImplementada().start();
                 break;
             case ConstantesTelas.BTN_CONSULTAR_CHAVES_EM_USO:
-                getThreadShowMensagemFuncaoNaoImplementada().start();
+                getThreadShowConsultaArmariosOcupados().start();
                 break;
 
         }

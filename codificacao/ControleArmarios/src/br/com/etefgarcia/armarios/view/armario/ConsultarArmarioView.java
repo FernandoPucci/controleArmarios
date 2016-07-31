@@ -39,6 +39,8 @@ public class ConsultarArmarioView extends javax.swing.JFrame {
     private ConsultarArmarioViewAction consultarArmarioViewAction;
     private List<Armario> listaArmarios = null;
 
+    private Boolean consultaOcupados = Boolean.FALSE;
+
     private final Runnable threadChecaCampoChave = new Runnable() {
 
         @Override
@@ -69,6 +71,38 @@ public class ConsultarArmarioView extends javax.swing.JFrame {
         TelaRenderUtil.habilitarBotao(jButtonBuscar, true);
 
         mostrarTabela(false);
+
+    }
+
+    //construtor para Chaves em Uso (armarios Ocupados)
+    public ConsultarArmarioView(Boolean ocupados) {
+
+        initComponents();
+
+        this.consultaOcupados = ocupados;
+
+        inicializar();
+
+        configurarBotoes(false);
+
+        configurarBotoesFiltro(false);
+        inicializarRadioButtons();
+
+        configurarCampos();
+        configurarItens();
+
+        jRadioButtonOcupados.setSelected(true);
+        jRadioButtonSomenteAtivos.setSelected(true);
+
+        jButtonEditar.setVisible(false);
+        jButtonLimpar.setVisible(false);
+
+        TelaRenderUtil.habilitarBotao(jButtonBuscar, true);
+
+        jTextFieldChave.requestFocus();
+
+        //  mostrarTabela(false);
+        armarioController.getThreadConsultarArmarioGeral().start();
 
     }
 
@@ -382,7 +416,7 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
 
     private void jTextFieldChaveFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldChaveFocusLost
 
-        if (!jTextFieldChave.getText().trim().isEmpty()) {
+        if (!jTextFieldChave.getText().trim().isEmpty() && !consultaOcupados) {
             configurarBotoes(true);
         }
     }//GEN-LAST:event_jTextFieldChaveFocusLost
@@ -498,17 +532,24 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
             TelaRenderUtil.habilitarBotao(jButtonBuscar, true);
 
             configurarBotoes(true);
-            configurarBotoesFiltro(true);
+
+            if (!consultaOcupados) {
+                configurarBotoesFiltro(true);
+            }
 
             armarioController.getThreadConsultarArmarioGeral().start();
 
         } else {
+
             mostrarTabelas(false);
             configurarBotoes(false);
 
             TelaRenderUtil.habilitarBotao(jButtonBuscar, true);
-            configurarBotoesFiltro(true);
 
+            if (!consultaOcupados) {
+                configurarBotoesFiltro(true);
+            }
+            
             TelaRenderUtil.habilitarBotao(jButtonBuscar, jTextFieldChave.getText().length() > 0);
 
         }
@@ -516,15 +557,18 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
 
     private void validaCampocodigo() {
 
-        if (jTextFieldIdArmario.getText().trim().length() > 0) {
+        if (!consultaOcupados) {
 
-            configurarBotoes(true);
-            configurarBotoesFiltro(false);
+            if (jTextFieldIdArmario.getText().trim().length() > 0) {
 
-        } else {
+                configurarBotoes(true);
+                configurarBotoesFiltro(false);
 
-            configurarBotoes(false);
+            } else {
 
+                configurarBotoes(false);
+
+            }
         }
 
     }
