@@ -42,7 +42,9 @@ public class ConstantesTelas {
     public static final String TITULO_CADASTRAR_ALUNO = "Cadastrar Aluno";
     public static final String TITULO_CONSULTAR_ALUNO = "Consultar Aluno";
     public static final String TITULO_CARREGAR_ARQUIVO = "Carregar Arquivo de Alunos";
-
+    public static final String TITULO_RETIRAR_CHAVE = "Retirar Chave";
+    
+    
     public static final String TITULO_CADASTRAR_ARMARIO = "Cadastrar Armario";
     public static final String TITULO_CONSULTAR_ARMARIO = "Consultar Armario";
 
@@ -55,8 +57,10 @@ public class ConstantesTelas {
     public static final String BTN_SALVAR = "salvar";
     public static final String BTN_BUSCAR = "buscar";
     public static final String BTN_BUSCAR_TELA_BUSCA = "buscarConsulta";
+    public static final String BTN_BUSCAR_TELA_BUSCA_ALUNO_RETIRADA = "consultarAlunoRetirada";
     public static final String BTN_LIMPAR = "limpar";
     public static final String BTN_EDITAR = "edit";
+    public static final String BTN_CARREGA_RETIRAR_CHAVE = "chamaTelaRetirarChave";
     public static final String BTN_SALVAR_CONFIGURACAO = "salvarConfiguracao";
     public static final String BTN_TESTAR_CONFIGURACAO = "testarConfiguracao";
 
@@ -92,5 +96,7 @@ public class ConstantesTelas {
     public static final String TT_BTN_LIMPAR_PESQUISA = "Limpar Pesquisa";
     public static final String TT_BTN_SALVAR_UPLOAD = " Carregar Planilha para o Banco de Dados";
     public static final String TT_BTN_CARREGAR_ARQUIVO = "Escolher arquivo";
-
+    public static final String TT_BTN_BUSCAR_ALUNO_RETIRADA = "Consultar Aluno para Retirada Chaves";
+    public static final String TT_BTN_CARREGAR_RETIRADA_CHAVE = "Consultar chaves para retirada";
+       
 }

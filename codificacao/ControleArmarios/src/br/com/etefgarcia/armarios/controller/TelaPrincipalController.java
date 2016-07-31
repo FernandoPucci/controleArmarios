@@ -43,7 +43,7 @@ public class TelaPrincipalController {
     private TelaPrincipalView telaPrincipalView = null;
 
     public TelaPrincipalController() {
-  
+
     }
 
     public Thread getThreadShowTelaPrincipalView() {
@@ -53,9 +53,8 @@ public class TelaPrincipalController {
             @Override
             public void run() {
 
-                
-             telaPrincipalView =    new TelaPrincipalView();
-                     
+                telaPrincipalView = new TelaPrincipalView();
+
                 carregaUsuario();
 
                 if (telaPrincipalView.getUsuario() != null) {
@@ -68,7 +67,7 @@ public class TelaPrincipalController {
                     System.exit(0);
                 }
             }
-  
+
         };
 
     }
@@ -76,6 +75,12 @@ public class TelaPrincipalController {
     private void carregaUsuario() {
 
         try {
+
+            if (telaPrincipalView == null) {
+
+                telaPrincipalView = new TelaPrincipalView();
+
+            }
 
             // TODO :  Mock usuario id 1L, criar regra de login
             Usuario u = UsuarioService.getUsuarioById(1L);
@@ -164,7 +169,23 @@ public class TelaPrincipalController {
 
         };
     }
-    
+
+    public Thread getThreadShowConsultarAlunoRetiradaChaveView() {
+
+        return new Thread() {
+
+            @Override
+            public void run() {
+
+                carregaUsuario();
+
+                new ConsultarAlunoView(Boolean.TRUE, telaPrincipalView.getUsuario()).setVisible(true);
+
+            }
+
+        };
+    }
+
     public Thread getThreadShowCarregarPlanilhaAlunoView() {
 
         return new Thread() {

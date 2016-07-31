@@ -566,7 +566,7 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
         modelTabela.addColumn("Cod");
         modelTabela.addColumn("Chave");
         modelTabela.addColumn("Descrição");
-        modelTabela.addColumn("Ocupado");
+        modelTabela.addColumn("Status");
         modelTabela.addColumn("Ativo");
 
         for (Armario c : listaArmarios) {

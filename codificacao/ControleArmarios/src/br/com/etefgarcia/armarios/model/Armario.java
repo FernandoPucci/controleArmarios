@@ -106,7 +106,7 @@ public class Armario implements Serializable {
             
         }
 
-        return flgOcupado ? "SIM" : "NÃO";
+        return flgOcupado ? "OCUPADO" : "DISPONIVEL";
     }
 
     public void setFlgOcupado(Boolean flgOcupado) {

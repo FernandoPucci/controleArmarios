@@ -23,6 +23,7 @@ import br.com.etefgarcia.armarios.service.AlunoService;
 import br.com.etefgarcia.armarios.util.threads.ExcelThreads;
 import br.com.etefgarcia.armarios.util.Mensagens;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
+import br.com.etefgarcia.armarios.view.aluguel.armario.CadastrarAluguelArmarioView;
 import br.com.etefgarcia.armarios.view.aluno.CadastrarAlunoView;
 import br.com.etefgarcia.armarios.view.aluno.CarregarPlanilhaAlunoView;
 import br.com.etefgarcia.armarios.view.aluno.ConsultarAlunoView;
@@ -30,6 +31,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractButton;
 
 /**
@@ -154,6 +157,24 @@ public class AlunoController {
 
             }
 
+        };
+    }
+
+    public Thread getThreadConsultarAlunoAtivo() {
+        return new Thread() {
+            @Override
+            public void run() {
+
+                try {
+
+                    consultarAlunosGeral(Boolean.TRUE);
+
+                } catch (SistemaException | NegocioException ex) {
+
+                    Mensagens.mostraMensagemErro(cadastrarAlunoView.getPainel(), ex.getMessage());
+
+                }
+            }
         };
     }
 
@@ -342,6 +363,21 @@ public class AlunoController {
 
     }
 
+    private Thread getThreadGetShowCadastrarAluguelArmarioView() {
+        return new Thread() {
+
+            @Override
+            public void run() {
+
+                Aluno a = consultarAlunoView.getAlunoSelecionado();
+                if (a != null) {
+                    new CadastrarAluguelArmarioView(a, consultarAlunoView.getUsuario()).setVisible(true);
+                }
+            }
+
+        };
+    }
+
     //METODOS PRIVADOS
     //consulta alunos da tela de cadastro
     private void consultarAlunos() throws SistemaException {
@@ -437,6 +473,10 @@ public class AlunoController {
                 getThreadConsultarAlunoGeral().start();
                 break;
 
+            case ConstantesTelas.BTN_BUSCAR_TELA_BUSCA_ALUNO_RETIRADA:
+                getThreadConsultarAlunoAtivo().start();
+                break;
+
             case ConstantesTelas.BTN_FILTRO_TODOS:
                 getThreadConsultarAlunoGeral().start();
                 break;
@@ -497,11 +537,14 @@ public class AlunoController {
             case ConstantesTelas.BTN_SALVAR_PLANILHA:
                 getThreadGetProcessarPlanilha().start();
                 break;
+            case ConstantesTelas.BTN_CARREGA_RETIRAR_CHAVE:
+                getThreadGetShowCadastrarAluguelArmarioView().start();
+                break;
 
         }
 
         //TEST:
-        //System.out.println(botao);
+        System.out.println(botao);
     }
 
 }

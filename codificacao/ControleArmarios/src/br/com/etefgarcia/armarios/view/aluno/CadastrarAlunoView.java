@@ -661,7 +661,7 @@ jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
         DefaultTableModel modelTabela = new DefaultTableModel();
 
         //monta os cabeçalhos das colunas da tabela
-        modelTabela.addColumn("Cod");
+        modelTabela.addColumn("RM");
         modelTabela.addColumn("Nome");
         modelTabela.addColumn("Sexo");
         modelTabela.addColumn("Telefone");

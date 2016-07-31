@@ -16,7 +16,7 @@
  */
 package br.com.etefgarcia.armarios.action.aluguel.armario;
 
-import br.com.etefgarcia.armarios.action.armario.*;
+import br.com.etefgarcia.armarios.controller.AluguelArmarioController;
 import br.com.etefgarcia.armarios.controller.ArmarioController;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -28,11 +28,11 @@ import javax.swing.AbstractButton;
  */
 public class CadastrarAluguelArmarioViewAction implements MouseListener {
 
-    private final ArmarioController armarioController;
+    private final AluguelArmarioController aluguelArmarioController
+;
+    public CadastrarAluguelArmarioViewAction(AluguelArmarioController aluguelArmarioController) {
 
-    public CadastrarAluguelArmarioViewAction(ArmarioController armarioController) {
-
-        this.armarioController = armarioController;
+        this.aluguelArmarioController = aluguelArmarioController;
 
     }
 
@@ -42,15 +42,15 @@ public class CadastrarAluguelArmarioViewAction implements MouseListener {
             Object source = e.getSource();
             if (source instanceof AbstractButton) {
 
-                armarioController.acaoClickController((AbstractButton) source);
+                aluguelArmarioController.acaoClickController((AbstractButton) source);
 
             } else if (source instanceof javax.swing.JTable) {
 
-                armarioController.acaoClickController((javax.swing.JTable) source);
+                aluguelArmarioController.acaoClickController((javax.swing.JTable) source);
 
             } else if (source instanceof javax.swing.JRadioButton) {
 
-                armarioController.acaoClickController((javax.swing.JTable) source);
+                aluguelArmarioController.acaoClickController((javax.swing.JTable) source);
 
             }
         }

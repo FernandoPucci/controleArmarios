@@ -597,7 +597,7 @@ jTextFieldChave.addFocusListener(new java.awt.event.FocusAdapter() {
         modelTabela.addColumn("Cod");
         modelTabela.addColumn("Chave");
         modelTabela.addColumn("Descrição");
-        modelTabela.addColumn("Ocupado");
+        modelTabela.addColumn("Status");
         modelTabela.addColumn("Ativo");
 
         for (Armario c : listaArmarios) {

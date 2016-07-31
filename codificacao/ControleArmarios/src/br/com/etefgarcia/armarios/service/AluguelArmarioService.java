@@ -16,11 +16,14 @@
  */
 package br.com.etefgarcia.armarios.service;
 
-import br.com.etefgarcia.armarios.dao.ArmarioDAO;
-import br.com.etefgarcia.armarios.dao.impl.ArmarioDAOImpl;
+import br.com.etefgarcia.armarios.dao.AluguelArmarioDAO;
+import br.com.etefgarcia.armarios.dao.impl.AluguelArmarioDAOImpl;
 import br.com.etefgarcia.armarios.exceptions.NegocioException;
 import br.com.etefgarcia.armarios.exceptions.SistemaException;
 import br.com.etefgarcia.armarios.model.AluguelArmario;
+import br.com.etefgarcia.armarios.model.Aluno;
+import br.com.etefgarcia.armarios.model.Armario;
+import br.com.etefgarcia.armarios.model.Usuario;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
 import java.util.List;
 
@@ -30,7 +33,7 @@ import java.util.List;
  */
 public class AluguelArmarioService {
 
-    private static ArmarioDAO dao = null;
+    private static AluguelArmarioDAO dao = null;
 
     public static void cadastrarAtualizarArmarioService(Long idArmario, String chave, String descricao, Boolean flgOcupado, Boolean flgAtivo) throws NegocioException, SistemaException {
 
@@ -61,9 +64,7 @@ public class AluguelArmarioService {
 //        a.setDescricao(descricao.trim());
 //        a.setFlgOcupado(flgOcupado);
 //        a.setFlgAtivo(flgAtivo);
-
 //        try {
-
 //            List<AluguelArmario> aTeste = dao.getArmarioByChaveDao(a.getChave());
 //
 //            if (aTeste != null && aTeste.size() > 0) {
@@ -75,7 +76,6 @@ public class AluguelArmarioService {
 //            dao = new ArmarioDAOImpl();
 //
 //            dao.save(a);
-
 //        } catch (NegocioException nex) {
 //
 //            throw nex;
@@ -87,86 +87,80 @@ public class AluguelArmarioService {
 //        }
     }
 
-    public static List<AluguelArmario> consultarArmariosService(Boolean buscarOcupados, Boolean buscarAtivos) throws SistemaException {
+    public static void cadastrarAtualizarArmarioService(Aluno aluno, Armario armario, Usuario usuario) throws NegocioException, SistemaException {
 
-        List<AluguelArmario> listaArmarios = null;
+        int err = 0;
+        StringBuilder sb = new StringBuilder();
+
+        if (armario == null) {
+            throw new NegocioException("Armario Inválido ou nulo");
+        }
+
+        if (aluno == null) {
+            throw new NegocioException("Aluno Inválido ou nulo");
+        }
+
+        if (usuario == null) {
+            throw new NegocioException("Usuario Inválido ou nulo");
+        }
+
+        if (armario.getChave() == null) {
+            sb.append(ConstantesTelas.ERR_TOKEN_LISTA + "Chave vazia.");
+            err++;
+        }
+
+        if (aluno.getIdAluno() == null) {
+            sb.append(ConstantesTelas.ERR_TOKEN_LISTA + "Aluno com RM vazio.");
+            err++;
+        }
+
+        if (!armario.getFlgAtivo()) {
+
+            sb.append(ConstantesTelas.ERR_TOKEN_LISTA + "Armario Inativo.");
+            err++;
+        }
+
+        if (armario.getFlgOcupado()) {
+
+            sb.append(ConstantesTelas.ERR_TOKEN_LISTA + "Armario Ocupado. Verifique Status.");
+            err++;
+
+        }
+
+        if (!aluno.getFlgAtivo()) {
+
+            sb.append(ConstantesTelas.ERR_TOKEN_LISTA + "Aluno Inativo.");
+            err++;
+
+        }
+
+        if (err > 0) {
+
+            throw new NegocioException(sb.toString());
+
+        }
+
+        AluguelArmario a = new AluguelArmario();
+
+        a.setAluno(aluno);
+        a.setArmario(armario);
+        a.setUsuarioResponsavel(usuario);
 
         try {
+        
+            dao = new AluguelArmarioDAOImpl();
 
-            dao = new ArmarioDAOImpl();
+            dao.save(a);
+            
+        } catch (NegocioException nex) {
 
-//            listaArmarios = dao.getAllArmariosLivres(buscarOcupados, buscarAtivos);
+            throw nex;
 
         } catch (Exception ex) {
 
             throw new SistemaException(AluguelArmarioService.class, ex.getMessage());
 
         }
-
-        return listaArmarios;
-    }
-
-    public static List<AluguelArmario> consultarArmariosByChaveService(Long chave, boolean buscarAtivos) throws SistemaException {
-
-        List<AluguelArmario> listaArmarios = null;
-
-        try {
-
-            dao = new ArmarioDAOImpl();
-
-//            listaArmarios = dao.getArmarioByChaveDao(chave);
-
-        } catch (Exception ex) {
-
-            throw new SistemaException(AluguelArmarioService.class, ex.getMessage());
-
-        }
-
-        return listaArmarios;
-    }
-
-    public static AluguelArmario consultarArmariosByCodigoService(String codigo) throws SistemaException, NegocioException {
-
-        AluguelArmario armarioSaida = null;
-
-        if (codigo == null || Long.parseLong(codigo) <= 0) {
-
-            throw new NegocioException("Código inválido.");
-
-        }
-
-        try {
-
-            dao = new ArmarioDAOImpl();
-
-//            armarioSaida = dao.getById(AluguelArmario.class, Long.parseLong(codigo));
-
-        } catch (Exception ex) {
-
-            throw new SistemaException(AluguelArmarioService.class, ex.getMessage());
-
-        }
-
-        return armarioSaida;
-    }
-
-    public static List<AluguelArmario> consultarTodosArmariosService() throws SistemaException, NegocioException {
-
-        List<AluguelArmario> listaArmarios = null;
-
-        try {
-
-            dao = new ArmarioDAOImpl();
-
-//            listaArmarios = dao.getAll(AluguelArmario.class);
-
-        } catch (Exception ex) {
-
-            throw new SistemaException(AluguelArmarioService.class, ex.getMessage());
-
-        }
-
-        return listaArmarios;
     }
 
 }

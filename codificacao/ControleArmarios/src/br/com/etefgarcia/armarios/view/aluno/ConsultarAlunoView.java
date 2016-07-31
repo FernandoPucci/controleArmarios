@@ -19,6 +19,8 @@ package br.com.etefgarcia.armarios.view.aluno;
 import br.com.etefgarcia.armarios.action.aluno.ConsultarAlunoViewAction;
 import br.com.etefgarcia.armarios.controller.AlunoController;
 import br.com.etefgarcia.armarios.model.Aluno;
+import br.com.etefgarcia.armarios.model.Usuario;
+import br.com.etefgarcia.armarios.util.Mensagens;
 import br.com.etefgarcia.armarios.util.TelaRenderUtil;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
 import br.com.etefgarcia.armarios.util.telas.render.ZebraCellRenderer;
@@ -38,6 +40,10 @@ public class ConsultarAlunoView extends javax.swing.JFrame {
     private AlunoController alunoController;
     private ConsultarAlunoViewAction consultarAlunoViewAction;
     private List<Aluno> listaAlunos = null;
+
+    private Usuario usuario = null;
+
+    private Boolean isRetiradaChave = Boolean.FALSE;
 
     private final Runnable threadChecaCampoNome = new Runnable() {
 
@@ -60,7 +66,7 @@ public class ConsultarAlunoView extends javax.swing.JFrame {
         initComponents();
 
         inicializar();
-        configurarBotoes(false);
+        configurarBotoes(false, true);
         configurarBotoesFiltro(true);
         inicializarRadioButtons();
         configurarCampos();
@@ -72,19 +78,46 @@ public class ConsultarAlunoView extends javax.swing.JFrame {
 
     }
 
+    public ConsultarAlunoView(Boolean isRetiradaChave, Usuario usuario) {
+
+        initComponents();
+
+        this.isRetiradaChave = isRetiradaChave;
+
+        if (usuario != null) {
+            this.usuario = usuario;
+
+            inicializar();
+            configurarBotoes(false, true);
+            configurarBotoesFiltro(!isRetiradaChave);
+            inicializarRadioButtons();
+            configurarCampos();
+            configurarItens();
+
+            TelaRenderUtil.habilitarBotao(jButtonBuscar, true);
+
+            mostrarTabela(false);
+        } else {
+
+            Mensagens.mostraMensagemErro(jPanelEsquerdo, "Usuario nulo, impossivel carregar.");
+
+        }
+
+    }
+
     private void inicializar() {
 
-        jButtonBuscar.setName(ConstantesTelas.BTN_BUSCAR_TELA_BUSCA);
+        jButtonBuscar.setName(!isRetiradaChave ? ConstantesTelas.BTN_BUSCAR_TELA_BUSCA : ConstantesTelas.BTN_BUSCAR_TELA_BUSCA_ALUNO_RETIRADA);
         jButtonCancelar.setName(ConstantesTelas.BTN_CANCELAR);
-        jButtonEditar.setName(ConstantesTelas.BTN_EDITAR);
+        jButtonEditar.setName(!isRetiradaChave ? ConstantesTelas.BTN_EDITAR : ConstantesTelas.BTN_CARREGA_RETIRAR_CHAVE);
         jButtonCancelar.setName(ConstantesTelas.BTN_CANCELAR_CONSULTA_ALUNOS);
 
         jRadioButtonSomenteAtivos.setName(ConstantesTelas.BTN_FILTRO_ATIVOS);
         jRadioButtonSomenteInativos.setName(ConstantesTelas.BTN_FILTRO_INATIVOS);
         jRadioButtonTodos.setName(ConstantesTelas.BTN_FILTRO_TODOS);
 
-        jButtonBuscar.setToolTipText(ConstantesTelas.TT_BTN_BUSCAR);
-        jButtonEditar.setToolTipText(ConstantesTelas.TT_BTN_EDITAR);
+        jButtonBuscar.setToolTipText(!isRetiradaChave ? ConstantesTelas.TT_BTN_BUSCAR : ConstantesTelas.TT_BTN_BUSCAR_ALUNO_RETIRADA);
+        jButtonEditar.setToolTipText(!isRetiradaChave ? ConstantesTelas.TT_BTN_EDITAR : ConstantesTelas.TT_BTN_CARREGAR_RETIRADA_CHAVE);
         jButtonLimpar.setToolTipText(ConstantesTelas.TT_BTN_LIMPAR_PESQUISA);
         jButtonCancelar.setToolTipText(ConstantesTelas.TT_BTN_CANCELAR);
 
@@ -92,6 +125,11 @@ public class ConsultarAlunoView extends javax.swing.JFrame {
 
         this.alunoController = new AlunoController(this);
         this.consultarAlunoViewAction = new ConsultarAlunoViewAction(alunoController);
+
+        if (isRetiradaChave) {
+            alunoController.getThreadConsultarAlunoAtivo().start();
+            jButtonEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ico/chave3.png")));
+        }
 
         removeListeners();
         adicionaListeners();
@@ -112,13 +150,27 @@ public class ConsultarAlunoView extends javax.swing.JFrame {
 
     }
 
-    private void configurarBotoes(boolean habilitar) {
+    private boolean checaAlunoSelecionado(boolean isBusca) {
+
+        if (!isBusca) {
+
+            return listaAlunos != null && !listaAlunos.isEmpty() && getAlunoSelecionado() != null;
+
+        } else {
+
+            return true;
+
+        }
+
+    }
+
+    private void configurarBotoes(boolean habilitar, boolean isBusca) {
 
         TelaRenderUtil.habilitarBotao(jButtonBuscar, habilitar);
-        TelaRenderUtil.habilitarBotao(jButtonEditar, habilitar);
+        TelaRenderUtil.habilitarBotao(jButtonEditar, !isRetiradaChave ? habilitar : checaAlunoSelecionado(isBusca));
         TelaRenderUtil.habilitarBotao(jButtonLimpar, habilitar);
 
-        configurarBotoesFiltro(habilitar);
+        configurarBotoesFiltro(!isRetiradaChave ? habilitar : false);
 
     }
 
@@ -336,6 +388,12 @@ jTextFieldIdAluno.addKeyListener(new java.awt.event.KeyAdapter() {
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
 
+//        if (listaAlunos == null || listaAlunos.isEmpty() || getAlunoSelecionado() == null) {
+//
+//            Mensagens.mostraMensagemAlerta(jPanelEsquerdo, "Selecione um aluno da lista!");
+//
+//        }
+
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
     private void jTextFieldNomeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldNomeKeyTyped
@@ -346,7 +404,7 @@ jTextFieldIdAluno.addKeyListener(new java.awt.event.KeyAdapter() {
     private void jTextFieldNomeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldNomeFocusLost
 
         if (!jTextFieldNome.getText().trim().isEmpty()) {
-            configurarBotoes(true);
+            configurarBotoes(true, true);
         }
     }//GEN-LAST:event_jTextFieldNomeFocusLost
 
@@ -448,17 +506,17 @@ jTextFieldIdAluno.addKeyListener(new java.awt.event.KeyAdapter() {
 
             TelaRenderUtil.habilitarBotao(jButtonBuscar, true);
 
-            configurarBotoes(true);
-            configurarBotoesFiltro(true);
+            configurarBotoes(true, true);
+            configurarBotoesFiltro(!isRetiradaChave);
 
             alunoController.getThreadConsultarAlunoGeral().start();
 
         } else {
             mostrarTabelas(false);
-            configurarBotoes(false);
+            configurarBotoes(false, true);
 
             TelaRenderUtil.habilitarBotao(jButtonBuscar, true);
-            configurarBotoesFiltro(true);
+            configurarBotoesFiltro(!isRetiradaChave);
 
             TelaRenderUtil.habilitarBotao(jButtonBuscar, false);
 
@@ -470,12 +528,12 @@ jTextFieldIdAluno.addKeyListener(new java.awt.event.KeyAdapter() {
 
         if (jTextFieldIdAluno.getText().trim().length() > 0) {
 
-            configurarBotoes(true);
+            configurarBotoes(true, true);
             configurarBotoesFiltro(false);
 
         } else {
 
-            configurarBotoes(false);
+            configurarBotoes(false, true);
 
         }
 
@@ -486,10 +544,16 @@ jTextFieldIdAluno.addKeyListener(new java.awt.event.KeyAdapter() {
         jTextFieldNome.setText("");
         jTextFieldIdAluno.setText("");
 
-        configurarBotoes(false);
+        configurarBotoes(false, true);
 
         jScrollPane1.setVisible(false);
         jTableTabela.setVisible(false);
+
+        this.aluno = null;
+        this.listaAlunos = null;
+
+        inicializar();
+
     }
 
     private void mostrarTabela(boolean mostrar) {
@@ -514,7 +578,7 @@ jTextFieldIdAluno.addKeyListener(new java.awt.event.KeyAdapter() {
         DefaultTableModel modelTabela = new DefaultTableModel();
 
         //monta os cabeçalhos das colunas da tabela
-        modelTabela.addColumn("Cod");
+        modelTabela.addColumn("RM");
         modelTabela.addColumn("Nome");
         modelTabela.addColumn("Sexo");
         modelTabela.addColumn("Telefone");
@@ -617,11 +681,25 @@ jTextFieldIdAluno.addKeyListener(new java.awt.event.KeyAdapter() {
 
     }
 
+    public Usuario getUsuario() {
+        return this.usuario;
+    }
+
     public Aluno getAlunoSelecionado() {
 
         int linhaSelecionada = jTableTabela.getSelectedRow();
 
-        return listaAlunos.get(linhaSelecionada);
+        if (linhaSelecionada < 0) {
+
+            Mensagens.mostraMensagemAlerta(jPanelEsquerdo, "Primeiramente, selecione um Aluno na tabela.");
+
+            return null;
+
+        } else {
+
+            return listaAlunos.get(linhaSelecionada);
+
+        }
     }
 
     public String getFiltroSelecionado() {

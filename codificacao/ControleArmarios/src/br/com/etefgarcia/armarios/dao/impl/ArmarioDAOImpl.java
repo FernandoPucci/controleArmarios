@@ -59,15 +59,9 @@ public class ArmarioDAOImpl extends BaseDAOImpl<Armario, Long> implements Armari
             sb.append(ativos);
 
         }
-
-        System.out.println("\n\n\n++++++++++++++++++++++++++++++++++ \n" + sb.toString() + "\n++++++++++++++++++++++++++++++++++\n\n\n");
-
+       
         TypedQuery<Armario> query = getEntityManager().createQuery(sb.toString(), Armario.class);
 
-//        TypedQuery<Armario> query = getEntityManager().createQuery("SELECT A "
-//                + " FROM Armario A "
-//                + " where  A.flgOcupado = false"
-//                + " and A.flgAtivo = true ", Armario.class);
         listaSaida = query.getResultList();
 
         return listaSaida;

@@ -82,6 +82,8 @@ public class TelaPrincipalView extends javax.swing.JFrame {
         jMenuArmario = new javax.swing.JMenu();
         jMenuItemConsultarArmario = new javax.swing.JMenuItem();
         jMenuItemCadastrarArmario = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        jMenuItemRetirarChave = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(ConstantesTelas.TITULO_JANELA_PRINCIPAL + " " + ConstantesTelas.ETEC);
@@ -214,6 +216,20 @@ public class TelaPrincipalView extends javax.swing.JFrame {
         });
         jMenuArmario.add(jMenuItemCadastrarArmario);
 
+        jSeparator2.setForeground(new java.awt.Color(30, 25, 25));
+        jSeparator2.setPreferredSize(new java.awt.Dimension(2, 2));
+        jMenuArmario.add(jSeparator2);
+
+        jMenuItemRetirarChave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemRetirarChave.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jMenuItemRetirarChave.setText("Retirar Chave");
+        jMenuItemRetirarChave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemRetirarChaveActionPerformed(evt);
+            }
+        });
+        jMenuArmario.add(jMenuItemRetirarChave);
+
         jMenuBar.add(jMenuArmario);
 
         setJMenuBar(jMenuBar);
@@ -278,6 +294,10 @@ public class TelaPrincipalView extends javax.swing.JFrame {
         telaPrincipalController.getThreadShowCarregarPlanilhaAlunoView().start();
     }//GEN-LAST:event_jMenuItemCarregarPlanilhaActionPerformed
 
+    private void jMenuItemRetirarChaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRetirarChaveActionPerformed
+        telaPrincipalController.getThreadShowConsultarAlunoRetiradaChaveView().start();
+    }//GEN-LAST:event_jMenuItemRetirarChaveActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -328,12 +348,14 @@ public class TelaPrincipalView extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemConfigurarBanco;
     private javax.swing.JMenuItem jMenuItemConsultarAluno;
     private javax.swing.JMenuItem jMenuItemConsultarArmario;
+    private javax.swing.JMenuItem jMenuItemRetirarChave;
     private javax.swing.JMenuItem jMenuItemSair;
     private javax.swing.JPanel jPanelBotoes;
     private javax.swing.JPanel jPanelInferior;
     private javax.swing.JPanel jPanelPrincipal;
     private javax.swing.JPanel jPanelSuperior;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
     private br.com.etefgarcia.armarios.model.Usuario usuario;
     // End of variables declaration//GEN-END:variables
 

@@ -33,6 +33,7 @@ import javax.swing.table.DefaultTableModel;
  * @author fernando-pucci
  *
  */
+@Deprecated
 public class CadastrarAlunoViewBaseBackup extends javax.swing.JFrame {
     
     private AlunoController alunoController;

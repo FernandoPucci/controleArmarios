@@ -18,17 +18,17 @@ package br.com.etefgarcia.armarios.controller;
 
 import br.com.etefgarcia.armarios.exceptions.NegocioException;
 import br.com.etefgarcia.armarios.exceptions.SistemaException;
-import br.com.etefgarcia.armarios.model.AluguelArmario;
+import br.com.etefgarcia.armarios.model.Aluno;
 import br.com.etefgarcia.armarios.model.Armario;
+import br.com.etefgarcia.armarios.service.AluguelArmarioService;
 import br.com.etefgarcia.armarios.service.ArmarioService;
 import br.com.etefgarcia.armarios.util.Mensagens;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
 import br.com.etefgarcia.armarios.view.aluguel.armario.CadastrarAluguelArmarioView;
 
-
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractButton;
 
 /**
@@ -44,7 +44,6 @@ public class AluguelArmarioController {
         this.cadastrarAluguelArmarioView = cadastrarAluguelArmarioView;
 
     }
-
 
     public Thread getThreadConfirmarCancelar() {
 
@@ -64,41 +63,28 @@ public class AluguelArmarioController {
         };
     }
 
-    public Thread getThreadConfirmarCancelarBusca() {
-
+    private Thread getThreadConfirmarRetiradaChave() {
         return new Thread() {
 
             @Override
             public void run() {
 
-                int opt = Mensagens.mostraMensagemPergunta("Tem certeza que fechar esta Janela?");
+                Aluno aluno = cadastrarAluguelArmarioView.getAluno();
+                Armario armario = cadastrarAluguelArmarioView.getArmario();
+
+                int opt = Mensagens.mostraMensagemPergunta("Confirma retirada de Chave [ " + armario.getChave() + " ], pelo(a) Aluno(a) [ " + aluno.getNome() + " ] ?");
+
                 if (opt == 0) {
+                    try {
 
-                    cadastrarAluguelArmarioView.dispose();
+                        AluguelArmarioService.cadastrarAtualizarArmarioService(aluno, armario, cadastrarAluguelArmarioView.getUsuario());
 
+                    } catch (NegocioException | SistemaException ex) {
+
+                        Mensagens.mostraMensagemErro(cadastrarAluguelArmarioView.getPainel(), ex.getMessage());
+
+                    }
                 }
-            }
-
-        };
-    }
-
-    public Thread getThreadConsultarArmario() {
-
-        return new Thread() {
-
-            @Override
-            public void run() {
-
-                try {
-
-                    consultarArmariosPorChave();
-
-                } catch (SistemaException ex) {
-
-                    Mensagens.mostraMensagemErro(cadastrarAluguelArmarioView.getPainel(), ex.getMessage());
-
-                }
-
             }
 
         };
@@ -113,42 +99,8 @@ public class AluguelArmarioController {
 
                 try {
 
-                    Boolean filtroGeral = null;
-
-                    if (cadastrarAluguelArmarioView.getFiltroAtivosSelecionado() != null) {
-                        switch (cadastrarAluguelArmarioView.getFiltroAtivosSelecionado()) {
-
-                            case ConstantesTelas.BTN_FILTRO_TODOS:
-                                filtroGeral = null;
-                                break;
-                            case ConstantesTelas.BTN_FILTRO_ATIVOS:
-                                filtroGeral = Boolean.TRUE;
-                                break;
-                            case ConstantesTelas.BTN_FILTRO_INATIVOS:
-                                filtroGeral = Boolean.FALSE;
-                                break;
-
-                        }
-                    }
-
-                    if (cadastrarAluguelArmarioView.getFiltroArmariosLivresSelecionado() != null) {
-                        switch (cadastrarAluguelArmarioView.getFiltroArmariosLivresSelecionado()) {
-
-                            case ConstantesTelas.BTN_FILTRO_ARMARIOS_TODOS:
-                                consultarArmariosGeral(null, filtroGeral);
-                                break;
-                            case ConstantesTelas.BTN_FILTRO_ARMARIOS_OCUPADOS:
-                                consultarArmariosGeral(Boolean.TRUE, filtroGeral);
-                                break;
-                            case ConstantesTelas.BTN_FILTRO_ARMARIOS_LIVRES:
-                                consultarArmariosGeral(Boolean.FALSE, filtroGeral);
-                                break;
-
-                        }
-                    } else {
-                        consultarArmariosGeral(filtroGeral, null);
-
-                    }
+                    //consulta armarios ativos
+                    consultarArmariosAtivosPorChave();
 
                 } catch (SistemaException | NegocioException ex) {
 
@@ -187,125 +139,37 @@ public class AluguelArmarioController {
         };
     }
 
-    public Thread getThreadGetArmarioSelecionadoConsultar() {
-
-        return new Thread() {
-
-            @Override
-            public void run() {
-
-//                AluguelArmario a = cadastrarAluguelArmarioView.getArmarioSelecionado();
-//
-//                System.out.println(a);
-
-            }
-
-        };
-    }
-
-    public Thread getThreadCadastrarArmario() {
-
-        return new Thread() {
-
-            @Override
-            public void run() {
-//                try {
-//
-//                    AluguelArmario a = cadastrarAluguelArmarioView.getArmario();
-//
-//                    ArmarioService.cadastrarAtualizarArmarioService(a.getIdArmario(), a.getChave() + "", a.getDescricao(), a.getFlgOcupado(), a.getFlgAtivo());
-//
-//                    Mensagens.mostraMensagemSucesso(cadastrarAluguelArmarioView.getPainel(), a.getIdArmario() != null ? "AluguelArmario Atualizado com sucesso." : "AluguelArmario Cadastrado com sucesso.");
-//
-//                    cadastrarAluguelArmarioView.limparCampos(true);
-//
-//                } catch (NegocioException | SistemaException ex) {
-//
-//                    Mensagens.mostraMensagemErro(cadastrarAluguelArmarioView.getPainel(), ex.getMessage());
-//
-//                }
-//
-            }
-
-        };
-
-    }
-
-    public Thread getThreadShowTelaCadastrarAtualizar() {
-
-        return new Thread() {
-
-            @Override
-            public void run() {
-//
-//                AluguelArmario a = cadastrarAluguelArmarioView.getArmarioSelecionado();
-//
-//                new CadastrarAluguelArmarioView(a, true).setVisible(true);
-
-            }
-
-        };
-
-    }
-
     //METODOS PRIVADOS
-    private void consultarArmariosPorChave() throws SistemaException {
+    //consulta aluguelArmario
+    private void consultarArmariosAtivosPorChave() throws SistemaException, NegocioException {
 
-//        List<AluguelArmario> listaArmarios = ArmarioService.consultarArmariosByChaveService(new Long(cadastrarAluguelArmarioView.getChave()), true);
-//
-//        if (listaArmarios == null || listaArmarios.isEmpty() && !cadastrarAluguelArmarioView.isTesteChaveExistente()) {
-//            Mensagens.mostraMensagemAlerta(cadastrarAluguelArmarioView.getPainel(), "Não há resultados para esta busca.");
-//            cadastrarAluguelArmarioView.limparCampos(false);
-//
-//        } else {
-//
-//            if (cadastrarAluguelArmarioView.isTesteChaveExistente()) {
-//
-//                Mensagens.mostraMensagemErro(cadastrarAluguelArmarioView.getPainel(), "Esta chave já esta cadastrada.");
-//
-//            }
-//
-//            cadastrarAluguelArmarioView.setListaArmarios(listaArmarios);
-//            cadastrarAluguelArmarioView.mostrarTabelas(true);
-//        }
-    }
+        List<Armario> listaArmarios = null;
 
-    //consulta aluguelArmario generica
-    private void consultarArmariosGeral(Boolean ocupados, Boolean ativos) throws SistemaException, NegocioException {
+        if (cadastrarAluguelArmarioView.getChave() != null && !cadastrarAluguelArmarioView.getChave().isEmpty()) {
 
-        List<AluguelArmario> listaArmarios = null;
+            listaArmarios = ArmarioService.consultarArmariosByChaveService(new Long(cadastrarAluguelArmarioView.getChave()), true);
 
-//        if (cadastrarAluguelArmarioView.getCodigo() != null && !cadastrarAluguelArmarioView.getCodigo().isEmpty()) {
-//
-//            AluguelArmario a = ArmarioService.consultarArmariosByCodigoService(cadastrarAluguelArmarioView.getCodigo());
-//
-//            if (a != null) {
-//                listaArmarios = new ArrayList<>();
-//                listaArmarios.add(a);
-//            }
-//
-//        } else if (cadastrarAluguelArmarioView.getChave() != null && !cadastrarAluguelArmarioView.getChave().isEmpty()) {
-//
-//            listaArmarios = ArmarioService.consultarArmariosByChaveService(new Long(cadastrarAluguelArmarioView.getChave()), ativos);
-//
-//        } else if (ativos == null && (cadastrarAluguelArmarioView.getChave() == null || cadastrarAluguelArmarioView.getChave().isEmpty())) {
-//
-//            listaArmarios = ArmarioService.consultarTodosArmariosService();
-//
-//        } else {
-//
-//            listaArmarios = ArmarioService.consultarArmariosService(ocupados, ativos);
-//
-//        }
+        }
 
         if (listaArmarios == null || listaArmarios.isEmpty()) {
             Mensagens.mostraMensagemAlerta(cadastrarAluguelArmarioView.getPainel(), "Não há resultados para esta busca.");
             cadastrarAluguelArmarioView.limparCampos();
 
-        } else {
+        } else if (listaArmarios.size() > 1) {
 
-//            cadastrarAluguelArmarioView.setListaArmarios(listaArmarios);
+            Mensagens.mostraMensagemErro(cadastrarAluguelArmarioView.getPainel(), "Há mais de um registro para esta chave. Corrija este problema na rela de Cadastro de Armarios.");
+            cadastrarAluguelArmarioView.limparCampos();
+
+        } else if (listaArmarios.get(0).getFlgOcupado()) {
+
+            Mensagens.mostraMensagemErro(cadastrarAluguelArmarioView.getPainel(), "Esta chave está ocupada. Verifique utilizando a tela de Empréstimos.");
+            cadastrarAluguelArmarioView.limparCampos();
+
+        } else {
+            cadastrarAluguelArmarioView.setListaArmarios(listaArmarios);
+            cadastrarAluguelArmarioView.setArmario(listaArmarios.get(0));
             cadastrarAluguelArmarioView.mostrarTabelas(true);
+
         }
 
     }
@@ -326,66 +190,23 @@ public class AluguelArmarioController {
         }
     }
 
-    public void acaoClickController(javax.swing.JRadioButton botao) {
-
-        if (botao.isEnabled()) {
-            acaoController(botao.getName());
-        }
-    }
-
     private void acaoController(String botao) {
 
         switch (botao) {
-
-            case ConstantesTelas.BTN_BUSCAR:
-                getThreadConsultarArmario().start();
-                break;
 
             case ConstantesTelas.BTN_BUSCAR_TELA_BUSCA:
                 getThreadConsultarArmarioGeral().start();
                 break;
 
-            case ConstantesTelas.BTN_FILTRO_TODOS:
-                getThreadConsultarArmarioGeral().start();
-                break;
-
-            case ConstantesTelas.BTN_FILTRO_ATIVOS:
-                getThreadConsultarArmarioGeral().start();
-                break;
-
-            case ConstantesTelas.BTN_FILTRO_INATIVOS:
-                getThreadConsultarArmarioGeral().start();
-                break;
-
-            case ConstantesTelas.BTN_FILTRO_ARMARIOS_TODOS:
-                getThreadConsultarArmarioGeral().start();
-                break;
-            case ConstantesTelas.BTN_FILTRO_ARMARIOS_LIVRES:
-                getThreadConsultarArmarioGeral().start();
-                break;
-            case ConstantesTelas.BTN_FILTRO_ARMARIOS_OCUPADOS:
-                getThreadConsultarArmarioGeral().start();
-                break;
-
             case ConstantesTelas.BTN_SALVAR:
-                getThreadCadastrarArmario().start();
+                getThreadConfirmarRetiradaChave().start();
                 break;
 
             case ConstantesTelas.BTN_CANCELAR:
                 getThreadConfirmarCancelar().start();
                 break;
-            case ConstantesTelas.BTN_CANCELAR_CONSULTA_ARMARIOS:
-                getThreadConfirmarCancelarBusca().start();
-                break;
-
-            case ConstantesTelas.BTN_EDITAR:
-                getThreadShowTelaCadastrarAtualizar().start();
-                break;
 
             case ConstantesTelas.BTN_LIMPAR:
-                if (cadastrarAluguelArmarioView != null) {
-//                    cadastrarAluguelArmarioView.limparCampos(true);
-                }
 
                 if (cadastrarAluguelArmarioView != null) {
                     cadastrarAluguelArmarioView.limparCampos();
@@ -397,14 +218,11 @@ public class AluguelArmarioController {
                 getThreadGetArmarioSelecionado().start();
                 break;
 
-            case ConstantesTelas.ITM_TABELA_CONSULTAR:
-                getThreadGetArmarioSelecionadoConsultar().start();
-                break;
-
         }
 
         //TEST:
-        System.out.println(botao);
+        System.out.println("@@@ " + botao);
 
     }
+
 }

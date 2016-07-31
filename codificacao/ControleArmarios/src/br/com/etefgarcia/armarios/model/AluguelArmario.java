@@ -57,6 +57,8 @@ public class AluguelArmario implements Serializable {
 
     public AluguelArmario() {
 
+        this.duracao = 0;
+        this.dataAluguel = new Date();
         this.flgDevolvido = Boolean.FALSE;
 
     }
@@ -79,7 +81,7 @@ public class AluguelArmario implements Serializable {
     private Usuario usuarioResponsavel;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "DATA_ALUGUEL", nullable = true, insertable = false) //configuracoes para permitir insercao de datas null
+    @Column(name = "DATA_ALUGUEL", nullable = true)
     private Date dataAluguel;
 
     @Temporal(TemporalType.DATE)
