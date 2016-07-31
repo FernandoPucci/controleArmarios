@@ -39,11 +39,38 @@ public class TelaPrincipalView extends javax.swing.JFrame {
     }
 
     private void inicializar() {
+
         this.telaPrincipalController = new TelaPrincipalController();
         this.telaPrincipalViewAction = new TelaPrincipalViewAction(telaPrincipalController);
 
+        configurarBotoes();
+
         removeListeners();
         adicionaListeners();
+
+    }
+
+    private void configurarBotoes() {
+
+        jButtonConsultarAlunos.setName(ConstantesTelas.BTN_CONSULTAR_ALUNOS);
+        jButtonConsultarArmarios.setName(ConstantesTelas.BTN_CONSULTAR_ARMARIOS);
+        jButtonRetiradaChaves.setName(ConstantesTelas.BTN_RETIRAR_CHAVES);
+
+        jButtonVerEmprestimos.setName(ConstantesTelas.BTN_CONSULTAR_EMPRESTIMOS);
+        jButtonDevolucaoChaves.setName(ConstantesTelas.BTN_DEVOLVER_CHAVES);
+        jButtonChavesEmUso.setName(ConstantesTelas.BTN_CONSULTAR_CHAVES_EM_USO);
+
+        jButtonSair.setName(ConstantesTelas.BTN_SAIR);
+
+        jButtonConsultarAlunos.setToolTipText(ConstantesTelas.TT_BTN_BUSCAR_ALUNOS);
+        jButtonConsultarArmarios.setToolTipText(ConstantesTelas.TT_BTN_BUSCAR_ARMARIOS);
+        jButtonRetiradaChaves.setToolTipText(ConstantesTelas.TT_BTN_RETIRADA_CHAVES);
+
+        jButtonVerEmprestimos.setToolTipText(ConstantesTelas.TT_BTN_CONSULTAR_EMPRESTIMOS);
+        jButtonDevolucaoChaves.setToolTipText(ConstantesTelas.TT_BTN_DEVOLVER_CHAVES);
+        jButtonChavesEmUso.setToolTipText(ConstantesTelas.TT_BTN_CONSULTAR_CHAVES_EM_USO);
+
+        jButtonSair.setToolTipText(ConstantesTelas.TT_BTN_SAIR_PROGRAMA);
 
     }
 
@@ -65,6 +92,15 @@ public class TelaPrincipalView extends javax.swing.JFrame {
         jPanelPrincipal = new javax.swing.JPanel();
         jPanelSuperior = new javax.swing.JPanel();
         jPanelBotoes = new javax.swing.JPanel();
+        jButtonConsultarAlunos = new javax.swing.JButton();
+        jButtonConsultarArmarios = new javax.swing.JButton();
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        jButtonRetiradaChaves = new javax.swing.JButton();
+        jButtonDevolucaoChaves = new javax.swing.JButton();
+        jButtonVerEmprestimos = new javax.swing.JButton();
+        jButtonChavesEmUso = new javax.swing.JButton();
+        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        jButtonSair = new javax.swing.JButton();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
@@ -87,7 +123,6 @@ public class TelaPrincipalView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(ConstantesTelas.TITULO_JANELA_PRINCIPAL + " " + ConstantesTelas.ETEC);
-        setMaximumSize(new java.awt.Dimension(640, 480));
         setMinimumSize(new java.awt.Dimension(640, 480));
         setResizable(false);
 
@@ -98,18 +133,40 @@ public class TelaPrincipalView extends javax.swing.JFrame {
         jPanelSuperior.setName(""); // NOI18N
         jPanelSuperior.setPreferredSize(new java.awt.Dimension(460, 80));
         jPanelSuperior.setRequestFocusEnabled(false);
-        jPanelSuperior.setLayout(new java.awt.GridLayout(2, 1));
+        jPanelSuperior.setLayout(new java.awt.GridLayout(1, 1));
 
-        javax.swing.GroupLayout jPanelBotoesLayout = new javax.swing.GroupLayout(jPanelBotoes);
-        jPanelBotoes.setLayout(jPanelBotoesLayout);
-        jPanelBotoesLayout.setHorizontalGroup(
-            jPanelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 640, Short.MAX_VALUE)
-        );
-        jPanelBotoesLayout.setVerticalGroup(
-            jPanelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 45, Short.MAX_VALUE)
-        );
+        jPanelBotoes.setLayout(new java.awt.GridLayout(1, 8));
+
+        jButtonConsultarAlunos.setBackground(new java.awt.Color(242, 241, 240));
+        jButtonConsultarAlunos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ico/graduated3.png"))); // NOI18N
+        jPanelBotoes.add(jButtonConsultarAlunos);
+
+        jButtonConsultarArmarios.setBackground(new java.awt.Color(242, 241, 240));
+        jButtonConsultarArmarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ico/file-manager3.png"))); // NOI18N
+        jPanelBotoes.add(jButtonConsultarArmarios);
+        jPanelBotoes.add(filler8);
+
+        jButtonRetiradaChaves.setBackground(new java.awt.Color(242, 241, 240));
+        jButtonRetiradaChaves.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ico/chave3.png"))); // NOI18N
+        jButtonRetiradaChaves.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanelBotoes.add(jButtonRetiradaChaves);
+
+        jButtonDevolucaoChaves.setBackground(new java.awt.Color(242, 241, 240));
+        jButtonDevolucaoChaves.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ico/accept3.png"))); // NOI18N
+        jPanelBotoes.add(jButtonDevolucaoChaves);
+
+        jButtonVerEmprestimos.setBackground(new java.awt.Color(242, 241, 240));
+        jButtonVerEmprestimos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ico/books3.png"))); // NOI18N
+        jPanelBotoes.add(jButtonVerEmprestimos);
+
+        jButtonChavesEmUso.setBackground(new java.awt.Color(242, 241, 240));
+        jButtonChavesEmUso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ico/checklist3.png"))); // NOI18N
+        jPanelBotoes.add(jButtonChavesEmUso);
+        jPanelBotoes.add(filler7);
+
+        jButtonSair.setBackground(new java.awt.Color(242, 241, 240));
+        jButtonSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ico/exit3.png"))); // NOI18N
+        jPanelBotoes.add(jButtonSair);
 
         jPanelSuperior.add(jPanelBotoes);
 
@@ -337,6 +394,15 @@ public class TelaPrincipalView extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
+    private javax.swing.Box.Filler filler7;
+    private javax.swing.Box.Filler filler8;
+    private javax.swing.JButton jButtonChavesEmUso;
+    private javax.swing.JButton jButtonConsultarAlunos;
+    private javax.swing.JButton jButtonConsultarArmarios;
+    private javax.swing.JButton jButtonDevolucaoChaves;
+    private javax.swing.JButton jButtonRetiradaChaves;
+    private javax.swing.JButton jButtonSair;
+    private javax.swing.JButton jButtonVerEmprestimos;
     private javax.swing.JLabel jLabelDadosUsuario;
     private javax.swing.JMenu jMenu;
     private javax.swing.JMenu jMenuAlunos;
@@ -360,12 +426,34 @@ public class TelaPrincipalView extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void removeListeners() {
+
         jMenuItemSair.removeMouseListener(telaPrincipalViewAction);
+
+        jButtonConsultarAlunos.removeMouseListener(telaPrincipalViewAction);
+        jButtonConsultarArmarios.removeMouseListener(telaPrincipalViewAction);
+        jButtonRetiradaChaves.removeMouseListener(telaPrincipalViewAction);
+
+        jButtonDevolucaoChaves.removeMouseListener(telaPrincipalViewAction);
+        jButtonVerEmprestimos.removeMouseListener(telaPrincipalViewAction);
+        jButtonChavesEmUso.removeMouseListener(telaPrincipalViewAction);
+
+        jButtonSair.removeMouseListener(telaPrincipalViewAction);
     }
 
     private void adicionaListeners() {
 
         jMenuItemSair.addMouseListener(telaPrincipalViewAction);
+
+        jButtonConsultarAlunos.addMouseListener(telaPrincipalViewAction);
+        jButtonConsultarArmarios.addMouseListener(telaPrincipalViewAction);
+        jButtonRetiradaChaves.addMouseListener(telaPrincipalViewAction);
+
+        jButtonDevolucaoChaves.addMouseListener(telaPrincipalViewAction);
+        jButtonVerEmprestimos.addMouseListener(telaPrincipalViewAction);
+        jButtonChavesEmUso.addMouseListener(telaPrincipalViewAction);
+
+        jButtonSair.addMouseListener(telaPrincipalViewAction);
+
     }
 
     public javax.swing.JPanel getPainelInferior() {

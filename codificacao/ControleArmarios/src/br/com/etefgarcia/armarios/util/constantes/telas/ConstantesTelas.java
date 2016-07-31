@@ -43,8 +43,7 @@ public class ConstantesTelas {
     public static final String TITULO_CONSULTAR_ALUNO = "Consultar Aluno";
     public static final String TITULO_CARREGAR_ARQUIVO = "Carregar Arquivo de Alunos";
     public static final String TITULO_RETIRAR_CHAVE = "Retirar Chave";
-    
-    
+
     public static final String TITULO_CADASTRAR_ARMARIO = "Cadastrar Armario";
     public static final String TITULO_CONSULTAR_ARMARIO = "Consultar Armario";
 
@@ -53,6 +52,15 @@ public class ConstantesTelas {
     public static final String TEXTO_INICIAL_TELA_CARREGAR_ARQUIVO = "Clique no botão da lupa para selecionar o arquivo.";
 
     //Botoes
+    public static final String BTN_CONSULTAR_ALUNOS = "buscarAlunos";
+    public static final String BTN_CONSULTAR_ARMARIOS = "buscarArmarios";
+    
+    public static final String BTN_CONSULTAR_EMPRESTIMOS = "buscarEmprestimos";
+    
+    public static final String BTN_CONSULTAR_CHAVES_EM_USO = "buscarChavesEmUso";
+    public static final String BTN_DEVOLVER_CHAVES = "devolverChaves";
+    public static final String BTN_RETIRAR_CHAVES = "retirarChaves";
+
     public static final String BTN_CANCELAR = "cancelar";
     public static final String BTN_SALVAR = "salvar";
     public static final String BTN_BUSCAR = "buscar";
@@ -88,7 +96,19 @@ public class ConstantesTelas {
     public static final String ITM_TABELA_CONSULTAR = "tabelaSelecionarConsultar";
 
     //Tooltips
+    public static final String TT_BTN_BUSCAR_ALUNOS = "Pesquisar Alunos...";
+    public static final String TT_BTN_BUSCAR_ARMARIOS = "Pesquisar Armários...";
+    public static final String TT_BTN_RETIRADA_CHAVES = "Consultar Aluno e Retirar Chaves...";
+
+        public static final String TT_BTN_CONSULTAR_EMPRESTIMOS = "Ver Empréstimos";
+    
+    public static final String TT_BTN_CONSULTAR_CHAVES_EM_USO = "Pesquisar Chaves em uso...";
+    public static final String TT_BTN_DEVOLVER_CHAVES = "Efetuar Devolução de Chaves";
+    
+    
+    
     public static final String TT_BTN_CANCELAR = "Fechar Tela";
+    public static final String TT_BTN_SAIR_PROGRAMA = "Encerrar Programa.";
     public static final String TT_BTN_SALVAR = "Gravar";
     public static final String TT_BTN_EDITAR = "Abrir tela de Edição";
     public static final String TT_BTN_BUSCAR = "Pesquisar...";
@@ -98,5 +118,5 @@ public class ConstantesTelas {
     public static final String TT_BTN_CARREGAR_ARQUIVO = "Escolher arquivo";
     public static final String TT_BTN_BUSCAR_ALUNO_RETIRADA = "Consultar Aluno para Retirada Chaves";
     public static final String TT_BTN_CARREGAR_RETIRADA_CHAVE = "Consultar chaves para retirada";
-       
+
 }

@@ -214,6 +214,20 @@ public class TelaPrincipalController {
         };
     }
 
+    public Thread getThreadShowMensagemFuncaoNaoImplementada() {
+
+        return new Thread() {
+
+            @Override
+            public void run() {
+
+                Mensagens.mostraMensagemAlerta("Funcionalidade ainda não implementada.");
+
+            }
+
+        };
+    }
+
     public Thread getThreadShowConsultarArmarioView() {
 
         return new Thread() {
@@ -244,11 +258,30 @@ public class TelaPrincipalController {
             case ConstantesTelas.BTN_SAIR:
                 getThreadConfirmarSaida().start();
                 break;
+            case ConstantesTelas.BTN_CONSULTAR_ALUNOS:
+                getThreadShowConsultarAlunoView().start();
+                break;
+            case ConstantesTelas.BTN_CONSULTAR_ARMARIOS:
+                getThreadShowConsultarArmarioView().start();
+                break;
+            case ConstantesTelas.BTN_RETIRAR_CHAVES:
+                getThreadShowConsultarAlunoRetiradaChaveView().start();
+                break;
+
+            case ConstantesTelas.BTN_DEVOLVER_CHAVES:
+                getThreadShowMensagemFuncaoNaoImplementada().start();
+                break;
+            case ConstantesTelas.BTN_CONSULTAR_EMPRESTIMOS:
+                getThreadShowMensagemFuncaoNaoImplementada().start();
+                break;
+            case ConstantesTelas.BTN_CONSULTAR_CHAVES_EM_USO:
+                getThreadShowMensagemFuncaoNaoImplementada().start();
+                break;
 
         }
 
         //TEST:
-        System.out.println(botao);
+       // System.out.println(botao);
 
     }
 
