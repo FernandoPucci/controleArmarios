@@ -68,4 +68,23 @@ public class AluguelArmarioDAOImpl extends BaseDAOImpl<AluguelArmario, Long> imp
         throw new UnsupportedOperationException("Método ainda não implementado"); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public List<AluguelArmario> getAllAluguelArmarioBychave(Long chave) throws Exception {
+        
+        List<AluguelArmario> listaSaida = null;
+
+        TypedQuery<AluguelArmario> query = getEntityManager().createQuery("SELECT A "
+                + " FROM AluguelArmario A, Armario AR "
+                + " where "
+                + " A.flgDevolvido = false "
+                + " and AR.chave = :chaveQuery", AluguelArmario.class);
+
+        
+        query.setParameter("chaveQuery", chave);
+        
+        listaSaida = query.getResultList();
+
+        return listaSaida;
+    }
+
 }

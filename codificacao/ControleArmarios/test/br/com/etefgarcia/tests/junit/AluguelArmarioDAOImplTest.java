@@ -37,6 +37,7 @@ import org.junit.AfterClass;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -64,7 +65,7 @@ public class AluguelArmarioDAOImplTest {
     public static void setUpClass() throws ClassNotFoundException, Exception {
 
         dao = new AluguelArmarioDAOImpl();
-        daoArmario = new ArmarioDAOImpl();
+        daoArmario = new ArmarioDAOImpl();;
         daoAluno = new AlunoDAOImpl();
         daoUsuario = new UsuarioDAOImpl();
 
@@ -159,5 +160,20 @@ public class AluguelArmarioDAOImplTest {
         AluguelArmario aluguel = new AluguelArmario(null, armarioAluguel, alunoAluguel, usuarioAluguel, new Date(), null, 0, Boolean.FALSE);
         dao.save(aluguel);
 
+    }
+    
+    @Test
+    public void getAllAluguelArmarioBychaveTest()throws Exception{
+    
+    
+    List<AluguelArmario> listaSaida = null;
+    
+    listaSaida = dao.getAllAluguelArmarioBychave(5L);
+    
+        assertNotNull(listaSaida);
+        assertTrue(listaSaida.size()==1);
+        System.out.println(listaSaida.get(0));
+    
+    
     }
 }

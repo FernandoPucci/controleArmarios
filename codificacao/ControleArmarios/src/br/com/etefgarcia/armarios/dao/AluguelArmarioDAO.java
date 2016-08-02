@@ -34,4 +34,7 @@ public interface AluguelArmarioDAO extends BaseDAO<AluguelArmario, Long> {
 
     public List<AluguelArmario> getAllAluguelArmarioFechadas(Date dataInicial, Date DataFinal) throws Exception;
 
+    public List<AluguelArmario> getAllAluguelArmarioBychave(Long chave) throws Exception;
+    
+    
 }
