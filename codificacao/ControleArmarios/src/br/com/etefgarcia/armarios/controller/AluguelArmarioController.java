@@ -18,6 +18,7 @@ package br.com.etefgarcia.armarios.controller;
 
 import br.com.etefgarcia.armarios.exceptions.NegocioException;
 import br.com.etefgarcia.armarios.exceptions.SistemaException;
+import br.com.etefgarcia.armarios.model.AluguelArmario;
 import br.com.etefgarcia.armarios.model.Aluno;
 import br.com.etefgarcia.armarios.model.Armario;
 import br.com.etefgarcia.armarios.service.AluguelArmarioService;
@@ -27,8 +28,6 @@ import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
 import br.com.etefgarcia.armarios.view.aluguel.armario.CadastrarAluguelArmarioView;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.AbstractButton;
 
 /**
@@ -77,8 +76,72 @@ public class AluguelArmarioController {
                 if (opt == 0) {
                     try {
 
-                        AluguelArmarioService.cadastrarAtualizarArmarioService(aluno, armario, cadastrarAluguelArmarioView.getUsuario());
+                        AluguelArmarioService.cadastrarAluguelArmarioService(aluno, armario, cadastrarAluguelArmarioView.getUsuario());
                         Mensagens.mostraMensagemSucesso(cadastrarAluguelArmarioView.getPainel(), "Chave Retirada com Sucesso!");
+                        cadastrarAluguelArmarioView.dispose();
+
+                    } catch (NegocioException | SistemaException ex) {
+
+                        Mensagens.mostraMensagemErro(cadastrarAluguelArmarioView.getPainel(), ex.getMessage());
+
+                    }
+                }
+            }
+
+        };
+    }
+
+    public Thread getThreadCarregarListaAluguelArmarioPorChave() {
+        return new Thread() {
+
+            @Override
+            public void run() {
+
+                List<AluguelArmario> listaAluguelArmario = null;
+
+                try {
+
+                    listaAluguelArmario = AluguelArmarioService.getAllAluguelArmarioByChaveService(cadastrarAluguelArmarioView.getChave());
+
+                    if (listaAluguelArmario == null || listaAluguelArmario.isEmpty()) {
+
+                        Mensagens.mostraMensagemAlerta(cadastrarAluguelArmarioView.getPainel(), "Esta chave não esta registrada em nenhum aluguel; Verifique. ");
+                        cadastrarAluguelArmarioView.limparCampos();
+                    } else {
+
+                        cadastrarAluguelArmarioView.setListaAluguelArmarios(listaAluguelArmario);
+                        cadastrarAluguelArmarioView.mostrarTabelas(true);
+
+                    }
+
+                } catch (NegocioException | SistemaException ex) {
+
+                    Mensagens.mostraMensagemErro(cadastrarAluguelArmarioView.getPainel(), ex.getMessage());
+
+                }
+
+            }
+
+        };
+    }
+
+    private Thread getThreadDevolucaoChave() {
+        return new Thread() {
+
+            @Override
+            public void run() {
+
+                AluguelArmario aluguelArmario = cadastrarAluguelArmarioView.getArmarioDevolucaoSelecionado();
+
+                int opt = Mensagens.mostraMensagemPergunta("Confirma Devolução da Chave [ " + aluguelArmario.getArmario().getChave() + " ], pelo(a) Aluno(a) [ " + aluguelArmario.getAluno().getNome() + " ] ?");
+
+                if (opt == 0) {
+                    try {
+
+                        aluguelArmario.setFlgDevolvido(Boolean.TRUE);
+
+                        AluguelArmarioService.devolverChavesAluguelArmarioService(aluguelArmario);
+                        Mensagens.mostraMensagemSucesso(cadastrarAluguelArmarioView.getPainel(), "Chave Devolvida com Sucesso!");
                         cadastrarAluguelArmarioView.dispose();
 
                     } catch (NegocioException | SistemaException ex) {
@@ -168,6 +231,7 @@ public class AluguelArmarioController {
             cadastrarAluguelArmarioView.limparCampos();
 
         } else {
+
             cadastrarAluguelArmarioView.setListaArmarios(listaArmarios);
             cadastrarAluguelArmarioView.setArmario(listaArmarios.get(0));
             cadastrarAluguelArmarioView.mostrarTabelas(true);
@@ -208,6 +272,10 @@ public class AluguelArmarioController {
                 getThreadConfirmarCancelar().start();
                 break;
 
+            case ConstantesTelas.BTN_DEVOLVER:
+                getThreadDevolucaoChave().start();
+                break;
+
             case ConstantesTelas.BTN_LIMPAR:
 
                 if (cadastrarAluguelArmarioView != null) {
@@ -216,6 +284,10 @@ public class AluguelArmarioController {
 
                 break;
 
+            case ConstantesTelas.BTN_BUSCAR_ARMARIOS_CHAVE:
+                getThreadCarregarListaAluguelArmarioPorChave().start();
+
+                break;
             case ConstantesTelas.ITM_TABELA:
                 getThreadGetArmarioSelecionado().start();
                 break;

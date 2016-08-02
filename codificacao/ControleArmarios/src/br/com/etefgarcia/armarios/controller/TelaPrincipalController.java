@@ -25,6 +25,7 @@ import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
 import br.com.etefgarcia.armarios.view.aluno.CadastrarAlunoView;
 import br.com.etefgarcia.armarios.view.ConfigInicialView;
 import br.com.etefgarcia.armarios.view.TelaPrincipalView;
+import br.com.etefgarcia.armarios.view.aluguel.armario.CadastrarAluguelArmarioView;
 import br.com.etefgarcia.armarios.view.aluno.CarregarPlanilhaAlunoView;
 import br.com.etefgarcia.armarios.view.aluno.ConsultarAlunoView;
 import br.com.etefgarcia.armarios.view.armario.CadastrarArmarioView;
@@ -214,8 +215,7 @@ public class TelaPrincipalController {
         };
     }
 
-    
-        public Thread getThreadShowConsultaArmariosOcupados() {
+    public Thread getThreadShowConsultaArmariosOcupados() {
 
         return new Thread() {
 
@@ -228,8 +228,21 @@ public class TelaPrincipalController {
 
         };
     }
-    
-    
+
+    public Thread getThreadShowDevolverArmarios() {
+
+        return new Thread() {
+
+            @Override
+            public void run() {
+
+                new CadastrarAluguelArmarioView(Boolean.TRUE).setVisible(true);
+
+            }
+
+        };
+    }
+
     public Thread getThreadShowMensagemFuncaoNaoImplementada() {
 
         return new Thread() {
@@ -285,7 +298,7 @@ public class TelaPrincipalController {
                 break;
 
             case ConstantesTelas.BTN_DEVOLVER_CHAVES:
-                getThreadShowMensagemFuncaoNaoImplementada().start();
+                getThreadShowDevolverArmarios().start();
                 break;
             case ConstantesTelas.BTN_CONSULTAR_EMPRESTIMOS:
                 getThreadShowMensagemFuncaoNaoImplementada().start();
@@ -297,8 +310,7 @@ public class TelaPrincipalController {
         }
 
         //TEST:
-       // System.out.println(botao);
-
+        // System.out.println(botao);
     }
 
 }

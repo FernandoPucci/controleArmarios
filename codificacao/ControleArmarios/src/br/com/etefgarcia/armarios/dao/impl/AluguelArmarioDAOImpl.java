@@ -70,18 +70,16 @@ public class AluguelArmarioDAOImpl extends BaseDAOImpl<AluguelArmario, Long> imp
 
     @Override
     public List<AluguelArmario> getAllAluguelArmarioBychave(Long chave) throws Exception {
-        
+
         List<AluguelArmario> listaSaida = null;
 
-        TypedQuery<AluguelArmario> query = getEntityManager().createQuery("SELECT A "
-                + " FROM AluguelArmario A, Armario AR "
-                + " where "
-                + " A.flgDevolvido = false "
-                + " and AR.chave = :chaveQuery", AluguelArmario.class);
+        TypedQuery<AluguelArmario> query = getEntityManager().createQuery("SELECT AA "
+                + " FROM AluguelArmario AA "
+                + " WHERE AA.flgDevolvido = false "
+                + " AND AA.armario.chave = :chaveQuery", AluguelArmario.class);
 
-        
         query.setParameter("chaveQuery", chave);
-        
+
         listaSaida = query.getResultList();
 
         return listaSaida;

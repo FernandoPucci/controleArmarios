@@ -18,10 +18,12 @@ package br.com.etefgarcia.armarios.view.aluguel.armario;
 
 import br.com.etefgarcia.armarios.action.aluguel.armario.CadastrarAluguelArmarioViewAction;
 import br.com.etefgarcia.armarios.controller.AluguelArmarioController;
+import br.com.etefgarcia.armarios.model.AluguelArmario;
 import br.com.etefgarcia.armarios.model.Aluno;
 import br.com.etefgarcia.armarios.model.Armario;
 import br.com.etefgarcia.armarios.model.Usuario;
 import br.com.etefgarcia.armarios.util.Mensagens;
+import br.com.etefgarcia.armarios.util.ServiceUtils;
 import br.com.etefgarcia.armarios.util.TelaRenderUtil;
 import br.com.etefgarcia.armarios.util.constantes.telas.ConstantesTelas;
 import br.com.etefgarcia.armarios.util.telas.render.ZebraCellRenderer;
@@ -40,7 +42,11 @@ public class CadastrarAluguelArmarioView extends javax.swing.JFrame {
 
     private AluguelArmarioController aluguelArmarioController;
     private CadastrarAluguelArmarioViewAction cadastrarAluguelArmarioViewAction;
+
     private List<Armario> listaArmarios = null;
+    private List<AluguelArmario> listaArmariosDevolucao = null;
+
+    private Boolean isDevolucao = Boolean.FALSE;
 
     private final Runnable threadChecaCampoChave = new Runnable() {
 
@@ -78,6 +84,33 @@ public class CadastrarAluguelArmarioView extends javax.swing.JFrame {
 
     }
 
+    public CadastrarAluguelArmarioView(Boolean isDevolucao) {
+
+        initComponents();
+
+        if (this.isDevolucao) {
+            this.aluno = null;
+            this.usuario = null;
+
+        }
+        this.isDevolucao = isDevolucao;
+
+        inicializar();
+        configurarBotoes(false);
+        configurarCampos();
+        configurarItens();
+
+        TelaRenderUtil.habilitarBotao(jButtonBuscar, true);
+
+        jLabelIdAluno.setVisible(!isDevolucao);
+        jTextFieldIdAluno.setVisible(!isDevolucao);
+        jLabelNome.setVisible(!isDevolucao);
+        jTextFieldNome.setVisible(!isDevolucao);
+
+        mostrarTabela(false);
+
+    }
+
     private void checaAluno() {
 
         if (aluno == null) {
@@ -91,16 +124,23 @@ public class CadastrarAluguelArmarioView extends javax.swing.JFrame {
 
     private void inicializar() {
 
-        jButtonBuscar.setName(ConstantesTelas.BTN_BUSCAR_TELA_BUSCA);
+        jButtonBuscar.setName(!isDevolucao ? ConstantesTelas.BTN_BUSCAR_TELA_BUSCA : ConstantesTelas.BTN_BUSCAR_ARMARIOS_CHAVE);
         jButtonCancelar.setName(ConstantesTelas.BTN_CANCELAR);
-        jButtonSalvar.setName(ConstantesTelas.BTN_SALVAR);
+        jButtonSalvar.setName(!isDevolucao ? ConstantesTelas.BTN_SALVAR : ConstantesTelas.BTN_DEVOLVER);
 
         jButtonBuscar.setToolTipText(ConstantesTelas.TT_BTN_BUSCAR);
-        jButtonSalvar.setToolTipText(ConstantesTelas.TT_BTN_SALVAR);
+        jButtonSalvar.setToolTipText(!isDevolucao ? ConstantesTelas.TT_BTN_SALVAR : ConstantesTelas.TT_BTN_DEVOLVER
+        );
         jButtonLimpar.setToolTipText(ConstantesTelas.TT_BTN_LIMPAR);
         jButtonCancelar.setToolTipText(ConstantesTelas.TT_BTN_CANCELAR);
 
         jTextFieldChave.requestFocus();
+
+        if (isDevolucao) {
+
+            jButtonSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ico/accept3.png")));
+
+        }
 
         this.aluguelArmarioController = new AluguelArmarioController(this);
         this.cadastrarAluguelArmarioViewAction = new CadastrarAluguelArmarioViewAction(aluguelArmarioController);
@@ -131,6 +171,8 @@ public class CadastrarAluguelArmarioView extends javax.swing.JFrame {
         jTextFieldIdAluno.setText(aluno.getIdAluno() + "");
         jTextFieldNome.setText(aluno.getNome());
 
+//          jTextFieldIdAluno.setText(!isDevolucao ? aluno.getIdAluno() + "" : "");
+//        jTextFieldNome.setText(!isDevolucao ? aluno.getNome() : "");
     }
 
     private void configurarBotoes(boolean habilitar) {
@@ -155,12 +197,12 @@ public class CadastrarAluguelArmarioView extends javax.swing.JFrame {
         usuario = new br.com.etefgarcia.armarios.model.Usuario();
         jPanelFundo = new javax.swing.JPanel();
         jPanelEsquerdo = new javax.swing.JPanel();
-        jLabelIdAluno = new javax.swing.JLabel();
+        jLabelIdAlrmario = new javax.swing.JLabel();
         jTextFieldIdArmario = new javax.swing.JTextField();
         jLabelChave = new javax.swing.JLabel();
         jTextFieldChave = new javax.swing.JTextField();
         jPanelInternoFiltrosBusca = new javax.swing.JPanel();
-        jLabelIdAluno1 = new javax.swing.JLabel();
+        jLabelIdAluno = new javax.swing.JLabel();
         jTextFieldIdAluno = new javax.swing.JTextField();
         jLabelNome = new javax.swing.JLabel();
         jTextFieldNome = new javax.swing.JTextField();
@@ -175,7 +217,7 @@ public class CadastrarAluguelArmarioView extends javax.swing.JFrame {
         jButtonCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle(ConstantesTelas.TITULO_JANELA_PRINCIPAL + " - " + ConstantesTelas.TITULO_RETIRAR_CHAVE);
+        setTitle(!isDevolucao?(ConstantesTelas.TITULO_JANELA_PRINCIPAL + " - " + ConstantesTelas.TITULO_RETIRAR_CHAVE):(ConstantesTelas.TITULO_JANELA_PRINCIPAL + " - " + ConstantesTelas.TITULO_DEVOLUCAO));
         setMinimumSize(new java.awt.Dimension(640, 480));
         setResizable(false);
 
@@ -186,15 +228,15 @@ public class CadastrarAluguelArmarioView extends javax.swing.JFrame {
         jPanelFundo.setRequestFocusEnabled(false);
         jPanelFundo.setLayout(new javax.swing.BoxLayout(jPanelFundo, javax.swing.BoxLayout.LINE_AXIS));
 
-        jPanelEsquerdo.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder(null, ConstantesTelas.TITULO_RETIRAR_CHAVE
+        jPanelEsquerdo.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder(null, !isDevolucao?ConstantesTelas.TITULO_RETIRAR_CHAVE:ConstantesTelas.TITULO_DEVOLUCAO
             , javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 14)), javax.swing.BorderFactory.createEtchedBorder())); // NOI18N
 jPanelEsquerdo.setMaximumSize(new java.awt.Dimension(500, 459));
 jPanelEsquerdo.setMinimumSize(new java.awt.Dimension(500, 459));
 jPanelEsquerdo.setPreferredSize(new java.awt.Dimension(500, 459));
 
-jLabelIdAluno.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-jLabelIdAluno.setText("Cód.:");
-jPanelEsquerdo.add(jLabelIdAluno);
+jLabelIdAlrmario.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+jLabelIdAlrmario.setText("Cód.:");
+jPanelEsquerdo.add(jLabelIdAlrmario);
 
 jTextFieldIdArmario.setEditable(false);
 jTextFieldIdArmario.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
@@ -231,9 +273,9 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
     jPanelInternoFiltrosBusca.setOpaque(false);
     jPanelInternoFiltrosBusca.setPreferredSize(new java.awt.Dimension(483, 80));
 
-    jLabelIdAluno1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-    jLabelIdAluno1.setText("RM.:");
-    jPanelInternoFiltrosBusca.add(jLabelIdAluno1);
+    jLabelIdAluno.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+    jLabelIdAluno.setText("RM.:");
+    jPanelInternoFiltrosBusca.add(jLabelIdAluno);
 
     jTextFieldIdAluno.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
     jTextFieldIdAluno.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -387,8 +429,18 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
     private void jTextFieldChaveFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldChaveFocusLost
 
         if (!jTextFieldChave.getText().trim().isEmpty()) {
+
             configurarBotoes(true);
-            aluguelArmarioController.getThreadConsultarArmarioGeral().start();
+
+            if (isDevolucao) {
+
+                aluguelArmarioController.getThreadCarregarListaAluguelArmarioPorChave().start();
+
+            } else {
+
+                aluguelArmarioController.getThreadConsultarArmarioGeral().start();
+
+            }
         }
     }//GEN-LAST:event_jTextFieldChaveFocusLost
 
@@ -455,8 +507,8 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
     private javax.swing.JButton jButtonLimpar;
     private javax.swing.JButton jButtonSalvar;
     private javax.swing.JLabel jLabelChave;
+    private javax.swing.JLabel jLabelIdAlrmario;
     private javax.swing.JLabel jLabelIdAluno;
-    private javax.swing.JLabel jLabelIdAluno1;
     private javax.swing.JLabel jLabelNome;
     private javax.swing.JPanel jPanelBotoes;
     private javax.swing.JPanel jPanelEsquerdo;
@@ -541,6 +593,7 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
     private void mostrarTabela(boolean mostrar) {
 
         if (listaArmarios != null && mostrar) {
+
             carregaTabela();
 
             jTableTabela.setVisible(mostrar);
@@ -551,7 +604,64 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
 
             habilitarEditar(false);
 
+        } else if (listaArmariosDevolucao != null && mostrar) {
+
+            carregaTabelaDevolucao();
+
+            jTableTabela.setVisible(mostrar);
+            jTableTabela.setEnabled(mostrar);
+
+            jScrollPane1.setEnabled(mostrar);
+            jScrollPane1.setVisible(mostrar);
+
+            habilitarEditar(false);
         }
+
+    }
+
+    private void carregaTabelaDevolucao() {
+
+        DefaultTableModel modelTabela = new DefaultTableModel();
+
+        //monta os cabeçalhos das colunas da tabela
+        modelTabela.addColumn("Nome");
+        modelTabela.addColumn("Data da Retirada");
+
+        for (AluguelArmario c : listaArmariosDevolucao) {
+
+            //cria uma linha 'generica' com a quantidade de colunas do  modelTabela
+            Object[] vetorLinhas = new Object[modelTabela.getColumnCount()];
+
+            //preenche as colunas de cada linha do vetorLinhas para preenchar com os dados do Cliente
+            vetorLinhas[0] = c.getAluno().getNome();
+            vetorLinhas[1] = ServiceUtils.formataData(c.getDataAluguel());
+
+            //adiciona esta linha ao model da tabela
+            modelTabela.addRow(vetorLinhas);
+
+        }
+
+        //coloca checkbox no flgativo
+        //ajusta as barras de rolagem
+        jTableTabela.setPreferredScrollableViewportSize(jTableTabela.getPreferredSize());
+
+        //desabilita selecao de colunas na tabela
+        jTableTabela.setColumnSelectionAllowed(false);
+
+        //desabilita selecao de celulas na tabela
+        jTableTabela.setCellSelectionEnabled(false);
+
+        //habilita selecao de unica linha
+        jTableTabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        //habilita selecao de linhas
+        jTableTabela.setRowSelectionAllowed(true);
+
+        //habilita tabela zebrada
+        jTableTabela.setDefaultRenderer(Object.class, new ZebraCellRenderer());
+
+        //finalmente adiciono o modelo ja pronto à minha tabela
+        jTableTabela.setModel(modelTabela);
 
     }
 
@@ -658,6 +768,12 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
 
     }
 
+    public void setListaAluguelArmarios(List<AluguelArmario> listaArmariosDevolucao) {
+
+        this.listaArmariosDevolucao = listaArmariosDevolucao;
+
+    }
+
     public String getChave() {
 
         return jTextFieldChave.getText().trim();
@@ -681,6 +797,23 @@ jTextFieldIdArmario.addKeyListener(new java.awt.event.KeyAdapter() {
         int linhaSelecionada = jTableTabela.getSelectedRow();
 
         return listaArmarios.get(linhaSelecionada);
+    }
+
+    public AluguelArmario getArmarioDevolucaoSelecionado() {
+
+        if (isDevolucao) {
+            int linhaSelecionada = jTableTabela.getSelectedRow();
+
+            if (linhaSelecionada < 0) {
+                Mensagens.mostraMensagemAlerta(jPanelEsquerdo, "Primeiramente, selecione um Registro na tabela.");
+
+                return null;
+            }
+            
+            return listaArmariosDevolucao.get(linhaSelecionada);
+        }
+
+        return null;
     }
 
 }

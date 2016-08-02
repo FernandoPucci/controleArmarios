@@ -121,7 +121,7 @@ public class AluguelArmarioDAOImplTest {
 
     }
 
-        @Test
+    @Test
     @Transactional
     public void getAllAluguelArmarioEmAberto() throws ClassNotFoundException, Exception {
 
@@ -168,10 +168,11 @@ public class AluguelArmarioDAOImplTest {
     
     List<AluguelArmario> listaSaida = null;
     
-    listaSaida = dao.getAllAluguelArmarioBychave(5L);
+    listaSaida = dao.getAllAluguelArmarioBychave(6L);
     
         assertNotNull(listaSaida);
         assertTrue(listaSaida.size()==1);
+        System.out.println("@@@ "+ listaSaida.size());
         System.out.println(listaSaida.get(0));
     
     

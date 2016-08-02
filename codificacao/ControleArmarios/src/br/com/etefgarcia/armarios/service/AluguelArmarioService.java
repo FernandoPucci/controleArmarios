@@ -35,7 +35,7 @@ public class AluguelArmarioService {
 
     private static AluguelArmarioDAO dao = null;
 
-    public static void cadastrarAtualizarArmarioService(Aluno aluno, Armario armario, Usuario usuario) throws NegocioException, SistemaException {
+    public static void cadastrarAluguelArmarioService(Aluno aluno, Armario armario, Usuario usuario) throws NegocioException, SistemaException {
 
         int err = 0;
         StringBuilder sb = new StringBuilder();
@@ -98,6 +98,7 @@ public class AluguelArmarioService {
 
             dao = new AluguelArmarioDAOImpl();
 
+            a.setDataDevolucao(new java.util.Date());
             dao.save(a);
 
         } catch (NegocioException nex) {
@@ -111,15 +112,44 @@ public class AluguelArmarioService {
         }
     }
 
-    public static List<AluguelArmario> getAllAluguelArmarioByChaveService(Long chave) throws NegocioException, SistemaException {
+    public static void devolverChavesAluguelArmarioService(AluguelArmario aluguelArmario) throws NegocioException, SistemaException {
 
         int err = 0;
         StringBuilder sb = new StringBuilder();
 
-        List<AluguelArmario> listaSaida = null;
+        if (aluguelArmario == null) {
+            throw new NegocioException("Aluguel Armario Inválido ou nulo");
+        }
 
-        if (chave == null) {
-            throw new NegocioException("Chave Inválida ou nula");
+        if (aluguelArmario.getAluno() == null) {
+            throw new NegocioException("Aluno Inválido ou nulo");
+        }
+
+        if (aluguelArmario.getUsuarioResponsavel() == null) {
+            throw new NegocioException("Usuario Inválido ou nulo");
+        }
+
+        if (aluguelArmario.getArmario().getChave() == null) {
+            sb.append(ConstantesTelas.ERR_TOKEN_LISTA + "Chave vazia.");
+            err++;
+        }
+
+        if (aluguelArmario.getAluno().getIdAluno() == null) {
+            sb.append(ConstantesTelas.ERR_TOKEN_LISTA + "Aluno com RM vazio.");
+            err++;
+        }
+
+        if (!aluguelArmario.getArmario().getFlgAtivo()) {
+
+            sb.append(ConstantesTelas.ERR_TOKEN_LISTA + "Armario Inativo.");
+            err++;
+        }
+
+        if (!aluguelArmario.getAluno().getFlgAtivo()) {
+
+            sb.append(ConstantesTelas.ERR_TOKEN_LISTA + "Aluno Inativo.");
+            err++;
+
         }
 
         if (err > 0) {
@@ -132,7 +162,51 @@ public class AluguelArmarioService {
 
             dao = new AluguelArmarioDAOImpl();
 
-            listaSaida = dao.getAllAluguelArmarioBychave(chave);
+            dao.save(aluguelArmario);
+
+        } catch (NegocioException nex) {
+
+            throw nex;
+
+        } catch (Exception ex) {
+
+            throw new SistemaException(AluguelArmarioService.class, ex.getMessage());
+
+        }
+    }
+
+    public static List<AluguelArmario> getAllAluguelArmarioByChaveService(String chave) throws NegocioException, SistemaException {
+
+        int err = 0;
+        StringBuilder sb = new StringBuilder();
+
+        List<AluguelArmario> listaSaida = null;
+
+        Long chaveSaida = null;
+
+        if (chave == null || chave.trim().isEmpty()) {
+            throw new NegocioException("Chave Inválida ou nula");
+        }
+
+        try {
+
+            chaveSaida = Long.parseLong(chave);
+
+        } catch (Exception ex) {
+            throw new NegocioException("Erro de conversão do valor da chave;");
+        }
+
+        if (err > 0) {
+
+            throw new NegocioException(sb.toString());
+
+        }
+
+        try {
+
+            dao = new AluguelArmarioDAOImpl();
+
+            listaSaida = dao.getAllAluguelArmarioBychave(chaveSaida);
 
         } catch (NegocioException nex) {
 
