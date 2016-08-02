@@ -35,58 +35,6 @@ public class AluguelArmarioService {
 
     private static AluguelArmarioDAO dao = null;
 
-    public static void cadastrarAtualizarArmarioService(Long idArmario, String chave, String descricao, Boolean flgOcupado, Boolean flgAtivo) throws NegocioException, SistemaException {
-
-        int err = 0;
-        StringBuilder sb = new StringBuilder();
-
-        if (chave == null || chave.isEmpty()) {
-            sb.append(ConstantesTelas.ERR_TOKEN_LISTA + "Chave vazia.");
-            err++;
-        }
-
-        if (descricao == null) {
-
-            descricao = "";
-
-        }
-
-        if (err > 0) {
-
-            throw new NegocioException(sb.toString());
-
-        }
-
-        AluguelArmario a = new AluguelArmario();
-
-//        a.setIdArmario(idArmario);
-//        a.setChave(new Long(chave.trim()));
-//        a.setDescricao(descricao.trim());
-//        a.setFlgOcupado(flgOcupado);
-//        a.setFlgAtivo(flgAtivo);
-//        try {
-//            List<AluguelArmario> aTeste = dao.getArmarioByChaveDao(a.getChave());
-//
-//            if (aTeste != null && aTeste.size() > 0) {
-//
-//                throw new NegocioException("Esta chave já está cadastrada.");
-//
-//            }
-//
-//            dao = new ArmarioDAOImpl();
-//
-//            dao.save(a);
-//        } catch (NegocioException nex) {
-//
-//            throw nex;
-//
-//        } catch (Exception ex) {
-//
-//            throw new SistemaException(AluguelArmarioService.class, ex.getMessage());
-//
-//        }
-    }
-
     public static void cadastrarAtualizarArmarioService(Aluno aluno, Armario armario, Usuario usuario) throws NegocioException, SistemaException {
 
         int err = 0;
@@ -147,11 +95,11 @@ public class AluguelArmarioService {
         a.setUsuarioResponsavel(usuario);
 
         try {
-        
+
             dao = new AluguelArmarioDAOImpl();
 
             dao.save(a);
-            
+
         } catch (NegocioException nex) {
 
             throw nex;
@@ -163,4 +111,40 @@ public class AluguelArmarioService {
         }
     }
 
+    public static List<AluguelArmario> getAllAluguelArmarioByChaveService(Long chave) throws NegocioException, SistemaException {
+
+        int err = 0;
+        StringBuilder sb = new StringBuilder();
+
+        List<AluguelArmario> listaSaida = null;
+
+        if (chave == null) {
+            throw new NegocioException("Chave Inválida ou nula");
+        }
+
+        if (err > 0) {
+
+            throw new NegocioException(sb.toString());
+
+        }
+
+        try {
+
+            dao = new AluguelArmarioDAOImpl();
+
+            listaSaida = dao.getAllAluguelArmarioBychave(chave);
+
+        } catch (NegocioException nex) {
+
+            throw nex;
+
+        } catch (Exception ex) {
+
+            throw new SistemaException(AluguelArmarioService.class, ex.getMessage());
+
+        }
+
+        return listaSaida;
+
+    }
 }
